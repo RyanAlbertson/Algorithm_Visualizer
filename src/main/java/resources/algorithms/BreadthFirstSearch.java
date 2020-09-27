@@ -1,4 +1,5 @@
-package algorithms;
+package resources.algorithms;
 
 public class BreadthFirstSearch {
+
 }
