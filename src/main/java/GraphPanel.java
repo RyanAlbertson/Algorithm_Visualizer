@@ -10,8 +10,6 @@ public class GraphPanel extends JPanel {
     GraphPanel() {
 
         this.setPreferredSize(new Dimension(1280, 720));
-        this.setAlignmentX(-20);
-        this.setAlignmentY(-20);
     }
 
     public void paint(Graphics g) {
