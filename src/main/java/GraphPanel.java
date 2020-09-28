@@ -1,21 +1,24 @@
 import javax.swing.*;
-import java.awt.*;
 
 public class GraphPanel extends JPanel {
+
 
     static final int NODE_WIDTH = 10;
     static final int NODE_HEIGHT = 10;
 
 
-    GraphPanel() {
+    public GraphPanel() {
 
-        this.setPreferredSize(new Dimension(1280, 720));
+//        this.setPreferredSize(new Dimension(1280, 720 - (720 / 15)));
+//        this.setBackground(Color.RED);
     }
 
-    public void paint(Graphics g) {
+//    public void paint(Graphics g) {
 
-        g.setColor(Color.BLACK);
-        g.drawOval(0, 0, NODE_WIDTH, NODE_HEIGHT);
-        g.fillOval(0, 0, NODE_WIDTH, NODE_HEIGHT);
-    }
+
+    // NEED METHODS TO DRAW + ANIMATE THE GRAPH
+//        g.setColor(Color.BLACK);
+//        g.drawOval(0, 0, NODE_WIDTH, NODE_HEIGHT);
+//        g.fillOval(0, 0, NODE_WIDTH, NODE_HEIGHT);
+//    }
 }
