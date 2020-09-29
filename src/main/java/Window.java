@@ -7,11 +7,15 @@ public class Window extends JFrame {
     static final int WIDTH = 1280;
     static final int HEIGHT = 720;
 
-    private JFrame frame;
+    private final JFrame frame;
     protected GraphPanel graph;
-    private JButton startButton;
-    private JButton stopButton;
-    private JButton pauseButton;
+    protected String algName;
+    protected String graphSize;
+    private JComboBox<String> chooseAlgName;
+    private JComboBox<String> chooseGraphSize;
+
+    // MAKE PROTECTED FIELDS THAT STORE VISITED/UNVISITED NODES AND THE EDGES
+    // AND PREDECESSOR LISTS, ETC... USED FOR PAINTING THE GRAPHS.
 
 
     public Window() {
@@ -23,6 +27,9 @@ public class Window extends JFrame {
         frame.setSize(WIDTH, HEIGHT);
         initPanels();
         frame.setVisible(true);
+
+        algName = "Breadth-First Search";
+        graphSize = "Small";
     }
 
 
@@ -33,17 +40,30 @@ public class Window extends JFrame {
         menu.setPreferredSize(new Dimension(WIDTH, HEIGHT / 15));
         menu.setBackground(Color.DARK_GRAY);
 
-        startButton = new JButton("Start");
+        JButton startButton = new JButton("Start");
         startButton.addActionListener(event -> startAlgorithm());
         menu.add(startButton);
 
-        pauseButton = new JButton("Pause");
+        JButton pauseButton = new JButton("Pause");
         pauseButton.addActionListener(event -> pauseAlgorithm());
         menu.add(pauseButton);
 
-        stopButton = new JButton("Stop");
+        JButton stopButton = new JButton("Stop");
         startButton.addActionListener(event -> stopAlgorithm());
         menu.add(stopButton);
+
+        String[] algNames = {"Breadth-First Search", "Depth-First Search",
+                "Dijkstra", "Bellman-Ford", "Floyd-Warshall"};
+        chooseAlgName = new JComboBox<>(algNames);
+        chooseAlgName.addActionListener(event ->
+                algName = (String) chooseAlgName.getSelectedItem());
+        menu.add(chooseAlgName);
+
+        String[] graphSizes = {"Small", "Medium", "Large"};
+        chooseGraphSize = new JComboBox<>(graphSizes);
+        chooseGraphSize.addActionListener(event ->
+                graphSize = (String) chooseGraphSize.getSelectedItem());
+        menu.add(chooseGraphSize);
 
         graph = new GraphPanel();
         graph.setPreferredSize(new Dimension(WIDTH, HEIGHT - (HEIGHT / 15)));
@@ -56,7 +76,6 @@ public class Window extends JFrame {
     // PUT THESE IN ANOTHER CLASS? ////////
 
     private void startAlgorithm() {
-
     }
 
     private void stopAlgorithm() {

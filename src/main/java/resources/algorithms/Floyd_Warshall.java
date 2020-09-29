@@ -1,4 +1,4 @@
 package resources.algorithms;
 
-public class Floyd_Marshall {
+public class Floyd_Warshall {
 }

@@ -1,10 +1,12 @@
-import javax.swing.*;
+import java.awt.*;
 
-public class GraphPanel extends JPanel {
+public class GraphPanel extends Window {
 
 
-    static final int NODE_WIDTH = 10;
-    static final int NODE_HEIGHT = 10;
+    static final int NODE_DIMENSION = 10;
+    static final Color VISITED_COLOR = Color.RED;
+    static final Color UNVISITED_COLOR = Color.BLACK;
+    static final Color PATH_COLOR = Color.GREEN;
 
 
     public GraphPanel() {
@@ -13,12 +15,14 @@ public class GraphPanel extends JPanel {
 //        this.setBackground(Color.RED);
     }
 
-//    public void paint(Graphics g) {
+    //HOW TO REPAINT nodes/edges WHEN NEEDED?
+    @Override
+    public void paint(Graphics g) {
 
-
-    // NEED METHODS TO DRAW + ANIMATE THE GRAPH
-//        g.setColor(Color.BLACK);
-//        g.drawOval(0, 0, NODE_WIDTH, NODE_HEIGHT);
-//        g.fillOval(0, 0, NODE_WIDTH, NODE_HEIGHT);
-//    }
+        g.setColor(UNVISITED_COLOR);
+        // Loop through all nodes and mark them as unvisited
+        g.drawOval(0, 0, NODE_DIMENSION, NODE_DIMENSION);
+        g.fillOval(0, 0, NODE_DIMENSION, NODE_DIMENSION);
+        // Loop through all edges and paint them as unvisited
+    }
 }
