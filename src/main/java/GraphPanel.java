@@ -16,17 +16,34 @@ import java.util.*;
 public class GraphPanel extends JPanel {
 
 
-    static final int NODE_DIMENSION = 10;
     static final Color VISITED_COLOR = Color.RED;
     static final Color UNVISITED_COLOR = Color.BLACK;
     static final Color PATH_COLOR = Color.GREEN;
-    static final String[] MOUSE_STATES = {"startNode", "endNode", "reset"};
     static final double NODE_RADIUS = 0.5;
+    static final HashMap<String, String> graphFileNames = new HashMap<>();
 
-    private boolean isFirstPaint = true;
-    private String mouseState = MOUSE_STATES[0];
+    static {
+        graphFileNames.put("Small", "sm_graph.txt");
+        graphFileNames.put("Medium", "md_graph.txt");
+        graphFileNames.put("Large", "lg_graph.txt");
+    }
+
+    public enum MOUSE_STATE {
+        START_NODE, END_NODE, RESET {
+            @Override
+            public MOUSE_STATE next() {
+                return values()[0];
+            }
+        };
+
+        public MOUSE_STATE next() {
+            return values()[ordinal() + 1];
+        }
+    }
+
+    private MOUSE_STATE mouseState;
     private String algName;
-    private String graphSize;
+    protected String graphSize;
     protected Integer startNode;
     protected Integer endNode;
     private boolean[] visited;
@@ -42,7 +59,10 @@ public class GraphPanel extends JPanel {
 
         // Defaults
         this.setAlgName("Breadth-First Search");
-        this.setGraphSize("Small");
+        this.graphSize = "Small";
+        mouseState = MOUSE_STATE.START_NODE;
+
+        initGraph();
 
         // Detect user-selected start and end nodes
         addMouseListener(new MouseAdapter() {
@@ -52,25 +72,21 @@ public class GraphPanel extends JPanel {
 
                 super.mouseClicked(me);
 
-                if (mouseState.equals("reset")) {
+                if (mouseState.equals(MOUSE_STATE.RESET)) {
                     startNode = endNode = null;
-                    repaint();
-                    mouseState = "startNode";
                 } else {
                     for (Shape shape : allNodes.keySet()) {
                         if (shape.contains(me.getPoint())) {
-                            if (mouseState.equals("startNode")) {
+                            if (mouseState.equals(MOUSE_STATE.START_NODE)) {
                                 startNode = allNodes.get(shape);
-                                repaint();
-                                mouseState = "endNode";
                             } else {
                                 endNode = allNodes.get(shape);
-                                repaint();
-                                mouseState = "reset";
                             }
                         }
                     }
                 }
+                repaint();
+                mouseState = mouseState.next();
             }
         });
     }
@@ -101,26 +117,29 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     *
+     * Reads and stores graph data from a file, determined by {@code graphSize}.
      */
     private void initGraph() {
 
+        String graphFileName = graphFileNames.get(graphSize);
         String graphFileLocation = System.getProperty("user.dir");
-        graphFileLocation = graphFileLocation.concat(
-                "\\src\\main\\java\\" + "resources" + graphSize + ".txt");
+        graphFileLocation = graphFileLocation.concat("\\src\\main\\java\\" +
+                "resources\\graphs\\" + graphFileName);
         try {
             Scanner scanner = new Scanner(new File(graphFileLocation));
             while (scanner.hasNextLine()) {
                 String lineAsStr = scanner.nextLine();
                 LinkedList<Integer> line = new LinkedList<>();
                 for (String str : lineAsStr.split(" ")) {
-                    line.add(Integer.parseInt(str));
+                    if (!str.equals("")) line.add(Integer.parseInt(str));
                 }
                 Integer currentNode = line.get(0);
                 double currentNodeX = line.get(1);
                 double currentNodeY = line.get(2);
                 Shape nodeShape = new Ellipse2D.Double(currentNodeX,
                         currentNodeY, NODE_RADIUS, NODE_RADIUS);
+                allNodes = new HashMap<>();
+                adjNodes = new HashMap<>();
                 allNodes.put(nodeShape, currentNode);
                 ListIterator<Integer> it = line.listIterator(3);
                 while (it.hasNext()) {
@@ -128,12 +147,10 @@ public class GraphPanel extends JPanel {
                             new LinkedList<>()).add(
                             new Integer[]{currentNode, it.next()});
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         visited = new boolean[allNodes.size()];
     }
 
@@ -167,16 +184,5 @@ public class GraphPanel extends JPanel {
     protected void setAlgName(String algName) {
 
         this.algName = algName;
-    }
-
-
-    /**
-     * Sets the size of the graph input for the algorithm.
-     *
-     * @param graphSize Size of the graph.
-     */
-    protected void setGraphSize(String graphSize) {
-
-        this.graphSize = graphSize;
     }
 }
