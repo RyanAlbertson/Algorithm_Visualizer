@@ -126,22 +126,22 @@ public class GraphPanel extends JPanel {
         graphFileLocation = graphFileLocation.concat("\\src\\main\\java\\" +
                 "resources\\graphs\\" + graphFileName);
         try {
-            Scanner scanner = new Scanner(new File(graphFileLocation));
-            while (scanner.hasNextLine()) {
-                String lineAsStr = scanner.nextLine();
-                LinkedList<Integer> line = new LinkedList<>();
-                for (String str : lineAsStr.split(" ")) {
-                    if (!str.equals("")) line.add(Integer.parseInt(str));
+            Scanner s = new Scanner(new File(graphFileLocation));
+            String line;
+            while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
+                LinkedList<Integer> lineData = new LinkedList<>();
+                for (String str : line.split(" ")) {
+                    if (!str.equals("")) lineData.add(Integer.parseInt(str));
                 }
-                Integer currentNode = line.get(0);
-                double currentNodeX = line.get(1);
-                double currentNodeY = line.get(2);
+                Integer currentNode = lineData.get(0);
+                double currentNodeX = lineData.get(1);
+                double currentNodeY = lineData.get(2);
                 Shape nodeShape = new Ellipse2D.Double(currentNodeX,
                         currentNodeY, NODE_RADIUS, NODE_RADIUS);
                 allNodes = new HashMap<>();
                 adjNodes = new HashMap<>();
                 allNodes.put(nodeShape, currentNode);
-                ListIterator<Integer> it = line.listIterator(3);
+                ListIterator<Integer> it = lineData.listIterator(3);
                 while (it.hasNext()) {
                     adjNodes.computeIfAbsent(currentNode, key ->
                             new LinkedList<>()).add(
