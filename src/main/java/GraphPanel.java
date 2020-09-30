@@ -7,9 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.IOException;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 
 /**
@@ -33,7 +31,7 @@ public class GraphPanel extends JPanel {
     protected Integer endNode;
     private boolean[] visited;
     private HashMap<Shape, Integer> allNodes;
-    private HashMap<Integer, Integer[]> adjNodes;
+    private HashMap<Integer, LinkedList<Integer[]>> adjNodes;
     private Deque<Integer> path;
 
 
@@ -107,32 +105,36 @@ public class GraphPanel extends JPanel {
      */
     private void initGraph() {
 
-        // READ NODES AND ADJACENCY'S FROM FILE. UPDATE adj AS YOU GO.
-
-        String graphFileLocation = System.getProperty("user.dir" +
+        String graphFileLocation = System.getProperty("user.dir");
+        graphFileLocation = graphFileLocation.concat(
                 "\\src\\main\\java\\" + "resources" + graphSize + ".txt");
         try {
             Scanner scanner = new Scanner(new File(graphFileLocation));
             while (scanner.hasNextLine()) {
-                String[] line = scanner.nextLine().split(" ");
-                Integer currentNode = Integer.parseInt(line[0]);
-                double currentNodeX = Double.parseDouble(line[1]);
-                double currentNodeY = Double.parseDouble(line[2]);
+                String lineAsStr = scanner.nextLine();
+                LinkedList<Integer> line = new LinkedList<>();
+                for (String str : lineAsStr.split(" ")) {
+                    line.add(Integer.parseInt(str));
+                }
+                Integer currentNode = line.get(0);
+                double currentNodeX = line.get(1);
+                double currentNodeY = line.get(2);
                 Shape nodeShape = new Ellipse2D.Double(currentNodeX,
                         currentNodeY, NODE_RADIUS, NODE_RADIUS);
                 allNodes.put(nodeShape, currentNode);
-                //ADD EDGES TO ADJ LIST ///////////
+                ListIterator<Integer> it = line.listIterator(3);
+                while (it.hasNext()) {
+                    adjNodes.computeIfAbsent(currentNode, key ->
+                            new LinkedList<>()).add(
+                            new Integer[]{currentNode, it.next()});
+                }
 
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        int numNodes = 0;
-
-
-        visited = new boolean[numNodes];
+        visited = new boolean[allNodes.size()];
     }
 
 
