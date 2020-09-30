@@ -1,4 +1,9 @@
-package resources.algorithms;
+package main.java.resources.algorithms;
 
-public class DepthFirstSearch {
+import main.java.GraphPanel;
+
+public class DepthFirstSearch extends GraphPanel {
+
+
+    // repaint() or super.repaints()  ?
 }

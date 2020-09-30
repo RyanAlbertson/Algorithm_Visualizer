@@ -1,10 +1,12 @@
+package main.java;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
  *
  */
-public class Window extends JFrame {
+public class GUI extends JFrame {
 
 
     static final int WIDTH = 1280;
@@ -19,7 +21,7 @@ public class Window extends JFrame {
     /**
      *
      */
-    public Window() {
+    public GUI() {
 
         frame = new JFrame();
         frame.setTitle("Algorithm Visualizer");
@@ -39,6 +41,7 @@ public class Window extends JFrame {
 
         graph = new GraphPanel();
         graph.setPreferredSize(new Dimension(WIDTH, HEIGHT - (HEIGHT / 15)));
+        graph.setBackground(Color.WHITE);
 
         frame.add(graph, BorderLayout.CENTER);
     }
