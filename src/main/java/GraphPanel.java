@@ -117,14 +117,14 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     * Reads and stores graph data from a file, determined by {@code graphSize}.
+     * Reads and stores graph data from a file, as defined by {@code graphSize}.
      */
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DM_DEFAULT_ENCODING")
     private void initGraph() {
 
         String graphFileName = graphFileNames.get(graphSize);
-        String graphFileLocation = System.getProperty("user.dir");
-        graphFileLocation = graphFileLocation.concat("\\src\\main\\java\\" +
-                "resources\\graphs\\" + graphFileName);
+        String graphFileLocation = System.getProperty("user.dir")
+                .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         try {
             Scanner s = new Scanner(new File(graphFileLocation));
             String line;
