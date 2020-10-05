@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -19,7 +20,7 @@ public class GraphPanel extends JPanel {
     static final Color VISITED_COLOR = Color.RED;
     static final Color UNVISITED_COLOR = Color.BLACK;
     static final Color PATH_COLOR = Color.GREEN;
-    static final double NODE_RADIUS = 0.5;
+    static final int NODE_RADIUS = 5;
     static final HashMap<String, String> graphFileNames = new HashMap<>();
 
     static {
@@ -47,8 +48,9 @@ public class GraphPanel extends JPanel {
     protected Integer startNode;
     protected Integer endNode;
     private boolean[] visited;
-    private HashMap<Shape, Integer> allNodes;
-    private HashMap<Integer, LinkedList<Integer[]>> adjNodes;
+    private HashMap<Integer, double[]> nodeCoords;
+    private HashMap<Integer, Shape> nodeShapes;
+    private HashMap<Integer, LinkedList<Integer>> adjNodes;
     private Deque<Integer> path;
 
 
@@ -75,13 +77,11 @@ public class GraphPanel extends JPanel {
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
                     startNode = endNode = null;
                 } else {
-                    for (Shape shape : allNodes.keySet()) {
-                        if (shape.contains(me.getPoint())) {
+                    for (Integer nodeNum : nodeShapes.keySet()) {
+                        if (nodeShapes.get(nodeNum).contains(me.getPoint())) {
                             if (mouseState.equals(MOUSE_STATE.START_NODE)) {
-                                startNode = allNodes.get(shape);
-                            } else {
-                                endNode = allNodes.get(shape);
-                            }
+                                startNode = nodeNum;
+                            } else endNode = nodeNum;
                         }
                     }
                 }
@@ -97,22 +97,36 @@ public class GraphPanel extends JPanel {
      */
     public void paint(Graphics g) {
 
-        super.paint(g);
+        Graphics2D g2D = (Graphics2D) g;
+        super.paint(g2D);
 
-        // Paint start and end nodes or unpaint if either is null
+        for (Integer nodeNum : nodeCoords.keySet()) {
+            g.setColor(visited[nodeNum] ? VISITED_COLOR : UNVISITED_COLOR);
+            if (path.contains(nodeNum)) g.setColor(PATH_COLOR);
+            g2D.draw(nodeShapes.get(nodeNum));
 
-        // Loop through all nodes and paint them as unvisited or visited
-//        g.setColor(UNVISITED_COLOR);
-//        g.setColor(VISITED_COLOR);
-//        g.drawOval(0, 0, NODE_DIMENSION, NODE_DIMENSION);
-//        g.fillOval(0, 0, NODE_DIMENSION, NODE_DIMENSION);
+            // ADD CONDITIONAL THAT CHECKS IF THIS IS VERY FIRST PAINT. IN WHICH CASE
+            // THE EDGES WOULD'NT HAVE TO ALL BE DRAWN BLACK EACH TIME.
+            g.setColor(Color.BLACK);
+            double x = nodeCoords.get(nodeNum)[0];
+            double y = nodeCoords.get(nodeNum)[1];
+            for (Integer adjNode : adjNodes.get(nodeNum)) {
+                double adjX = nodeCoords.get(nodeNum)[0];
+                double adjY = nodeCoords.get(nodeNum)[0];
+                g2D.draw(new Line2D.Double(x, y, adjX, adjY));
+            }
+        }
 
-        // Loop through all edges and paint them as unvisited
-//        g.setColor(UNVISITED_COLOR);
-//        g.drawLine(0, 0, 0, 0);
-
-        // Loop through nodes in path and paint them, along with their edges
-//        g.setColor(PATH_COLOR);
+        double prevX;
+        double prevY;
+        Iterator it = path.iterator();
+        while (it.hasNext()) {
+            Integer nodeNum = (Integer) it.next();
+            prevX = nodeCoords.get(nodeNum)[0];
+            prevY = nodeCoords.get(nodeNum)[1];
+            
+            double nextX = nodeCoords()
+        }
     }
 
 
@@ -138,20 +152,24 @@ public class GraphPanel extends JPanel {
                 double currentNodeY = lineData.get(2);
                 Shape nodeShape = new Ellipse2D.Double(currentNodeX,
                         currentNodeY, NODE_RADIUS, NODE_RADIUS);
-                allNodes = new HashMap<>();
+
+                nodeCoords = new HashMap<>();
+                nodeCoords.put(currentNode, new double[]{currentNodeX, currentNodeY});
+
+                nodeShapes = new HashMap<>();
+                nodeShapes.put(currentNode, nodeShape);
+
                 adjNodes = new HashMap<>();
-                allNodes.put(nodeShape, currentNode);
                 ListIterator<Integer> it = lineData.listIterator(3);
                 while (it.hasNext()) {
-                    adjNodes.computeIfAbsent(currentNode, key ->
-                            new LinkedList<>()).add(
-                            new Integer[]{currentNode, it.next()});
+                    adjNodes.computeIfAbsent(currentNode,
+                            key -> new LinkedList<>()).add(it.next());
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        visited = new boolean[allNodes.size()];
+        visited = new boolean[nodeCoords.size()];
     }
 
 
