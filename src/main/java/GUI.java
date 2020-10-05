@@ -24,6 +24,7 @@ public class GUI extends JFrame {
     public GUI() {
 
         // NEED TO RESCALE THE AXES AND CENTER THE ORIGIN IN THE CENTER
+        // CHANGE SCALING FOR EACH GRAPH SIZE
 
         frame = new JFrame();
         frame.setTitle("Algorithm Visualizer");
