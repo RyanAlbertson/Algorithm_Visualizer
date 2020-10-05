@@ -23,6 +23,8 @@ public class GUI extends JFrame {
      */
     public GUI() {
 
+        // NEED TO RESCALE THE AXES AND CENTER THE ORIGIN IN THE CENTER
+
         frame = new JFrame();
         frame.setTitle("Algorithm Visualizer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

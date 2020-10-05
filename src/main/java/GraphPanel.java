@@ -20,7 +20,7 @@ public class GraphPanel extends JPanel {
     static final Color VISITED_COLOR = Color.RED;
     static final Color UNVISITED_COLOR = Color.BLACK;
     static final Color PATH_COLOR = Color.GREEN;
-    static final int NODE_RADIUS = 5;
+    static final int NODE_RADIUS = 10;
     static final HashMap<String, String> graphFileNames = new HashMap<>();
 
     static {
@@ -42,9 +42,10 @@ public class GraphPanel extends JPanel {
         }
     }
 
-    private MOUSE_STATE mouseState;
-    private String algName;
-    protected String graphSize;
+    private boolean firstPaint = true;
+    private String algName = "Breath-First Search";
+    protected String graphSize = "Small";
+    private MOUSE_STATE mouseState = MOUSE_STATE.START_NODE;
     protected Integer startNode;
     protected Integer endNode;
     private boolean[] visited;
@@ -58,13 +59,6 @@ public class GraphPanel extends JPanel {
      *
      */
     public GraphPanel() {
-
-        // Defaults
-        this.setAlgName("Breadth-First Search");
-        this.graphSize = "Small";
-        mouseState = MOUSE_STATE.START_NODE;
-
-        initGraph();
 
         // Detect user-selected start and end nodes
         addMouseListener(new MouseAdapter() {
@@ -97,35 +91,49 @@ public class GraphPanel extends JPanel {
      */
     public void paint(Graphics g) {
 
+        if (firstPaint) {
+            initGraph();
+        }
+
         Graphics2D g2D = (Graphics2D) g;
         super.paint(g2D);
 
         for (Integer nodeNum : nodeCoords.keySet()) {
             g.setColor(visited[nodeNum] ? VISITED_COLOR : UNVISITED_COLOR);
             if (path.contains(nodeNum)) g.setColor(PATH_COLOR);
-            g2D.draw(nodeShapes.get(nodeNum));
+            g2D.fill(nodeShapes.get(nodeNum));
 
-            // ADD CONDITIONAL THAT CHECKS IF THIS IS VERY FIRST PAINT. IN WHICH CASE
-            // THE EDGES WOULD'NT HAVE TO ALL BE DRAWN BLACK EACH TIME.
-            g.setColor(Color.BLACK);
-            double x = nodeCoords.get(nodeNum)[0];
-            double y = nodeCoords.get(nodeNum)[1];
-            for (Integer adjNode : adjNodes.get(nodeNum)) {
-                double adjX = nodeCoords.get(nodeNum)[0];
-                double adjY = nodeCoords.get(nodeNum)[0];
-                g2D.draw(new Line2D.Double(x, y, adjX, adjY));
+            if (firstPaint) {
+                g.setColor(Color.BLACK);
+                double x = nodeCoords.get(nodeNum)[0];
+                double y = nodeCoords.get(nodeNum)[1];
+                for (Integer adjNode : adjNodes.get(nodeNum)) {
+                    double adjX = nodeCoords.get(nodeNum)[0];
+                    double adjY = nodeCoords.get(nodeNum)[0];
+                    g2D.draw(new Line2D.Double(x, y, adjX, adjY));
+                }
             }
         }
+        firstPaint = false;
 
+        g.setColor(PATH_COLOR);
         double prevX;
         double prevY;
+        Integer nodeNum;
         Iterator it = path.iterator();
-        while (it.hasNext()) {
-            Integer nodeNum = (Integer) it.next();
+        if (it.hasNext()) {
+            nodeNum = (Integer) it.next();
             prevX = nodeCoords.get(nodeNum)[0];
             prevY = nodeCoords.get(nodeNum)[1];
-            
-            double nextX = nodeCoords()
+
+            while (it.hasNext()) {
+                nodeNum = (Integer) it.next();
+                double x = nodeCoords.get(nodeNum)[0];
+                double y = nodeCoords.get(nodeNum)[1];
+                g2D.draw(new Line2D.Double(prevX, prevY, x, y));
+                prevX = nodeCoords.get(nodeNum)[0];
+                prevY = nodeCoords.get(nodeNum)[1];
+            }
         }
     }
 
@@ -136,6 +144,11 @@ public class GraphPanel extends JPanel {
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DM_DEFAULT_ENCODING")
     private void initGraph() {
 
+        nodeCoords = new HashMap<>();
+        nodeShapes = new HashMap<>();
+        adjNodes = new HashMap<>();
+        path = new ArrayDeque<>();
+
         String graphFileName = graphFileNames.get(graphSize);
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
@@ -143,26 +156,21 @@ public class GraphPanel extends JPanel {
             Scanner s = new Scanner(new File(graphFileLocation));
             String line;
             while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
+
                 LinkedList<Integer> lineData = new LinkedList<>();
                 for (String str : line.split(" ")) {
                     if (!str.equals("")) lineData.add(Integer.parseInt(str));
                 }
-                Integer currentNode = lineData.get(0);
-                double currentNodeX = lineData.get(1);
-                double currentNodeY = lineData.get(2);
-                Shape nodeShape = new Ellipse2D.Double(currentNodeX,
-                        currentNodeY, NODE_RADIUS, NODE_RADIUS);
-
-                nodeCoords = new HashMap<>();
-                nodeCoords.put(currentNode, new double[]{currentNodeX, currentNodeY});
-
-                nodeShapes = new HashMap<>();
-                nodeShapes.put(currentNode, nodeShape);
-
-                adjNodes = new HashMap<>();
-                ListIterator<Integer> it = lineData.listIterator(3);
+                Integer nodeNum = lineData.get(0);
+                double nodeNumX = lineData.get(1);
+                double nodeNumY = lineData.get(2);
+                Shape nodeShape = new Ellipse2D.Double(nodeNumX,
+                        nodeNumY, NODE_RADIUS, NODE_RADIUS);
+                nodeCoords.put(nodeNum, new double[]{nodeNumX, nodeNumY});
+                nodeShapes.put(nodeNum, nodeShape);
+                ListIterator<Integer> it = lineData.listIterator();
                 while (it.hasNext()) {
-                    adjNodes.computeIfAbsent(currentNode,
+                    adjNodes.computeIfAbsent(nodeNum,
                             key -> new LinkedList<>()).add(it.next());
                 }
             }
