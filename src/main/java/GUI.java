@@ -23,9 +23,6 @@ public class GUI extends JFrame {
      */
     public GUI() {
 
-        // NEED TO RESCALE THE AXES AND CENTER THE ORIGIN IN THE CENTER
-        // CHANGE NODE RADIUS FOR EACH GRAPH SIZE
-
         frame = new JFrame();
         frame.setTitle("Algorithm Visualizer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +42,7 @@ public class GUI extends JFrame {
         graph = new GraphPanel();
         graph.setPreferredSize(new Dimension(WIDTH, HEIGHT - (HEIGHT / 15)));
         graph.centerX = (double) WIDTH / 2;
-        graph.centerY = (double) HEIGHT / 2;
+        graph.centerY = (double) (HEIGHT - (HEIGHT / 15)) / 2;
         graph.setBackground(Color.WHITE);
 
         frame.add(graph, BorderLayout.CENTER);
@@ -78,7 +75,7 @@ public class GUI extends JFrame {
                 "Dijkstra", "Bellman-Ford", "Floyd-Warshall"};
         chooseAlgName = new JComboBox<>(algNames);
         chooseAlgName.addActionListener(event ->
-                graph.setAlgName((String) chooseAlgName.getSelectedItem()));
+                graph.algName = (String) chooseAlgName.getSelectedItem());
         menu.add(chooseAlgName);
 
         String[] graphSizes = {"Small", "Medium", "Large"};
