@@ -48,6 +48,8 @@ public class GraphPanel extends JPanel {
     private MOUSE_STATE mouseState = MOUSE_STATE.START_NODE;
     protected Integer startNode;
     protected Integer endNode;
+    protected double centerX;
+    protected double centerY;
     private boolean[] visited;
     private HashMap<Integer, double[]> nodeCoords;
     private HashMap<Integer, Shape> nodeShapes;

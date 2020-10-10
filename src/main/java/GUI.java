@@ -24,7 +24,7 @@ public class GUI extends JFrame {
     public GUI() {
 
         // NEED TO RESCALE THE AXES AND CENTER THE ORIGIN IN THE CENTER
-        // CHANGE SCALING FOR EACH GRAPH SIZE
+        // CHANGE NODE RADIUS FOR EACH GRAPH SIZE
 
         frame = new JFrame();
         frame.setTitle("Algorithm Visualizer");
@@ -44,6 +44,8 @@ public class GUI extends JFrame {
 
         graph = new GraphPanel();
         graph.setPreferredSize(new Dimension(WIDTH, HEIGHT - (HEIGHT / 15)));
+        graph.centerX = (double) WIDTH / 2;
+        graph.centerY = (double) HEIGHT / 2;
         graph.setBackground(Color.WHITE);
 
         frame.add(graph, BorderLayout.CENTER);
