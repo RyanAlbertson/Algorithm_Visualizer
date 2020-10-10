@@ -42,7 +42,6 @@ public class GraphPanel extends JPanel {
         }
     }
 
-    private boolean firstPaint;
     protected String algName;
     protected String graphSize;
     private MOUSE_STATE mouseState;
@@ -57,17 +56,23 @@ public class GraphPanel extends JPanel {
     private Deque<Integer> path;
 
 
+    public GraphPanel() {
+        // REMOVE THIS WHEN I START WORKING ON ALG CLASSES
+    }
+
     /**
      *
      */
-    public GraphPanel() {
+    public GraphPanel(Color color, int width, int height) {
 
-        firstPaint = true;
         algName = "Breath-First Search";
         graphSize = "Small";
         mouseState = MOUSE_STATE.START_NODE;
-        centerX = this.getWidth() / 2.0;
-        centerY = (this.getHeight() - (this.getHeight() / 15.0)) / 2.0;
+        this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(color);
+        centerX = width / 2.0;
+        centerY = (height - (height / 15.0)) / 2.0;
+        initGraph();
 
         // Detect user-selected start and end nodes
         addMouseListener(new MouseAdapter() {
@@ -79,17 +84,19 @@ public class GraphPanel extends JPanel {
 
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
                     startNode = endNode = null;
+                    repaint();
+                    mouseState = mouseState.next();
                 } else {
                     for (Integer nodeNum : nodeShapes.keySet()) {
                         if (nodeShapes.get(nodeNum).contains(me.getPoint())) {
                             if (mouseState.equals(MOUSE_STATE.START_NODE)) {
                                 startNode = nodeNum;
                             } else endNode = nodeNum;
+                            repaint();
+                            mouseState = mouseState.next();
                         }
                     }
                 }
-                repaint();
-                mouseState = mouseState.next();
             }
         });
     }
@@ -100,8 +107,6 @@ public class GraphPanel extends JPanel {
      */
     public void paint(Graphics g) {
 
-        if (firstPaint) initGraph();
-
         super.paint(g);
         Graphics2D g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -109,30 +114,25 @@ public class GraphPanel extends JPanel {
         g2D.setStroke(new BasicStroke(2f));
 
         for (Integer nodeNum : nodeCoords.keySet()) {
-            // DOESN'T REPAINT BLACK EDGES IF WINDOW SIZE IS CHANGED
             // Color all nodes and edges black initially
-            if (firstPaint) {
-                g.setColor(Color.BLACK);
-                double x = nodeCoords.get(nodeNum)[0];
-                double y = nodeCoords.get(nodeNum)[1];
-                for (Integer adjNode : adjNodes.get(nodeNum)) {
-                    try {
-                        double adjX = nodeCoords.get(adjNode)[0];
-                        double adjY = nodeCoords.get(adjNode)[1];
-                        g2D.draw(new Line2D.Double(x, y, adjX, adjY));
-                    } catch (NullPointerException e) {
-                        // nodeNum has no adjacent nodes
-                    }
+            g.setColor(Color.BLACK);
+            double x = nodeCoords.get(nodeNum)[0];
+            double y = nodeCoords.get(nodeNum)[1];
+            for (Integer adjNode : adjNodes.get(nodeNum)) {
+                try {
+                    double adjX = nodeCoords.get(adjNode)[0];
+                    double adjY = nodeCoords.get(adjNode)[1];
+                    g2D.draw(new Line2D.Double(x, y, adjX, adjY));
+                } catch (NullPointerException e) {
+                    // nodeNum has no adjacent nodes
                 }
             }
 
-            // Colors visited and unvisited nodes
-            g.setColor(visited[nodeNum] ? VISITED_COLOR : UNVISITED_COLOR);
-            if (path.contains(nodeNum)) g.setColor(PATH_COLOR);
-            // CHANGE NODE RADIUS FOR EACH GRAPH SIZE
+            if (nodeNum.equals(startNode)) g.setColor(Color.GREEN);
+            else if (nodeNum.equals(endNode)) g.setColor(Color.RED);
+            else g.setColor(visited[nodeNum] ? VISITED_COLOR : UNVISITED_COLOR);
             g2D.fill(nodeShapes.get(nodeNum));
         }
-        firstPaint = false;
 
         // Colors nodes and edges in path
         g.setColor(PATH_COLOR);
@@ -168,9 +168,6 @@ public class GraphPanel extends JPanel {
         adjNodes = new HashMap<>();
         path = new ArrayDeque<>();
 
-        centerX = this.getWidth() / 2.0;
-        centerY = (this.getHeight() - (this.getHeight() / 15.0)) / 2.0;
-
         String graphFileName = graphFileNames.get(graphSize);
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
@@ -185,15 +182,16 @@ public class GraphPanel extends JPanel {
                     if (!str.equals("")) lineData.add(Integer.parseInt(str));
                 }
                 Integer nodeNum = lineData.get(0);
-                double nodeNumX = centerX + lineData.get(1) - NODE_RADIUS / 2;
-                double nodeNumY = centerY + lineData.get(2) + NODE_RADIUS / 2;
+                double nodeNumX = centerX + lineData.get(1);
+                double nodeNumY = centerY + lineData.get(2);
                 Shape nodeShape = new Ellipse2D.Double(nodeNumX,
                         nodeNumY, NODE_RADIUS, NODE_RADIUS);
                 nodeCoords.put(nodeNum, new double[]{nodeNumX, nodeNumY});
                 nodeShapes.put(nodeNum, nodeShape);
-                for (Integer adjNode : lineData) {
+                Iterator<Integer> it = lineData.listIterator(3);
+                while (it.hasNext()) {
                     adjNodes.computeIfAbsent(nodeNum,
-                            key -> new LinkedList<>()).add(adjNode);
+                            key -> new LinkedList<>()).add(it.next());
                 }
             }
         } catch (IOException e) {

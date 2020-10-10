@@ -32,6 +32,7 @@ public class GUI extends JFrame {
         frame.setSize(WIDTH, HEIGHT);
         initGraphPanel();
         initMenuPanel();
+        frame.pack();
         frame.setVisible(true);
     }
 
@@ -41,9 +42,10 @@ public class GUI extends JFrame {
      */
     private void initGraphPanel() {
 
-        graph = new GraphPanel();
-        graph.setPreferredSize(new Dimension(WIDTH, HEIGHT - (HEIGHT / 15)));
-        graph.setBackground(Color.WHITE);
+        Color graphBackgroundColor = Color.WHITE;
+        int graphWidth = WIDTH;
+        int graphHeight = HEIGHT - (HEIGHT / 15);
+        graph = new GraphPanel(graphBackgroundColor, graphWidth, graphHeight);
 
         frame.add(graph, BorderLayout.CENTER);
     }
