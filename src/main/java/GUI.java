@@ -8,6 +8,8 @@ import java.awt.*;
  */
 public class GUI extends JFrame {
 
+    // CHANGE ENTIRE GRAPH PANEL TO SCALE WITH THE GRAPH SIZE. NODES NEED TO BE BIGGER
+    // BUT THEY CANT JUST INCREASE IN RADIUS OR THEY WILL OVER LAP
 
     static final int WIDTH = 1280;
     static final int HEIGHT = 720;
@@ -41,8 +43,6 @@ public class GUI extends JFrame {
 
         graph = new GraphPanel();
         graph.setPreferredSize(new Dimension(WIDTH, HEIGHT - (HEIGHT / 15)));
-        graph.centerX = (double) WIDTH / 2;
-        graph.centerY = (double) (HEIGHT - (HEIGHT / 15)) / 2;
         graph.setBackground(Color.WHITE);
 
         frame.add(graph, BorderLayout.CENTER);

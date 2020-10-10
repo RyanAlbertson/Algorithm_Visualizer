@@ -20,7 +20,7 @@ public class GraphPanel extends JPanel {
     static final Color VISITED_COLOR = Color.RED;
     static final Color UNVISITED_COLOR = Color.BLACK;
     static final Color PATH_COLOR = Color.GREEN;
-    static final int NODE_RADIUS = 10;
+    static final double NODE_RADIUS = 20.0;
     static final HashMap<String, String> graphFileNames = new HashMap<>();
 
     static {
@@ -66,6 +66,8 @@ public class GraphPanel extends JPanel {
         algName = "Breath-First Search";
         graphSize = "Small";
         mouseState = MOUSE_STATE.START_NODE;
+        centerX = this.getWidth() / 2.0;
+        centerY = (this.getHeight() - (this.getHeight() / 15.0)) / 2.0;
 
         // Detect user-selected start and end nodes
         addMouseListener(new MouseAdapter() {
@@ -100,11 +102,15 @@ public class GraphPanel extends JPanel {
 
         if (firstPaint) initGraph();
 
+        super.paint(g);
         Graphics2D g2D = (Graphics2D) g;
-        super.paint(g2D);
+        g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2D.setStroke(new BasicStroke(2f));
 
         for (Integer nodeNum : nodeCoords.keySet()) {
-            // All nodes and edges are initially black
+            // DOESN'T REPAINT BLACK EDGES IF WINDOW SIZE IS CHANGED
+            // Color all nodes and edges black initially
             if (firstPaint) {
                 g.setColor(Color.BLACK);
                 double x = nodeCoords.get(nodeNum)[0];
@@ -162,21 +168,25 @@ public class GraphPanel extends JPanel {
         adjNodes = new HashMap<>();
         path = new ArrayDeque<>();
 
+        centerX = this.getWidth() / 2.0;
+        centerY = (this.getHeight() - (this.getHeight() / 15.0)) / 2.0;
+
         String graphFileName = graphFileNames.get(graphSize);
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         try {
             Scanner s = new Scanner(new File(graphFileLocation));
+            // Skip first line, it's a comment
+            if (s.hasNextLine()) s.nextLine();
             String line;
             while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
-
                 LinkedList<Integer> lineData = new LinkedList<>();
                 for (String str : line.split(" ")) {
                     if (!str.equals("")) lineData.add(Integer.parseInt(str));
                 }
                 Integer nodeNum = lineData.get(0);
-                double nodeNumX = centerX + lineData.get(1);
-                double nodeNumY = centerY + lineData.get(2);
+                double nodeNumX = centerX + lineData.get(1) - NODE_RADIUS / 2;
+                double nodeNumY = centerY + lineData.get(2) + NODE_RADIUS / 2;
                 Shape nodeShape = new Ellipse2D.Double(nodeNumX,
                         nodeNumY, NODE_RADIUS, NODE_RADIUS);
                 nodeCoords.put(nodeNum, new double[]{nodeNumX, nodeNumY});
