@@ -34,26 +34,29 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/resources/graphs" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\GitHub\Algorithm_Visualizer\src\main\java\resources\graphs" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="" />
+      <recent name="resources.algorithms" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
       <recent name="com" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\GitHub\Algorithm_Visualizer\src\main\java\resources\graphs" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="resources.algorithms" />
     </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="" />
-      <recent name="resources.algorithms" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\GitHub\Algorithm_Visualizer\src\main\java\resources\graphs" />
     </key>
   </component>
   <component name="RunManager" selected="Application.AlgorithmVisualizer (1)">
@@ -211,13 +214,14 @@
     </state>
     <state width="1837" height="372" key="GridCell.Tab.1.right/0.0.1837.1080@0.0.1837.1080" timestamp="1602356604184" />
     <state width="1848" height="372" key="GridCell.Tab.1.right/0.0.1848.1080@0.0.1848.1080" timestamp="1601180268293" />
-    <state x="402" y="113" width="837" height="615" key="SettingsEditor" timestamp="1601588766135">
-      <screen x="0" y="0" width="1838" height="1080" />
+    <state x="825" y="113" width="1719" height="708" key="SettingsEditor" timestamp="1602431669739">
+      <screen x="0" y="0" width="3774" height="1080" />
     </state>
     <state x="544" y="151" key="SettingsEditor/-1080.243.972.1920/0.0.2488.1440@0.0.2488.1440" timestamp="1601264599473" />
     <state x="402" y="113" width="837" height="615" key="SettingsEditor/0.0.1838.1080@0.0.1838.1080" timestamp="1601588766135" />
     <state x="404" y="113" width="1133" height="818" key="SettingsEditor/0.0.1848.1080@0.0.1848.1080" timestamp="1601165417795" />
     <state x="544" y="151" key="SettingsEditor/0.0.2488.1440@0.0.2488.1440" timestamp="1601565144428" />
+    <state x="825" y="113" width="1719" height="708" key="SettingsEditor/0.0.3774.1080@0.0.3774.1080" timestamp="1602431669739" />
     <state x="786" y="374" key="chooseDestDirectoryDialog" timestamp="1601588691915">
       <screen x="0" y="0" width="1838" height="1080" />
     </state>
@@ -240,6 +244,16 @@
           <url>file://$PROJECT_DIR$/src/main/java/GUI.java</url>
           <line>11</line>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/GraphGenerator.java</url>
+          <line>1</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/GUI.java</url>
+          <line>85</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
