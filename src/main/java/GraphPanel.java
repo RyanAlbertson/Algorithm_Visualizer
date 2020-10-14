@@ -8,6 +8,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -172,7 +173,8 @@ public class GraphPanel extends JPanel {
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         try {
-            Scanner s = new Scanner(new File(graphFileLocation));
+            Scanner s = new Scanner(new File(graphFileLocation),
+                    StandardCharsets.UTF_8);
             // Skip first line, it's a comment
             if (s.hasNextLine()) s.nextLine();
             String line;

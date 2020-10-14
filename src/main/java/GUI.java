@@ -82,9 +82,9 @@ public class GUI extends JFrame {
 
         String[] graphSizes = {"Small", "Medium", "Large"};
         chooseGraphSize = new JComboBox<>(graphSizes);
-        chooseGraphSize.addActionListener(event ->
-                //GraphGenerator.generateGraph("small");
-                graph.graphSize = ((String) chooseGraphSize.getSelectedItem()));
+        chooseGraphSize.addActionListener(event -> GraphGenerator.
+                generateGraph(((String) chooseGraphSize.getSelectedItem())));
+        chooseGraphSize.addActionListener(event -> graph.repaint());
         menu.add(chooseGraphSize);
 
         frame.add(menu, BorderLayout.NORTH);
