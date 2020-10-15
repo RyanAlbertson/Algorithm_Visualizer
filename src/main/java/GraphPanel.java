@@ -162,7 +162,7 @@ public class GraphPanel extends JPanel {
      * Reads and stores graph data from a file, as defined by {@code graphSize}.
      */
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    private void initGraph() {
+    protected void initGraph() {
 
         nodeCoords = new HashMap<>();
         nodeShapes = new HashMap<>();

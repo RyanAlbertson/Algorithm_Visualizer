@@ -8,9 +8,6 @@ import java.awt.*;
  */
 public class GUI extends JFrame {
 
-    // CHANGE ENTIRE GRAPH PANEL TO SCALE WITH THE GRAPH SIZE. NODES NEED TO BE BIGGER
-    // BUT THEY CANT JUST INCREASE IN RADIUS OR THEY WILL OVER LAP
-
     static final int WIDTH = 1280;
     static final int HEIGHT = 720;
 
@@ -84,6 +81,7 @@ public class GUI extends JFrame {
         chooseGraphSize = new JComboBox<>(graphSizes);
         chooseGraphSize.addActionListener(event -> GraphGenerator.
                 generateGraph(((String) chooseGraphSize.getSelectedItem())));
+        chooseGraphSize.addActionListener(event -> graph.initGraph());
         chooseGraphSize.addActionListener(event -> graph.repaint());
         menu.add(chooseGraphSize);
 
