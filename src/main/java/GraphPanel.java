@@ -21,7 +21,7 @@ public class GraphPanel extends JPanel {
     static final Color VISITED_COLOR = Color.RED;
     static final Color UNVISITED_COLOR = Color.BLACK;
     static final Color PATH_COLOR = Color.GREEN;
-    static final double NODE_RADIUS = 20.0;
+    static final int NODE_RADIUS = 20;
     static final HashMap<String, String> graphFileNames = new HashMap<>();
 
     static {
@@ -48,31 +48,23 @@ public class GraphPanel extends JPanel {
     private MOUSE_STATE mouseState;
     protected Integer startNode;
     protected Integer endNode;
-    protected double centerX;
-    protected double centerY;
     private boolean[] visited;
-    private HashMap<Integer, double[]> nodeCoords;
+    private HashMap<Integer, Double[]> nodeCoords;
     private HashMap<Integer, Shape> nodeShapes;
     private HashMap<Integer, LinkedList<Integer>> adjNodes;
     private Deque<Integer> path;
 
 
-    public GraphPanel() {
-        // REMOVE THIS WHEN I START WORKING ON ALG CLASSES
-    }
-
     /**
      *
      */
-    public GraphPanel(Color color, int width, int height) {
+    public GraphPanel() {
 
         algName = "Breath-First Search";
         graphSize = "Small";
         mouseState = MOUSE_STATE.START_NODE;
-        this.setPreferredSize(new Dimension(width, height));
-        this.setBackground(color);
-        centerX = width / 2.0;
-        centerY = (height - (height / 15.0)) / 2.0;
+        this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
+        this.setBackground(Color.WHITE);
         initGraph();
 
         // Detect user-selected start and end nodes
@@ -92,11 +84,15 @@ public class GraphPanel extends JPanel {
                         if (nodeShapes.get(nodeNum).contains(me.getPoint())) {
                             if (mouseState.equals(MOUSE_STATE.START_NODE)) {
                                 startNode = nodeNum;
-                            } else endNode = nodeNum;
-                            repaint();
-                            mouseState = mouseState.next();
+                                break;
+                            } else {
+                                endNode = nodeNum;
+                                break;
+                            }
                         }
                     }
+                    repaint();
+                    mouseState = mouseState.next();
                 }
             }
         });
@@ -112,23 +108,30 @@ public class GraphPanel extends JPanel {
         Graphics2D g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g2D.setStroke(new BasicStroke(2f));
+        g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
+        g2D.setStroke(new BasicStroke(1f));
+
+        g2D.setFont(new Font("Ariel", Font.PLAIN, 18));
+        g2D.drawString("Click nodes to define a source and target", 475, 20);
 
         for (Integer nodeNum : nodeCoords.keySet()) {
             // Color all nodes and edges black initially
             g.setColor(Color.BLACK);
-            double x = nodeCoords.get(nodeNum)[0];
-            double y = nodeCoords.get(nodeNum)[1];
+            double x = nodeCoords.get(nodeNum)[0] + NODE_RADIUS / 2.0;
+            double y = nodeCoords.get(nodeNum)[1] + NODE_RADIUS / 2.0;
             for (Integer adjNode : adjNodes.get(nodeNum)) {
                 try {
-                    double adjX = nodeCoords.get(adjNode)[0];
-                    double adjY = nodeCoords.get(adjNode)[1];
+                    double adjX = nodeCoords.get(adjNode)[0] + NODE_RADIUS / 2.0;
+                    double adjY = nodeCoords.get(adjNode)[1] + NODE_RADIUS / 2.0;
                     g2D.draw(new Line2D.Double(x, y, adjX, adjY));
                 } catch (NullPointerException e) {
                     // nodeNum has no adjacent nodes
                 }
             }
-
+        }
+        // Need second loop so that nodes are painted over all lines
+        for (Integer nodeNum : nodeCoords.keySet()) {
             if (nodeNum.equals(startNode)) g.setColor(Color.GREEN);
             else if (nodeNum.equals(endNode)) g.setColor(Color.RED);
             else g.setColor(visited[nodeNum] ? VISITED_COLOR : UNVISITED_COLOR);
@@ -136,6 +139,14 @@ public class GraphPanel extends JPanel {
         }
 
         // Colors nodes and edges in path
+        //HOW TO SLOW DOWN SUCH THAT ALGORITHM CAN BE VISUALIZED AS IT STEPS?
+//        try {
+//            TimeUnit.SECONDS.sleep(1);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+        //USE SAME COLORS FOR VISISTED AND PATH NODES?
         g.setColor(PATH_COLOR);
         double prevX;
         double prevY;
@@ -145,7 +156,6 @@ public class GraphPanel extends JPanel {
             nodeNum = it.next();
             prevX = nodeCoords.get(nodeNum)[0];
             prevY = nodeCoords.get(nodeNum)[1];
-
             while (it.hasNext()) {
                 nodeNum = it.next();
                 double x = nodeCoords.get(nodeNum)[0];
@@ -168,15 +178,12 @@ public class GraphPanel extends JPanel {
         nodeShapes = new HashMap<>();
         adjNodes = new HashMap<>();
         path = new ArrayDeque<>();
-
         String graphFileName = graphFileNames.get(graphSize);
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         try {
             Scanner s = new Scanner(new File(graphFileLocation),
                     StandardCharsets.UTF_8);
-            // Skip first line, it's a comment
-            if (s.hasNextLine()) s.nextLine();
             String line;
             while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
                 LinkedList<Integer> lineData = new LinkedList<>();
@@ -184,11 +191,11 @@ public class GraphPanel extends JPanel {
                     if (!str.equals("")) lineData.add(Integer.parseInt(str));
                 }
                 Integer nodeNum = lineData.get(0);
-                double nodeNumX = centerX + lineData.get(1);
-                double nodeNumY = centerY + lineData.get(2);
+                double nodeNumX = lineData.get(1);
+                double nodeNumY = lineData.get(2);
                 Shape nodeShape = new Ellipse2D.Double(nodeNumX,
                         nodeNumY, NODE_RADIUS, NODE_RADIUS);
-                nodeCoords.put(nodeNum, new double[]{nodeNumX, nodeNumY});
+                nodeCoords.put(nodeNum, new Double[]{nodeNumX, nodeNumY});
                 nodeShapes.put(nodeNum, nodeShape);
                 Iterator<Integer> it = lineData.listIterator(3);
                 while (it.hasNext()) {

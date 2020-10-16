@@ -33,11 +33,9 @@ public class GraphGenerator extends DefaultEdge {
             Integer source = graph.getEdgeSource(currentEdge);
             Integer dest = graph.getEdgeSource(currentEdge);
 
-            //it can be at most one new vertex
             Integer targetNode = visited.contains(source) ? dest : source;
             if (!visited.contains(targetNode)) {
                 visited.add(targetNode);
-                //BFS
                 graph.edgesOf(targetNode).forEach(queue::addLast);
             }
         }
@@ -54,22 +52,28 @@ public class GraphGenerator extends DefaultEdge {
         Random rand = new Random();
         for (Integer node : graph.vertexSet()) {
             line.append(node).append(" ");
-            // Get random node coordinates within GUI bounds
-            int x = rand.nextInt(GUI.WIDTH);
-            int y = rand.nextInt(GUI.HEIGHT);
+            // Get random node coordinates within GUI bounds.
+            int xCenter = GUI.WINDOW_WIDTH / 2;
+            int yCenter = GUI.GRAPH_HEIGHT / 2;
+            int xLowerBound = -GUI.WINDOW_WIDTH / 2 + GraphPanel.NODE_RADIUS;
+            int xUpperBound = GUI.WINDOW_WIDTH / 2 - GraphPanel.NODE_RADIUS;
+            int yLowerBound = -GUI.GRAPH_HEIGHT / 2 + GraphPanel.NODE_RADIUS;
+            int yUpperBound = GUI.GRAPH_HEIGHT / 2 - GraphPanel.NODE_RADIUS;
+            int x = rand.nextInt((xUpperBound - xLowerBound) + 1) + xLowerBound + xCenter;
+            int y = rand.nextInt((yUpperBound - yLowerBound) + 1) + yLowerBound + yCenter;
             line.append(x).append(" ");
             line.append(y).append(" ");
             for (DefaultEdge edge : graph.edgesOf(node)) {
                 try {
-                    Method method = edge.getClass().getDeclaredMethod("getTarget");
-                    method.setAccessible(true);
-                    line.append(method.invoke(edge)).append(" ");
+                    Method getTarget = edge.getClass().getDeclaredMethod("getTarget");
+                    getTarget.setAccessible(true);
+                    line.append(getTarget.invoke(edge)).append(" ");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             lines.add(line.toString());
-            //DOESNT ADD LINE CORRECTLY, EACH lines.add ONLY APPENDS A NEW EDGE
+            line.delete(0, line.length() - 1);
         }
 
         // Write graph to file
