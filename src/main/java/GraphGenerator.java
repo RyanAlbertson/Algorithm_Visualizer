@@ -50,7 +50,7 @@ public class GraphGenerator extends DefaultEdge {
                                    String graphSize) {
 
         StringBuilder line = new StringBuilder();
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
         Random rand = new Random();
         for (Integer node : graph.vertexSet()) {
             line.append(node).append(" ");
@@ -60,10 +60,8 @@ public class GraphGenerator extends DefaultEdge {
             line.append(x).append(" ");
             line.append(y).append(" ");
             for (DefaultEdge edge : graph.edgesOf(node)) {
-                //HOW TO USE INFLECTION TO ACCESS protected getTarget()
                 try {
-                    Method method = edge.getClass().getDeclaredMethod("getTarget",
-                            (Class<?>) null);
+                    Method method = edge.getClass().getDeclaredMethod("getTarget");
                     method.setAccessible(true);
                     line.append(method.invoke(edge)).append(" ");
                 } catch (Exception e) {
