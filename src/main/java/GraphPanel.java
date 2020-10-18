@@ -31,7 +31,7 @@ public class GraphPanel extends JPanel {
     }
 
     public enum MOUSE_STATE {
-        START_NODE, END_NODE, RESET {
+        SOURCE_NODE, TARGET_NODE, RESET {
             @Override
             public MOUSE_STATE next() {
                 return values()[0];
@@ -60,9 +60,11 @@ public class GraphPanel extends JPanel {
      */
     public GraphPanel() {
 
+        // Defaults
         algName = "Breath-First Search";
         graphSize = "Small";
-        mouseState = MOUSE_STATE.START_NODE;
+        mouseState = MOUSE_STATE.SOURCE_NODE;
+        
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
         initGraph();
@@ -82,17 +84,15 @@ public class GraphPanel extends JPanel {
                 } else {
                     for (Integer nodeNum : nodeShapes.keySet()) {
                         if (nodeShapes.get(nodeNum).contains(me.getPoint())) {
-                            if (mouseState.equals(MOUSE_STATE.START_NODE)) {
+                            if (mouseState.equals(MOUSE_STATE.SOURCE_NODE)) {
                                 startNode = nodeNum;
-                                break;
                             } else {
                                 endNode = nodeNum;
-                                break;
                             }
+                            repaint();
+                            mouseState = mouseState.next();
                         }
                     }
-                    repaint();
-                    mouseState = mouseState.next();
                 }
             }
         });

@@ -11,9 +11,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+/**
+ *
+ */
 public class GraphGenerator extends DefaultEdge {
 
-
+    /**
+     * @param graph
+     * @return
+     */
     public static boolean isConnected(SimpleGraph<Integer, DefaultEdge> graph) {
 
         Set<Integer> vertices = graph.vertexSet();
@@ -44,6 +50,10 @@ public class GraphGenerator extends DefaultEdge {
     }
 
 
+    /**
+     * @param graph
+     * @param graphSize
+     */
     public static void graphToFile(SimpleGraph<Integer, DefaultEdge> graph,
                                    String graphSize) {
 
@@ -89,6 +99,9 @@ public class GraphGenerator extends DefaultEdge {
     }
 
 
+    /**
+     * @param graphSize
+     */
     public static void generateGraph(String graphSize) {
 
         // Define graph sizes
