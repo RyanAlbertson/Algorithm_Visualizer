@@ -1,5 +1,7 @@
 package main.java.util.algorithms;
 
+import main.java.GraphPanel;
+
 public class Dijkstra {
 
 
@@ -8,6 +10,8 @@ public class Dijkstra {
     static public boolean pause = false;
 
 
-    public static void main() {
+    public static void dijkstra(GraphPanel graphPanel) {
+
+
     }
 }

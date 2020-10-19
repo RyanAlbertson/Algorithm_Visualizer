@@ -22,10 +22,10 @@ import java.util.*;
 public class GraphPanel extends JPanel {
 
 
-    static final Color VISITED_COLOR = Color.RED;
-    static final Color UNVISITED_COLOR = Color.BLACK;
-    static final Color PATH_COLOR = Color.GREEN;
-    static final int NODE_RADIUS = 20;
+    public static final Color VISITED_COLOR = Color.RED;
+    public static final Color UNVISITED_COLOR = Color.BLACK;
+    public static final Color PATH_COLOR = Color.GREEN;
+    public static final int NODE_RADIUS = 20;
 
     static final HashMap<String, String> graphFileNames = new HashMap<>();
 
@@ -51,7 +51,7 @@ public class GraphPanel extends JPanel {
     protected String algName;
     protected String graphSize;
     private MOUSE_STATE mouseState;
-    protected Integer sourceNode;
+    public Integer sourceNode;
     protected Integer targetNode;
     protected SimpleGraph<Integer, DefaultEdge> graph;
     protected boolean[] visited;
@@ -59,6 +59,11 @@ public class GraphPanel extends JPanel {
     private HashMap<Integer, Double[]> nodeCoords;
     private HashMap<Integer, Shape> nodeShapes;
     private HashMap<Integer, LinkedList<Integer>> adjNodes;
+
+    // Used for communicating with algorithm classes
+    public boolean initialStart = true;
+    public boolean stop = false;
+    public boolean pause = false;
 
 
     /**
@@ -72,6 +77,8 @@ public class GraphPanel extends JPanel {
         GraphGenerator.generateGraph(graphSize);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
+        adjNodes = new HashMap<>();
+        path = new ArrayDeque<>();
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
         initGraph();
@@ -183,8 +190,6 @@ public class GraphPanel extends JPanel {
 
         nodeCoords = new HashMap<>();
         nodeShapes = new HashMap<>();
-        adjNodes = new HashMap<>();
-        path = new ArrayDeque<>();
         //REPLACE FOLLOWING 5 LINES WITH THIS FOR USE OF AN EXECUTABLE
 //        String graphFileName = graphFileNames.get(graphSize);
 //        try {
@@ -227,12 +232,13 @@ public class GraphPanel extends JPanel {
     protected void startAlgorithm() {
 
         switch (algName) {
-            case "Breadth-First Search" -> BreadthFirstSearch.main();
-            case "Depth-First Search" -> DepthFirstSearch.main();
-            case "Dijkstra" -> Dijkstra.main();
-            case "Bellman-Ford" -> Bellman_Ford.main();
-            case "Floyd_Warshall" -> Floyd_Warshall.main();
-            default -> System.out.println("Error: Invalid algorithm name");
+
+            case "Breadth-First Search" -> BreadthFirstSearch.breadthFirstSearch(this);
+            case "Depth-First Search" -> DepthFirstSearch.depthFirstSearch(this);
+            case "Dijkstra" -> Dijkstra.dijkstra(this);
+            case "Bellman-Ford" -> Bellman_Ford.bellmanFord(this);
+            case "Floyd_Warshall" -> Floyd_Warshall.floydWarshall(this);
+            default -> throw new IllegalArgumentException("Invalid algorithm name");
         }
     }
 
@@ -243,12 +249,9 @@ public class GraphPanel extends JPanel {
     protected void stopAlgorithm() {
 
         switch (algName) {
-            case "Breadth-First Search" -> BreadthFirstSearch.stop = true;
-            case "Depth-First Search" -> DepthFirstSearch.stop = true;
-            case "Dijkstra" -> Dijkstra.stop = true;
-            case "Bellman-Ford" -> Bellman_Ford.stop = true;
-            case "Floyd_Warshall" -> Floyd_Warshall.stop = true;
-            default -> System.out.println("Error: Invalid algorithm name");
+            case "Breadth-First Search", "Depth-First Search", "Dijkstra",
+                    "Bellman-Ford", "Floyd_Warshall" -> this.stop = true;
+            default -> throw new IllegalArgumentException("Invalid algorithm name");
         }
     }
 
@@ -258,6 +261,11 @@ public class GraphPanel extends JPanel {
      */
     protected void pauseAlgorithm() {
 
+        switch (algName) {
+            case "Breadth-First Search", "Depth-First Search", "Dijkstra",
+                    "Bellman-Ford", "Floyd_Warshall" -> this.pause = true;
+            default -> throw new IllegalArgumentException("Invalid algorithm name");
+        }
     }
 }
 

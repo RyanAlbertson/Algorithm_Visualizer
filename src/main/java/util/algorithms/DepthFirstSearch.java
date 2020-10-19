@@ -3,33 +3,34 @@ package main.java.util.algorithms;
 import main.java.GraphPanel;
 
 
+/**
+ *
+ */
 public class DepthFirstSearch extends GraphPanel {
 
-    private static boolean initialStart = true;
-    public static boolean stop = false;
-    public static boolean pause = false;
 
+    /**
+     *
+     */
+    public static void depthFirstSearch(GraphPanel graphPanel) {
 
-    public static void main() {
-
-        if (initialStart) {
-            // call methods
-        } else {
-            // unpause
-        }
-
+        if (graphPanel.initialStart) {
+            graphPanel.initialStart = false;
+            DFS(graphPanel.sourceNode);
+            graphPanel.initialStart = true;
+        } else graphPanel.stop = graphPanel.pause = false;
     }
 
-    private static void DFS() {
 
-        initialStart = false;
+    /**
+     * @param node
+     */
+    private static void DFS(Integer node) {
 
 
         // continuously check pause and stop
-        
+
         // when to be calling repaint?
 
-
-        initialStart = true;
     }
 }

@@ -1,5 +1,7 @@
 package main.java.util.algorithms;
 
+import main.java.GraphPanel;
+
 public class BreadthFirstSearch {
 
 
@@ -8,7 +10,7 @@ public class BreadthFirstSearch {
     static public boolean pause = false;
 
 
-    public static void main() {
+    public static void breadthFirstSearch(GraphPanel graphPanel) {
 
 
     }
