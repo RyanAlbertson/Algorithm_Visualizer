@@ -87,9 +87,10 @@ public class GraphGenerator extends DefaultEdge {
         }
 
         // Write graph to file
-        String fileName = GraphPanel.graphFileNames.get(graphSize);
+        String graphFileName = GraphPanel.graphFileNames.get(graphSize);
+        //REMOVE FOLLOWING 2 LINES FOR USE OF AN EXECUTABLE (CHANGE PATH PARAM TO graphFileName)
         String graphFileLocation = System.getProperty("user.dir")
-                .concat("\\src\\main\\java\\resources\\graphs\\" + fileName);
+                .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         Path file = Paths.get(graphFileLocation);
         try {
             Files.write(file, lines, StandardCharsets.UTF_8);
@@ -102,7 +103,7 @@ public class GraphGenerator extends DefaultEdge {
     /**
      * @param graphSize
      */
-    public static void generateGraph(String graphSize) {
+    public static SimpleGraph<Integer, DefaultEdge> generateGraph(String graphSize) {
 
         // Define graph sizes
         int numNodes = 0;
@@ -127,5 +128,7 @@ public class GraphGenerator extends DefaultEdge {
         } while (!isConnected(graph));
 
         graphToFile(graph, graphSize);
+
+        return graph;
     }
 }

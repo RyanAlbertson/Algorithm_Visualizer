@@ -12,9 +12,12 @@ public class GUI extends JFrame {
     static final int WINDOW_WIDTH = 1280;
     static final int WINDOW_HEIGHT = 720;
     static final int GRAPH_HEIGHT = WINDOW_HEIGHT - (WINDOW_HEIGHT / 15);
+    static final String[] algNames = {"Breadth-First Search", "Depth-First Search",
+            "Dijkstra", "Bellman-Ford", "Floyd-Warshall"};
+    static final String[] graphSizes = {"Small", "Medium", "Large"};
 
     private final JFrame frame;
-    protected GraphPanel graph;
+    protected GraphPanel graphPanel;
     private JComboBox<String> chooseAlgName;
     private JComboBox<String> chooseGraphSize;
 
@@ -41,9 +44,9 @@ public class GUI extends JFrame {
      */
     private void initGraphPanel() {
 
-        graph = new GraphPanel();
+        graphPanel = new GraphPanel();
 
-        frame.add(graph, BorderLayout.CENTER);
+        frame.add(graphPanel, BorderLayout.CENTER);
     }
 
 
@@ -59,35 +62,33 @@ public class GUI extends JFrame {
 
         JButton startButton = new JButton("Start");
         startButton.setFont(new Font("Ariel", Font.PLAIN, 18));
-        startButton.addActionListener(event -> graph.startAlgorithm());
+        startButton.addActionListener(event -> graphPanel.startAlgorithm());
         menu.add(startButton);
 
         JButton pauseButton = new JButton("Pause");
         pauseButton.setFont(new Font("Ariel", Font.PLAIN, 18));
-        pauseButton.addActionListener(event -> graph.pauseAlgorithm());
+        pauseButton.addActionListener(event -> graphPanel.pauseAlgorithm());
         menu.add(pauseButton);
 
         JButton stopButton = new JButton("Stop");
         stopButton.setFont(new Font("Ariel", Font.PLAIN, 18));
-        startButton.addActionListener(event -> graph.stopAlgorithm());
+        startButton.addActionListener(event -> graphPanel.stopAlgorithm());
         menu.add(stopButton);
 
-        String[] algNames = {"Breadth-First Search", "Depth-First Search",
-                "Dijkstra", "Bellman-Ford", "Floyd-Warshall"};
         chooseAlgName = new JComboBox<>(algNames);
         chooseAlgName.setFont(new Font("Ariel", Font.PLAIN, 18));
         chooseAlgName.addActionListener(event ->
-                graph.algName = (String) chooseAlgName.getSelectedItem());
+                graphPanel.algName = (String) chooseAlgName.getSelectedItem());
         menu.add(chooseAlgName);
 
-        String[] graphSizes = {"Small", "Medium", "Large"};
         chooseGraphSize = new JComboBox<>(graphSizes);
         chooseGraphSize.setFont(new Font("Ariel", Font.PLAIN, 18));
-        chooseGraphSize.addActionListener(event -> graph.repaint());
-        chooseGraphSize.addActionListener(event -> graph.initGraph());
-        chooseGraphSize.addActionListener(event -> GraphGenerator.
-                generateGraph((String) chooseGraphSize.getSelectedItem()));
-        chooseGraphSize.addActionListener(event -> graph.graphSize =
+        chooseGraphSize.addActionListener(event -> graphPanel.repaint());
+        chooseGraphSize.addActionListener(event -> graphPanel.initGraph());
+        chooseGraphSize.addActionListener(event -> graphPanel.graph =
+                GraphGenerator.generateGraph(
+                        (String) chooseGraphSize.getSelectedItem()));
+        chooseGraphSize.addActionListener(event -> graphPanel.graphSize =
                 (String) chooseGraphSize.getSelectedItem());
         menu.add(chooseGraphSize);
 

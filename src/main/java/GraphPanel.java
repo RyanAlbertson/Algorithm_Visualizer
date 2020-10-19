@@ -1,5 +1,9 @@
 package main.java;
 
+import main.java.util.algorithms.*;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -22,6 +26,7 @@ public class GraphPanel extends JPanel {
     static final Color UNVISITED_COLOR = Color.BLACK;
     static final Color PATH_COLOR = Color.GREEN;
     static final int NODE_RADIUS = 20;
+
     static final HashMap<String, String> graphFileNames = new HashMap<>();
 
     static {
@@ -46,13 +51,14 @@ public class GraphPanel extends JPanel {
     protected String algName;
     protected String graphSize;
     private MOUSE_STATE mouseState;
-    protected Integer startNode;
-    protected Integer endNode;
-    private boolean[] visited;
+    protected Integer sourceNode;
+    protected Integer targetNode;
+    protected SimpleGraph<Integer, DefaultEdge> graph;
+    protected boolean[] visited;
+    protected Deque<Integer> path;
     private HashMap<Integer, Double[]> nodeCoords;
     private HashMap<Integer, Shape> nodeShapes;
     private HashMap<Integer, LinkedList<Integer>> adjNodes;
-    private Deque<Integer> path;
 
 
     /**
@@ -63,8 +69,9 @@ public class GraphPanel extends JPanel {
         // Defaults
         algName = "Breath-First Search";
         graphSize = "Small";
+        GraphGenerator.generateGraph(graphSize);
         mouseState = MOUSE_STATE.SOURCE_NODE;
-        
+
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
         initGraph();
@@ -78,16 +85,16 @@ public class GraphPanel extends JPanel {
                 super.mouseClicked(me);
 
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
-                    startNode = endNode = null;
+                    sourceNode = targetNode = null;
                     repaint();
                     mouseState = mouseState.next();
                 } else {
                     for (Integer nodeNum : nodeShapes.keySet()) {
                         if (nodeShapes.get(nodeNum).contains(me.getPoint())) {
                             if (mouseState.equals(MOUSE_STATE.SOURCE_NODE)) {
-                                startNode = nodeNum;
+                                sourceNode = nodeNum;
                             } else {
-                                endNode = nodeNum;
+                                targetNode = nodeNum;
                             }
                             repaint();
                             mouseState = mouseState.next();
@@ -132,8 +139,8 @@ public class GraphPanel extends JPanel {
         }
         // Need second loop so that nodes are painted over all lines
         for (Integer nodeNum : nodeCoords.keySet()) {
-            if (nodeNum.equals(startNode)) g.setColor(Color.GREEN);
-            else if (nodeNum.equals(endNode)) g.setColor(Color.RED);
+            if (nodeNum.equals(sourceNode)) g.setColor(Color.GREEN);
+            else if (nodeNum.equals(targetNode)) g.setColor(Color.RED);
             else g.setColor(visited[nodeNum] ? VISITED_COLOR : UNVISITED_COLOR);
             g2D.fill(nodeShapes.get(nodeNum));
         }
@@ -178,6 +185,10 @@ public class GraphPanel extends JPanel {
         nodeShapes = new HashMap<>();
         adjNodes = new HashMap<>();
         path = new ArrayDeque<>();
+        //REPLACE FOLLOWING 5 LINES WITH THIS FOR USE OF AN EXECUTABLE
+//        String graphFileName = graphFileNames.get(graphSize);
+//        try {
+//            Scanner s = new Scanner(new File(graphFileName),
         String graphFileName = graphFileNames.get(graphSize);
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
@@ -214,6 +225,15 @@ public class GraphPanel extends JPanel {
      *
      */
     protected void startAlgorithm() {
+
+        switch (algName) {
+            case "Breadth-First Search" -> BreadthFirstSearch.main();
+            case "Depth-First Search" -> DepthFirstSearch.main();
+            case "Dijkstra" -> Dijkstra.main();
+            case "Bellman-Ford" -> Bellman_Ford.main();
+            case "Floyd_Warshall" -> Floyd_Warshall.main();
+            default -> System.out.println("Error: Invalid algorithm name");
+        }
     }
 
 
@@ -221,6 +241,15 @@ public class GraphPanel extends JPanel {
      *
      */
     protected void stopAlgorithm() {
+
+        switch (algName) {
+            case "Breadth-First Search" -> BreadthFirstSearch.stop = true;
+            case "Depth-First Search" -> DepthFirstSearch.stop = true;
+            case "Dijkstra" -> Dijkstra.stop = true;
+            case "Bellman-Ford" -> Bellman_Ford.stop = true;
+            case "Floyd_Warshall" -> Floyd_Warshall.stop = true;
+            default -> System.out.println("Error: Invalid algorithm name");
+        }
     }
 
 
