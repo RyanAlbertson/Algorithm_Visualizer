@@ -4,11 +4,11 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -88,27 +88,27 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
         // Write graph to file
         String graphFileName = GraphPanel.graphFileNames.get(graphSize);
-        //CHANGE FOR USE WITH AN EXECUTABLE
+        //CHANGE FOR USE WITH AN EXECUTABLE...JUST USE graphFileName?
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
-        Path path = Paths.get(graphFileLocation);
-        File newFile = new File(path.toString());
-        FileWriter fw = null;
+        File file = new File(graphFileLocation);
+        OutputStreamWriter writer = null;
         try {
             // Delete to prevent overwrite
-            if (!newFile.createNewFile()) {
-                new FileWriter(path.toString(), false).close();
+            if (!file.createNewFile()) {
+                new FileOutputStream(graphFileLocation, false).close();
             }
-            fw = new FileWriter(newFile);
+            FileOutputStream outFile = new FileOutputStream(graphFileLocation);
+            writer = new OutputStreamWriter(outFile, StandardCharsets.UTF_8);
             for (String nodeData : lines) {
-                fw.write(nodeData + System.getProperty("line.separator"));
+                writer.write(nodeData + System.getProperty("line.separator"));
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (fw != null) {
+            if (writer != null) {
                 try {
-                    fw.close();
+                    writer.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

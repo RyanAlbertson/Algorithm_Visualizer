@@ -235,7 +235,7 @@ public class GraphPanel extends JPanel {
         switch (algName) {
 
             case "Breadth-First Search" -> BreadthFirstSearch.breadthFirstSearch(this);
-            case "Depth-First Search" -> DepthFirstSearch.depthFirstSearch(this);
+            case "Depth-First Search" -> new Thread(new DepthFirstSearch(this)).start();
             case "Dijkstra" -> Dijkstra.dijkstra(this);
             case "Bellman-Ford" -> Bellman_Ford.bellmanFord(this);
             case "Floyd_Warshall" -> Floyd_Warshall.floydWarshall(this);
