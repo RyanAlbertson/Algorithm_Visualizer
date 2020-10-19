@@ -1,12 +1,12 @@
 package main.java;
 
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -14,13 +14,13 @@ import java.util.*;
 /**
  *
  */
-public class GraphGenerator extends DefaultEdge {
+public class GraphGenerator extends DefaultWeightedEdge {
 
     /**
      * @param graph
      * @return
      */
-    public static boolean isConnected(SimpleGraph<Integer, DefaultEdge> graph) {
+    public static boolean isConnected(SimpleGraph<Integer, DefaultWeightedEdge> graph) {
 
         Set<Integer> vertices = graph.vertexSet();
 
@@ -29,13 +29,13 @@ public class GraphGenerator extends DefaultEdge {
         if (vertices.size() - 1 > graph.edgeSet().size()) return false;
 
         Set<Integer> visited = new HashSet<>();
-        Deque<DefaultEdge> queue = new LinkedList<DefaultEdge>();
+        Deque<DefaultWeightedEdge> queue = new LinkedList<DefaultWeightedEdge>();
         Integer startNode = vertices.iterator().next();
 
         visited.add(startNode);
         graph.edgesOf(startNode).forEach(queue::addLast);
         while (visited.size() != vertices.size() && queue.size() != 0) {
-            DefaultEdge currentEdge = queue.pollFirst();
+            DefaultWeightedEdge currentEdge = queue.pollFirst();
             Integer source = graph.getEdgeSource(currentEdge);
             Integer dest = graph.getEdgeSource(currentEdge);
 
@@ -54,7 +54,7 @@ public class GraphGenerator extends DefaultEdge {
      * @param graph
      * @param graphSize
      */
-    public static void graphToFile(SimpleGraph<Integer, DefaultEdge> graph,
+    public static void graphToFile(SimpleGraph<Integer, DefaultWeightedEdge> graph,
                                    String graphSize) {
 
         StringBuilder line = new StringBuilder();
@@ -73,7 +73,7 @@ public class GraphGenerator extends DefaultEdge {
             int y = rand.nextInt((yUpperBound - yLowerBound) + 1) + yLowerBound + yCenter;
             line.append(x).append(" ");
             line.append(y).append(" ");
-            for (DefaultEdge edge : graph.edgesOf(node)) {
+            for (DefaultWeightedEdge edge : graph.edgesOf(node)) {
                 try {
                     Method getTarget = edge.getClass().getDeclaredMethod("getTarget");
                     getTarget.setAccessible(true);
@@ -88,14 +88,31 @@ public class GraphGenerator extends DefaultEdge {
 
         // Write graph to file
         String graphFileName = GraphPanel.graphFileNames.get(graphSize);
-        //REMOVE FOLLOWING 2 LINES FOR USE OF AN EXECUTABLE (CHANGE PATH PARAM TO graphFileName)
+        //CHANGE FOR USE WITH AN EXECUTABLE
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
-        Path file = Paths.get(graphFileLocation);
+        Path path = Paths.get(graphFileLocation);
+        File newFile = new File(path.toString());
+        FileWriter fw = null;
         try {
-            Files.write(file, lines, StandardCharsets.UTF_8);
+            // Delete to prevent overwrite
+            if (!newFile.createNewFile()) {
+                new FileWriter(path.toString(), false).close();
+            }
+            fw = new FileWriter(newFile);
+            for (String nodeData : lines) {
+                fw.write(nodeData + System.getProperty("line.separator"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (fw != null) {
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -103,7 +120,8 @@ public class GraphGenerator extends DefaultEdge {
     /**
      * @param graphSize
      */
-    public static SimpleGraph<Integer, DefaultEdge> generateGraph(String graphSize) {
+    public static SimpleGraph<Integer, DefaultWeightedEdge>
+    generateGraph(String graphSize) {
 
         // Define graph sizes
         int numNodes = 0;
@@ -114,8 +132,8 @@ public class GraphGenerator extends DefaultEdge {
             default -> throw new IllegalArgumentException("Error: invalid graph size");
         }
 
-        SimpleGraph<Integer, DefaultEdge> graph =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+        SimpleGraph<Integer, DefaultWeightedEdge> graph =
+                new SimpleGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         for (int i = 0; i < numNodes; i++) graph.addVertex(i);
 
         // Add random edges until graph is connected
@@ -130,5 +148,11 @@ public class GraphGenerator extends DefaultEdge {
         graphToFile(graph, graphSize);
 
         return graph;
+    }
+
+
+    private static void clearFile(File file) {
+
+
     }
 }

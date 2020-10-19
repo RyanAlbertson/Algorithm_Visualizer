@@ -1,7 +1,7 @@
 package main.java;
 
 import main.java.util.algorithms.*;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import javax.swing.*;
@@ -52,15 +52,14 @@ public class GraphPanel extends JPanel {
     protected String graphSize;
     private MOUSE_STATE mouseState;
     public Integer sourceNode;
-    protected Integer targetNode;
-    protected SimpleGraph<Integer, DefaultEdge> graph;
-    protected boolean[] visited;
-    protected Deque<Integer> path;
+    private Integer targetNode;
     private HashMap<Integer, Double[]> nodeCoords;
     private HashMap<Integer, Shape> nodeShapes;
     private HashMap<Integer, LinkedList<Integer>> adjNodes;
 
-    // Used for communicating with algorithm classes
+    public SimpleGraph<Integer, DefaultWeightedEdge> graph;
+    public Deque<Integer> path;
+    public boolean[] visited;
     public boolean initialStart = true;
     public boolean stop = false;
     public boolean pause = false;
@@ -77,7 +76,6 @@ public class GraphPanel extends JPanel {
         GraphGenerator.generateGraph(graphSize);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
-        adjNodes = new HashMap<>();
         path = new ArrayDeque<>();
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
@@ -190,6 +188,8 @@ public class GraphPanel extends JPanel {
 
         nodeCoords = new HashMap<>();
         nodeShapes = new HashMap<>();
+        adjNodes = new HashMap<>();
+
         //REPLACE FOLLOWING 5 LINES WITH THIS FOR USE OF AN EXECUTABLE
 //        String graphFileName = graphFileNames.get(graphSize);
 //        try {
@@ -219,6 +219,7 @@ public class GraphPanel extends JPanel {
                             key -> new LinkedList<>()).add(it.next());
                 }
             }
+            s.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
