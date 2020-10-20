@@ -68,13 +68,11 @@ public class GUI extends JFrame {
         JButton pauseButton = new JButton("Pause");
         pauseButton.setFont(new Font("Ariel", Font.PLAIN, 18));
         pauseButton.addActionListener(event -> graphPanel.pauseAlgorithm());
-        pauseButton.addActionListener(event -> System.out.print("TEST"));
-
         menu.add(pauseButton);
 
         JButton stopButton = new JButton("Stop");
         stopButton.setFont(new Font("Ariel", Font.PLAIN, 18));
-        startButton.addActionListener(event -> graphPanel.stopAlgorithm());
+        stopButton.addActionListener(event -> graphPanel.stopAlgorithm());
         menu.add(stopButton);
 
         chooseAlgName = new JComboBox<>(algNames);

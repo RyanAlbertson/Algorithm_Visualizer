@@ -12,15 +12,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
+ * Generates a {@link SimpleGraph} that is connected and weighted. Then writes it
+ * to a file. The graph size can be provided.
  *
+ * @author Ryan Albertson
  */
 public class GraphGenerator extends DefaultWeightedEdge {
 
     /**
-     * @param graph
-     * @return
+     * @param graph {@link SimpleGraph} to check for connectivity.
+     * @return True if {@code graph} is connected, otherwise false.
      */
-    public static boolean isConnected(SimpleGraph<Integer, DefaultWeightedEdge> graph) {
+    private static boolean isConnected(SimpleGraph<Integer, DefaultWeightedEdge> graph) {
 
         Set<Integer> vertices = graph.vertexSet();
 
@@ -51,11 +54,13 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
 
     /**
-     * @param graph
-     * @param graphSize
+     * Writes {@code graph} to a text file.
+     *
+     * @param graph     {@link SimpleGraph} to write to a file.
+     * @param graphSize # of nodes in {@code graph}. Used to determine file name.
      */
-    public static void graphToFile(SimpleGraph<Integer, DefaultWeightedEdge> graph,
-                                   String graphSize) {
+    private static void graphToFile(SimpleGraph<Integer, DefaultWeightedEdge> graph,
+                                    String graphSize) {
 
         StringBuilder line = new StringBuilder();
         List<String> lines = new ArrayList<>();
@@ -118,10 +123,19 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
 
     /**
-     * @param graphSize
+     * Generates a connected and weighted {@link SimpleGraph}. Calls
+     * {@link #graphToFile(SimpleGraph, String)} to write the graph to a file.
+     *
+     * @param graphSize Defines how many nodes will be in generated graph.
+     * @return {@link SimpleGraph} which is connected and has {@code graphSize} nodes.
+     * @throws IllegalArgumentException If {@code graphSize} is null.
      */
-    public static SimpleGraph<Integer, DefaultWeightedEdge>
-    generateGraph(String graphSize) {
+    public static SimpleGraph<Integer, DefaultWeightedEdge> generateGraph(
+            String graphSize) {
+
+        if (graphSize == null) {
+            throw new IllegalArgumentException("Error: SimpleGraph is null");
+        }
 
         // Define graph sizes
         int numNodes = 0;
@@ -129,11 +143,12 @@ public class GraphGenerator extends DefaultWeightedEdge {
             case "Small" -> numNodes = 10;
             case "Medium" -> numNodes = 25;
             case "Large" -> numNodes = 50;
-            default -> throw new IllegalArgumentException("Error: invalid graph size");
+            default -> throw new IllegalArgumentException("Error: invalid graph size\n" +
+                    "Available graph sizes: Small, Medium, Large");
         }
 
         SimpleGraph<Integer, DefaultWeightedEdge> graph =
-                new SimpleGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+                new SimpleGraph<>(DefaultWeightedEdge.class);
         for (int i = 0; i < numNodes; i++) graph.addVertex(i);
 
         // Add random edges until graph is connected
@@ -148,11 +163,5 @@ public class GraphGenerator extends DefaultWeightedEdge {
         graphToFile(graph, graphSize);
 
         return graph;
-    }
-
-
-    private static void clearFile(File file) {
-
-
     }
 }
