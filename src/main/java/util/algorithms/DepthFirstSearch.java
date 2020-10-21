@@ -8,60 +8,34 @@ import java.util.concurrent.TimeUnit;
 /**
  *
  */
-public class DepthFirstSearch implements Runnable {
+public class DepthFirstSearch extends Thread {
 
 
     private GraphPanel graphPanel;
     private volatile boolean running = true;
-    private volatile boolean paused = false;
+    private volatile boolean paused;
     private final Object pauseLock = new Object();
     int i = 0;
-
+    
 
     // REDO USING BELOW
     // https://stackoverflow.com/questions/11989589/how-to-pause-and-resume-a-thread-in-java-from-another-thread
 
 
     /**
-     * Starts the algorithm.
+     * Starts the algorithm process.
      *
      * @see Thread#run()
      */
     @Override
     public void run() {
 
-        while (running) {
-            synchronized (pauseLock) {
-                if (!running) { // may have changed while waiting to
-                    // synchronize on pauseLock
-                    break;
-                }
-                if (paused) {
-                    try {
-                        synchronized (pauseLock) {
-                            pauseLock.wait(); // will cause this Thread to block until
-                            // another thread calls pauseLock.notifyAll()
-                            // Note that calling wait() will
-                            // relinquish the synchronized lock that this
-                            // thread holds on pauseLock so another thread
-                            // can acquire the lock to call notifyAll()
-                            // (link with explanation below this code)
-                        }
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                    if (!running) { // running might have changed since we paused
-                        break;
-                    }
-                }
-            }
-            DFS(graphPanel.sourceNode);
-            graphPanel.initialStart = true;
-        }
+        DFS(graphPanel.sourceNode);
+        graphPanel.initialStart = true;
     }
 
 
-    public void stop() {
+    public void stopAlgorithm() {
 
         running = false;
         // you might also want to interrupt() the Thread that is
@@ -69,16 +43,17 @@ public class DepthFirstSearch implements Runnable {
         // to unblock
     }
 
-    public void pause() {
+    public void pauseAlgorithm() {
 
         // you may want to throw an IllegalStateException if !running
         graphPanel.start = false;
         paused = true;
     }
 
-    public void resume() {
+    public void resumeAlgorithm() {
 
         synchronized (pauseLock) {
+            running = true;
             graphPanel.start = false;
             paused = false;
             pauseLock.notifyAll(); // Unblocks thread
@@ -86,12 +61,49 @@ public class DepthFirstSearch implements Runnable {
     }
 
 
-    private void checkState() {
+    private void checkForPause() {
 
-        if (paused) {
-            if (graphPanel.start) resume();
-        } else if (graphPanel.pause) pause();
-        if (graphPanel.stop) stop();
+        synchronized (pauseLock) {
+            while (paused = graphPanel.pause) {
+                try {
+                    pauseLock.wait();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            pauseLock.notify(); // needs to call from somewheres else
+        }
+
+
+//        if (paused) {
+//            if (graphPanel.start) resume();
+//        } else if (graphPanel.pause) pause();
+//        if (graphPanel.stop) stop();
+
+//        synchronized (pauseLock) {
+//            if (!running) { // may have changed while waiting to
+//                // synchronize on pauseLock
+//                return;
+//            }
+//            if (paused) {
+//                try {
+//                    synchronized (pauseLock) {
+//                        pauseLock.wait(); // will cause this Thread to block until
+//                        // another thread calls pauseLock.notifyAll()
+//                        // Note that calling wait() will
+//                        // relinquish the synchronized lock that this
+//                        // thread holds on pauseLock so another thread
+//                        // can acquire the lock to call notifyAll()
+//                        // (link with explanation below this code)
+//                    }
+//                } catch (InterruptedException e) {
+//                    return;
+//                }
+//                if (!running) { // running might have changed since we paused
+//                    return;
+//                }
+//            }
+//        }
     }
 
 
@@ -102,7 +114,7 @@ public class DepthFirstSearch implements Runnable {
 
         int c = 0;
         while (c < 10) {
-            checkState();
+            checkForPause();
             System.out.print(i);
             i++;
             c++;
@@ -135,9 +147,9 @@ public class DepthFirstSearch implements Runnable {
             throw new IllegalArgumentException("Error: GraphPanel is null");
         } else if (graphPanel.initialStart) {
             this.graphPanel = graphPanel;
-            this.graphPanel.initialStart = false;
-            this.graphPanel.pause = false;
-            this.graphPanel.stop = false;
+//            this.graphPanel.initialStart = false;
+//            this.graphPanel.pause = false;
+//            this.graphPanel.stop = false;
         }
     }
 }

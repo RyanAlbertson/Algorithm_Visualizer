@@ -255,7 +255,7 @@ public class GraphPanel extends JPanel {
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
             // Unpause current algorithm
-        } else this.start = true;
+        } else this.pause = false;
     }
 
 
@@ -268,7 +268,7 @@ public class GraphPanel extends JPanel {
 
             switch (algName) {
                 case "Breadth-First Search", "Depth-First Search", "Dijkstra",
-                        "Bellman-Ford", "Floyd_Warshall" -> this.stop = !this.stop;
+                        "Bellman-Ford", "Floyd_Warshall" -> algThread.;
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
         }
@@ -284,7 +284,13 @@ public class GraphPanel extends JPanel {
 
             switch (algName) {
                 case "Breadth-First Search", "Depth-First Search", "Dijkstra",
-                        "Bellman-Ford", "Floyd_Warshall" -> this.pause = !this.pause;
+                        "Bellman-Ford", "Floyd_Warshall" -> {
+                    try {
+                        algThread.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
         }
