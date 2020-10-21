@@ -60,10 +60,8 @@ public class GraphPanel extends JPanel {
     public SimpleGraph<Integer, DefaultWeightedEdge> graph;
     public Deque<Integer> path;
     public boolean[] visited;
-    public boolean initialStart = true;  // Allows for dual use of start button
-    public boolean start = false;
-    public boolean stop = false;
-    public boolean pause = false;
+    public boolean stop;
+    public boolean pause;
     private Thread algThread;
 
 
@@ -245,14 +243,15 @@ public class GraphPanel extends JPanel {
 
             switch (algName) {
                 case "Breadth-First Search" -> BreadthFirstSearch.breadthFirstSearch(this);
-                case "Depth-First Search" -> {
-                    algThread = new Thread(new DepthFirstSearch(this));
-                    algThread.start();
-                }
+                case "Depth-First Search" -> algThread = new Thread(new DepthFirstSearch(this));
                 case "Dijkstra" -> Dijkstra.dijkstra(this);
                 case "Bellman-Ford" -> Bellman_Ford.bellmanFord(this);
                 case "Floyd_Warshall" -> Floyd_Warshall.floydWarshall(this);
                 default -> throw new IllegalArgumentException("Invalid algorithm");
+            }
+            if (algThread != null) {
+                this.stop = this.pause = false;
+                algThread.start();
             }
             // Unpause current algorithm
         } else this.pause = false;
@@ -268,7 +267,7 @@ public class GraphPanel extends JPanel {
 
             switch (algName) {
                 case "Breadth-First Search", "Depth-First Search", "Dijkstra",
-                        "Bellman-Ford", "Floyd_Warshall" -> algThread.;
+                        "Bellman-Ford", "Floyd_Warshall" -> this.stop = true;
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
         }
@@ -284,13 +283,7 @@ public class GraphPanel extends JPanel {
 
             switch (algName) {
                 case "Breadth-First Search", "Depth-First Search", "Dijkstra",
-                        "Bellman-Ford", "Floyd_Warshall" -> {
-                    try {
-                        algThread.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                        "Bellman-Ford", "Floyd_Warshall" -> this.pause = !this.pause;
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
         }
