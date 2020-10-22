@@ -44,15 +44,6 @@ public class DepthFirstSearch implements Runnable {
 
 
     /**
-     * @param node
-     */
-    private void dfsHelper(int node) {
-
-
-    }
-
-
-    /**
      * @param node Initial argument is the source node
      */
     private void dfs(Integer node) {
@@ -61,26 +52,22 @@ public class DepthFirstSearch implements Runnable {
         if (isStopped()) return;
         checkForPause();
 
+        if (node.equals(graphPanel.sourceNode)) return;
+
         graphPanel.visited[node] = true;
-        System.out.println(node + System.lineSeparator());
+
+        try {
+            graphPanel.repaint();
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         for (Integer adj : graphPanel.adjNodes.get(node)) {
-            System.out.println(adj + System.lineSeparator());
-
             if (!graphPanel.visited[adj]) {
-
-//                    dfs(adj);
+                graphPanel.path[adj] = node;
+                dfs(adj);
             }
-
-            //WHERE TO ADD TO PATH?
-
-            try {
-                // DRAW NEW NODE AND EDGE IN graphPanel
-                TimeUnit.MILLISECONDS.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //super.repaint();    ???
         }
     }
 

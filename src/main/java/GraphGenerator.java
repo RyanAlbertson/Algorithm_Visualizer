@@ -39,7 +39,6 @@ public class GraphGenerator extends DefaultWeightedEdge {
         graph.edgesOf(startNode).forEach(queue::addLast);
         while (visited.size() != vertices.size() && queue.size() != 0) {
             DefaultWeightedEdge currentEdge = queue.pollFirst();
-            // EDGES ARE UNDIRECTED SO SOURCE AND TARGET CHANGE PER EDGE
             Integer source = graph.getEdgeSource(currentEdge);
             Integer dest = graph.getEdgeTarget(currentEdge);
 
@@ -68,7 +67,8 @@ public class GraphGenerator extends DefaultWeightedEdge {
         Random rand = new Random();
         for (Integer node : graph.vertexSet()) {
             line.append(node).append(" ");
-            // Get random node coordinates within GUI bounds.
+
+            // Get random node coordinates within GUI bounds
             int xCenter = GUI.WINDOW_WIDTH / 2;
             int yCenter = GUI.GRAPH_HEIGHT / 2;
             int xLowerBound = -GUI.WINDOW_WIDTH / 2 + GraphPanel.NODE_RADIUS;
@@ -79,11 +79,25 @@ public class GraphGenerator extends DefaultWeightedEdge {
             int y = rand.nextInt((yUpperBound - yLowerBound) + 1) + yLowerBound + yCenter;
             line.append(x).append(" ");
             line.append(y).append(" ");
+
+            // Get adjacent nodes
             for (DefaultWeightedEdge edge : graph.edgesOf(node)) {
                 try {
+                    // Adjacencies are undirected, so choose correct node in edge
+                    int source;
+                    int target;
+                    int adj;
+
+                    Method getSource = edge.getClass().getDeclaredMethod("getSource");
+                    getSource.setAccessible(true);
+                    source = Integer.parseInt(getSource.invoke(edge).toString());
+
                     Method getTarget = edge.getClass().getDeclaredMethod("getTarget");
                     getTarget.setAccessible(true);
-                    line.append(getTarget.invoke(edge)).append(" ");
+                    target = Integer.parseInt(getTarget.invoke(edge).toString());
+
+                    adj = target == node ? source : target;
+                    line.append(adj).append(" ");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

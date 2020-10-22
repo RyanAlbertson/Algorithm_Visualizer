@@ -58,7 +58,7 @@ public class GraphPanel extends JPanel {
     public HashMap<Integer, LinkedList<Integer>> adjNodes;
 
     public SimpleGraph<Integer, DefaultWeightedEdge> graph;
-    public Deque<Integer> path;
+    public int[] path;
     public boolean[] visited;
     public boolean stop;
     public boolean pause;
@@ -76,10 +76,10 @@ public class GraphPanel extends JPanel {
         graph = GraphGenerator.generateGraph(graphSize);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
-        path = new ArrayDeque<>();
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
         initGraph();
+        path = new int[nodeCoords.size()];
 
         // Detect user-selected start and end nodes
         addMouseListener(new MouseAdapter() {
@@ -150,33 +150,25 @@ public class GraphPanel extends JPanel {
             g2D.fill(nodeShapes.get(nodeNum));
         }
 
-        // Colors nodes and edges in path
-        //HOW TO SLOW DOWN SUCH THAT ALGORITHM CAN BE VISUALIZED AS IT STEPS?
-//        try {
-//            TimeUnit.SECONDS.sleep(1);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         //USE SAME COLORS FOR VISISTED AND PATH NODES?
-        g.setColor(PATH_COLOR);
-        double prevX;
-        double prevY;
-        Integer nodeNum;
-        Iterator<Integer> it = path.iterator();
-        if (it.hasNext()) {
-            nodeNum = it.next();
-            prevX = nodeCoords.get(nodeNum)[0];
-            prevY = nodeCoords.get(nodeNum)[1];
-            while (it.hasNext()) {
-                nodeNum = it.next();
-                double x = nodeCoords.get(nodeNum)[0];
-                double y = nodeCoords.get(nodeNum)[1];
-                g2D.draw(new Line2D.Double(prevX, prevY, x, y));
-                prevX = nodeCoords.get(nodeNum)[0];
-                prevY = nodeCoords.get(nodeNum)[1];
-            }
-        }
+//        g.setColor(PATH_COLOR);
+//        double prevX;
+//        double prevY;
+//        Integer nodeNum;
+//        Iterator<Integer> it = path.iterator();
+//        if (it.hasNext()) {
+//            nodeNum = it.next();
+//            prevX = nodeCoords.get(nodeNum)[0];
+//            prevY = nodeCoords.get(nodeNum)[1];
+//            while (it.hasNext()) {
+//                nodeNum = it.next();
+//                double x = nodeCoords.get(nodeNum)[0];
+//                double y = nodeCoords.get(nodeNum)[1];
+//                g2D.draw(new Line2D.Double(prevX, prevY, x, y));
+//                prevX = nodeCoords.get(nodeNum)[0];
+//                prevY = nodeCoords.get(nodeNum)[1];
+//            }
+//        }
     }
 
 
@@ -234,7 +226,7 @@ public class GraphPanel extends JPanel {
 
         // Reset for next animation
         if (algThread != null && !algThread.isAlive()) {
-            path.clear();
+            Arrays.fill(path, 0);
             Arrays.fill(visited, false);
         }
 
