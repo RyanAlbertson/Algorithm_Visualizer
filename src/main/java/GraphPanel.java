@@ -52,10 +52,10 @@ public class GraphPanel extends JPanel {
     protected String graphSize;
     private MOUSE_STATE mouseState;
     public Integer sourceNode;
-    private Integer targetNode;
+    public Integer targetNode;
     private HashMap<Integer, Double[]> nodeCoords;
     private HashMap<Integer, Shape> nodeShapes;
-    private HashMap<Integer, LinkedList<Integer>> adjNodes;
+    public HashMap<Integer, LinkedList<Integer>> adjNodes;
 
     public SimpleGraph<Integer, DefaultWeightedEdge> graph;
     public Deque<Integer> path;
@@ -73,7 +73,7 @@ public class GraphPanel extends JPanel {
         // Defaults
         algName = "Breath-First Search";
         graphSize = "Small";
-        GraphGenerator.generateGraph(graphSize);
+        graph = GraphGenerator.generateGraph(graphSize);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
         path = new ArrayDeque<>();

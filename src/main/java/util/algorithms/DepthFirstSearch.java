@@ -11,9 +11,78 @@ import java.util.concurrent.TimeUnit;
 public class DepthFirstSearch implements Runnable {
 
 
-    private GraphPanel graphPanel = null;
+    private final GraphPanel graphPanel;
     private final Object pauseLock = new Object();
-    int i = 0;
+
+
+    /**
+     * @return True if user has stopped the animation, false otherwise.
+     */
+    private boolean isStopped() {
+
+        return graphPanel.stop;
+    }
+
+
+    /**
+     * Checks if user has paused the animation. If so, the animation process is
+     * held until the user has unpaused it.
+     */
+    private void checkForPause() {
+
+        synchronized (pauseLock) {
+            boolean paused;
+            while (paused = graphPanel.pause) {
+                try {
+                    pauseLock.wait(100);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * @param node
+     */
+    private void dfsHelper(int node) {
+
+
+    }
+
+
+    /**
+     * @param node Initial argument is the source node
+     */
+    private void dfs(Integer node) {
+
+        // Check if user has stopped or paused algorithm
+        if (isStopped()) return;
+        checkForPause();
+
+        graphPanel.visited[node] = true;
+        System.out.println(node + System.lineSeparator());
+        for (Integer adj : graphPanel.adjNodes.get(node)) {
+            System.out.println(adj + System.lineSeparator());
+
+            if (!graphPanel.visited[adj]) {
+
+//                    dfs(adj);
+            }
+
+            //WHERE TO ADD TO PATH?
+
+            try {
+                // DRAW NEW NODE AND EDGE IN graphPanel
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //super.repaint();    ???
+        }
+    }
 
 
     /**
@@ -24,57 +93,10 @@ public class DepthFirstSearch implements Runnable {
     @Override
     public void run() {
 
-        DFS(graphPanel.sourceNode);
-    }
-
-
-    /**
-     * @return
-     */
-    private boolean isStopped() {
-
-        return graphPanel.stop;
-    }
-
-
-    /**
-     *
-     */
-    private void checkForPause() {
-
-        synchronized (pauseLock) {
-            boolean paused;
-            while (paused = graphPanel.pause) {
-                try {
-                    if (paused) pauseLock.wait(100);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        // Don't start algorithm if user hasn't selected source & target nodes
+        if (graphPanel.sourceNode != null || graphPanel.targetNode != null) {
+            dfs(graphPanel.sourceNode);
         }
-    }
-
-
-    /**
-     * @param node Search will begin from this node.
-     */
-    private void DFS(Integer node) {
-
-        int c = 0;
-        while (c < 10) {
-            if (isStopped()) return;
-            checkForPause();
-            System.out.print(i);
-            i++;
-            c++;
-
-            try {
-                TimeUnit.MILLISECONDS.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        i *= 2;
     }
 
 

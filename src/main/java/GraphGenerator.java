@@ -32,15 +32,16 @@ public class GraphGenerator extends DefaultWeightedEdge {
         if (vertices.size() - 1 > graph.edgeSet().size()) return false;
 
         Set<Integer> visited = new HashSet<>();
-        Deque<DefaultWeightedEdge> queue = new LinkedList<DefaultWeightedEdge>();
+        Deque<DefaultWeightedEdge> queue = new LinkedList<>();
         Integer startNode = vertices.iterator().next();
 
         visited.add(startNode);
         graph.edgesOf(startNode).forEach(queue::addLast);
         while (visited.size() != vertices.size() && queue.size() != 0) {
             DefaultWeightedEdge currentEdge = queue.pollFirst();
+            // EDGES ARE UNDIRECTED SO SOURCE AND TARGET CHANGE PER EDGE
             Integer source = graph.getEdgeSource(currentEdge);
-            Integer dest = graph.getEdgeSource(currentEdge);
+            Integer dest = graph.getEdgeTarget(currentEdge);
 
             Integer targetNode = visited.contains(source) ? dest : source;
             if (!visited.contains(targetNode)) {
