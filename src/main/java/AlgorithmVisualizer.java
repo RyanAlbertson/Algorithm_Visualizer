@@ -20,7 +20,5 @@ public class AlgorithmVisualizer {
 //
 //          -COMPLETELY REVISE ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
-//
-//          -DOESNT COLOR ONE EDGE/NODE SOMETIMES.
-//
+////
 //          https://pages.github.com   -> website version of repository

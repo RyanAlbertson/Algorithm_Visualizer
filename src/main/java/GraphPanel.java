@@ -81,7 +81,7 @@ public class GraphPanel extends JPanel {
     public GraphPanel() {
 
         // Defaults
-        algName = "Breath-First Search";
+        algName = "Breadth-First Search";
         graphSize = "Small";
         graph = GraphGenerator.generateGraph(graphSize);
         mouseState = MOUSE_STATE.SOURCE_NODE;
@@ -136,11 +136,10 @@ public class GraphPanel extends JPanel {
         g2D.drawString("Click nodes to define a source and target", 475, 20);
 
         for (Integer node : nodeCoords.keySet()) {
-            // Color all nodes and edges black initially
-            g2D.setColor(UNVISITED_COLOR);
             double x = nodeCoords.get(node)[0];
             double y = nodeCoords.get(node)[1];
             for (Integer adjNode : adjNodes.get(node)) {
+                g2D.setColor(UNVISITED_COLOR);
                 g2D.setStroke(new BasicStroke(1f));
                 try {
                     double adjX = nodeCoords.get(adjNode)[0];
@@ -252,7 +251,7 @@ public class GraphPanel extends JPanel {
      *
      */
     protected void startAlgorithm() {
-        
+
         // Start new algorithm
         if (algThread == null || !algThread.isAlive()) {
 
@@ -261,8 +260,10 @@ public class GraphPanel extends JPanel {
             Arrays.fill(visited, false);
 
             switch (algName) {
-                case "Breadth-First Search" -> BreadthFirstSearch.breadthFirstSearch(this);
-                case "Depth-First Search" -> algThread = new Thread(new DepthFirstSearch(this));
+                case "Breadth-First Search" -> algThread =
+                        new Thread(new BreadthFirstSearch(this));
+                case "Depth-First Search" -> algThread =
+                        new Thread(new DepthFirstSearch(this));
                 case "Dijkstra" -> Dijkstra.dijkstra(this);
                 case "Bellman-Ford" -> Bellman_Ford.bellmanFord(this);
                 case "Floyd_Warshall" -> Floyd_Warshall.floydWarshall(this);

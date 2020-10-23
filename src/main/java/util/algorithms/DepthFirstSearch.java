@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Uses depth first search to find a path between given source and target nodes.
  * Note that DFS only finds a shortest path on a tree graph, and the given graph
- * is connected and cylic. Therefore this algorithm only provides a single path,
- * out of all possible, which itself is most likely is not the shortest.
+ * is connected but cylic. Therefore this algorithm only provides a single path,
+ * out of all possible, which itself is probabilistically not the shortest.
  *
  * @author Ryan Albertson
  */
@@ -19,6 +19,7 @@ public class DepthFirstSearch implements Runnable {
 
     private final GraphPanel graphPanel;
     private final Object pauseLock = new Object();
+    private boolean targetFound = false;
 
 
     /**
@@ -59,6 +60,22 @@ public class DepthFirstSearch implements Runnable {
 
 
     /**
+     * Repaints the animation within the {@link GraphPanel}. Does it slowly such
+     * that the user can visualize the algorithm stepping through.
+     */
+    private void animate() {
+
+        try {
+            // Update animation, slowly
+            graphPanel.repaint();
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * Recursively checks the given node's neighbors until the
      * {@link GraphPanel#targetNode} is found. The preceding node for every node
      * is stored such that a path can be traced from the target node to the
@@ -72,16 +89,15 @@ public class DepthFirstSearch implements Runnable {
         if (isStopped()) return;
         checkForPause();
 
-        graphPanel.visited[node] = true;
-
-        //MOVE THIS TO HELPER METHOD?
-        try {
-            // Update animation, slowly
-            graphPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        // Stop DFS when target is found
+        if (node.equals(graphPanel.targetNode)) targetFound = true;
+        if (targetFound) {
+            animate();
+            return;
         }
+
+        graphPanel.visited[node] = true;
+        animate();
 
         for (Integer adj : graphPanel.adjNodes.get(node)) {
             if (!graphPanel.visited[adj]) {
