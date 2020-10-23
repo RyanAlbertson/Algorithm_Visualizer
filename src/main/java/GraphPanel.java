@@ -22,6 +22,8 @@ import java.util.*;
 public class GraphPanel extends JPanel {
 
 
+    public static final Color SOURCE_COLOR = Color.GREEN;
+    public static final Color TARGET_COLOR = Color.RED;
     public static final Color VISITED_COLOR = Color.CYAN;
     public static final Color UNVISITED_COLOR = Color.BLACK;
     public static final Color PATH_COLOR = Color.blue;
@@ -135,7 +137,7 @@ public class GraphPanel extends JPanel {
 
         for (Integer node : nodeCoords.keySet()) {
             // Color all nodes and edges black initially
-            g2D.setColor(Color.BLACK);
+            g2D.setColor(UNVISITED_COLOR);
             double x = nodeCoords.get(node)[0];
             double y = nodeCoords.get(node)[1];
             for (Integer adjNode : adjNodes.get(node)) {
@@ -156,8 +158,8 @@ public class GraphPanel extends JPanel {
 
         // Need second loop so that nodes are painted over all lines
         for (Integer node : nodeCoords.keySet()) {
-            if (node.equals(sourceNode)) g.setColor(Color.GREEN);
-            else if (node.equals(targetNode)) g.setColor(Color.RED);
+            if (node.equals(sourceNode)) g.setColor(SOURCE_COLOR);
+            else if (node.equals(targetNode)) g.setColor(TARGET_COLOR);
             else g.setColor(visited[node] ? VISITED_COLOR : UNVISITED_COLOR);
             g2D.fill(nodeShapes.get(node));
         }
@@ -170,18 +172,25 @@ public class GraphPanel extends JPanel {
             int currentNode = targetNode;
             int prevNode = path[targetNode];
             while (prevNode != Integer.MAX_VALUE) {
-                g2D.fill(nodeShapes.get(currentNode));
-                g2D.fill(nodeShapes.get(prevNode));
                 double currentNodeX = nodeCoords.get(currentNode)[0];
                 double currentNodeY = nodeCoords.get(currentNode)[1];
                 double prevNodeX = nodeCoords.get(prevNode)[0];
                 double prevNodeY = nodeCoords.get(prevNode)[1];
                 g2D.draw(new Line2D.Double(currentNodeX, currentNodeY,
                         prevNodeX, prevNodeY));
+                // Maintain source and target node coloring
+                if (currentNode == sourceNode) g2D.setColor(SOURCE_COLOR);
+                else if (currentNode == targetNode) g2D.setColor(TARGET_COLOR);
+                g2D.fill(nodeShapes.get(currentNode));
+                g2D.setColor(PATH_COLOR);
+                if (prevNode == sourceNode) g2D.setColor(SOURCE_COLOR);
+                else if (prevNode == targetNode) g2D.setColor(TARGET_COLOR);
+                g2D.fill(nodeShapes.get(prevNode));
+                g2D.setColor(PATH_COLOR);
+
                 // Tranverse path back to source node
                 currentNode = prevNode;
                 prevNode = path[prevNode];
-                // NOT REACHING FINAL NODE (SOURCE)
             }
         }
     }
@@ -193,7 +202,7 @@ public class GraphPanel extends JPanel {
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DM_DEFAULT_ENCODING")
     protected void initGraph() {
 
-        int nodeCount = numNodes.get(graphSize);
+        int nodeCount = graph.vertexSet().size();
         nodeCoords = new HashMap<>(nodeCount);
         nodeShapes = new HashMap<>(nodeCount);
         adjNodes = new HashMap<>(nodeCount);

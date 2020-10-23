@@ -72,12 +72,11 @@ public class DepthFirstSearch implements Runnable {
 
         graphPanel.visited[node] = true;
 
-        if (node.equals(graphPanel.targetNode)) return;
-
+        //MOVE THIS TO HELPER METHOD?
         try {
             // Update animation, slowly
             graphPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(500);
+            TimeUnit.MILLISECONDS.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
