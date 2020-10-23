@@ -45,7 +45,6 @@ public class GUI extends JFrame {
     private void initGraphPanel() {
 
         graphPanel = new GraphPanel();
-
         frame.add(graphPanel, BorderLayout.CENTER);
     }
 

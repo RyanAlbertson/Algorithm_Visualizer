@@ -22,9 +22,9 @@ import java.util.*;
 public class GraphPanel extends JPanel {
 
 
-    public static final Color VISITED_COLOR = Color.RED;
+    public static final Color VISITED_COLOR = Color.CYAN;
     public static final Color UNVISITED_COLOR = Color.BLACK;
-    public static final Color PATH_COLOR = Color.GREEN;
+    public static final Color PATH_COLOR = Color.blue;
     public static final int NODE_RADIUS = 20;
 
     static final HashMap<String, String> graphFileNames = new HashMap<>();
@@ -33,6 +33,14 @@ public class GraphPanel extends JPanel {
         graphFileNames.put("Small", "sm_graph.txt");
         graphFileNames.put("Medium", "md_graph.txt");
         graphFileNames.put("Large", "lg_graph.txt");
+    }
+
+    static final HashMap<String, Integer> numNodes = new HashMap<>();
+
+    static {
+        numNodes.put("Small", 10);
+        numNodes.put("Medium", 25);
+        numNodes.put("Large", 50);
     }
 
     public enum MOUSE_STATE {
@@ -79,7 +87,7 @@ public class GraphPanel extends JPanel {
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
         initGraph();
-        path = new int[nodeCoords.size()];
+
 
         // Detect user-selected start and end nodes
         addMouseListener(new MouseAdapter() {
@@ -122,53 +130,60 @@ public class GraphPanel extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
-        g2D.setStroke(new BasicStroke(1f));
-
         g2D.setFont(new Font("Ariel", Font.PLAIN, 18));
         g2D.drawString("Click nodes to define a source and target", 475, 20);
 
-        for (Integer nodeNum : nodeCoords.keySet()) {
+        for (Integer node : nodeCoords.keySet()) {
             // Color all nodes and edges black initially
-            g.setColor(Color.BLACK);
-            double x = nodeCoords.get(nodeNum)[0] + NODE_RADIUS / 2.0;
-            double y = nodeCoords.get(nodeNum)[1] + NODE_RADIUS / 2.0;
-            for (Integer adjNode : adjNodes.get(nodeNum)) {
+            g2D.setColor(Color.BLACK);
+            double x = nodeCoords.get(node)[0];
+            double y = nodeCoords.get(node)[1];
+            for (Integer adjNode : adjNodes.get(node)) {
+                g2D.setStroke(new BasicStroke(1f));
                 try {
-                    double adjX = nodeCoords.get(adjNode)[0] + NODE_RADIUS / 2.0;
-                    double adjY = nodeCoords.get(adjNode)[1] + NODE_RADIUS / 2.0;
+                    double adjX = nodeCoords.get(adjNode)[0];
+                    double adjY = nodeCoords.get(adjNode)[1];
+                    if (visited[node] && visited[adjNode]) {
+                        g2D.setStroke(new BasicStroke(2f));
+                        g2D.setColor(VISITED_COLOR);
+                    }
                     g2D.draw(new Line2D.Double(x, y, adjX, adjY));
                 } catch (NullPointerException e) {
                     // nodeNum has no adjacent nodes
                 }
             }
         }
+
         // Need second loop so that nodes are painted over all lines
-        for (Integer nodeNum : nodeCoords.keySet()) {
-            if (nodeNum.equals(sourceNode)) g.setColor(Color.GREEN);
-            else if (nodeNum.equals(targetNode)) g.setColor(Color.RED);
-            else g.setColor(visited[nodeNum] ? VISITED_COLOR : UNVISITED_COLOR);
-            g2D.fill(nodeShapes.get(nodeNum));
+        for (Integer node : nodeCoords.keySet()) {
+            if (node.equals(sourceNode)) g.setColor(Color.GREEN);
+            else if (node.equals(targetNode)) g.setColor(Color.RED);
+            else g.setColor(visited[node] ? VISITED_COLOR : UNVISITED_COLOR);
+            g2D.fill(nodeShapes.get(node));
         }
 
-        //USE SAME COLORS FOR VISISTED AND PATH NODES?
-//        g.setColor(PATH_COLOR);
-//        double prevX;
-//        double prevY;
-//        Integer nodeNum;
-//        Iterator<Integer> it = path.iterator();
-//        if (it.hasNext()) {
-//            nodeNum = it.next();
-//            prevX = nodeCoords.get(nodeNum)[0];
-//            prevY = nodeCoords.get(nodeNum)[1];
-//            while (it.hasNext()) {
-//                nodeNum = it.next();
-//                double x = nodeCoords.get(nodeNum)[0];
-//                double y = nodeCoords.get(nodeNum)[1];
-//                g2D.draw(new Line2D.Double(prevX, prevY, x, y));
-//                prevX = nodeCoords.get(nodeNum)[0];
-//                prevY = nodeCoords.get(nodeNum)[1];
-//            }
-//        }
+        // Draw path once algorithm has finished
+        if (targetNode != null && (path[targetNode] != Integer.MAX_VALUE)) {
+
+            g2D.setColor(PATH_COLOR);
+            g2D.setStroke(new BasicStroke(3f));
+            int currentNode = targetNode;
+            int prevNode = path[targetNode];
+            while (prevNode != Integer.MAX_VALUE) {
+                g2D.fill(nodeShapes.get(currentNode));
+                g2D.fill(nodeShapes.get(prevNode));
+                double currentNodeX = nodeCoords.get(currentNode)[0];
+                double currentNodeY = nodeCoords.get(currentNode)[1];
+                double prevNodeX = nodeCoords.get(prevNode)[0];
+                double prevNodeY = nodeCoords.get(prevNode)[1];
+                g2D.draw(new Line2D.Double(currentNodeX, currentNodeY,
+                        prevNodeX, prevNodeY));
+                // Tranverse path back to source node
+                currentNode = prevNode;
+                prevNode = path[prevNode];
+                // NOT REACHING FINAL NODE (SOURCE)
+            }
+        }
     }
 
 
@@ -178,9 +193,10 @@ public class GraphPanel extends JPanel {
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DM_DEFAULT_ENCODING")
     protected void initGraph() {
 
-        nodeCoords = new HashMap<>();
-        nodeShapes = new HashMap<>();
-        adjNodes = new HashMap<>();
+        int nodeCount = numNodes.get(graphSize);
+        nodeCoords = new HashMap<>(nodeCount);
+        nodeShapes = new HashMap<>(nodeCount);
+        adjNodes = new HashMap<>(nodeCount);
 
         //REPLACE FOLLOWING 5 LINES WITH THIS FOR USE OF AN EXECUTABLE
 //        String graphFileName = graphFileNames.get(graphSize);
@@ -203,7 +219,8 @@ public class GraphPanel extends JPanel {
                 double nodeNumY = lineData.get(2);
                 Shape nodeShape = new Ellipse2D.Double(nodeNumX,
                         nodeNumY, NODE_RADIUS, NODE_RADIUS);
-                nodeCoords.put(nodeNum, new Double[]{nodeNumX, nodeNumY});
+                nodeCoords.put(nodeNum, new Double[]{nodeNumX + NODE_RADIUS / 2.0,
+                        nodeNumY + NODE_RADIUS / 2.0});
                 nodeShapes.put(nodeNum, nodeShape);
                 Iterator<Integer> it = lineData.listIterator(3);
                 while (it.hasNext()) {
@@ -216,6 +233,9 @@ public class GraphPanel extends JPanel {
             e.printStackTrace();
         }
         visited = new boolean[nodeCoords.size()];
+        //PATH SIZE NEEDS TO CHANGE IF NEW GRAPH SIZE IS SELECTED
+        path = new int[nodeCoords.size()];
+        Arrays.fill(path, Integer.MAX_VALUE);
     }
 
 
@@ -224,14 +244,12 @@ public class GraphPanel extends JPanel {
      */
     protected void startAlgorithm() {
 
-        // Reset for next animation
-        if (algThread != null && !algThread.isAlive()) {
-            Arrays.fill(path, 0);
-            Arrays.fill(visited, false);
-        }
-
         // Start new algorithm
         if (algThread == null || !algThread.isAlive()) {
+
+            // Reset for next animation
+            Arrays.fill(path, Integer.MAX_VALUE);
+            Arrays.fill(visited, false);
 
             switch (algName) {
                 case "Breadth-First Search" -> BreadthFirstSearch.breadthFirstSearch(this);
@@ -242,7 +260,7 @@ public class GraphPanel extends JPanel {
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
             if (algThread != null) {
-                this.stop = this.pause = false;
+                this.pause = false;
                 algThread.start();
             }
             // Unpause current algorithm

@@ -149,7 +149,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
             String graphSize) {
 
         if (graphSize == null) {
-            throw new IllegalArgumentException("Error: SimpleGraph is null");
+            throw new IllegalArgumentException("SimpleGraph is null");
         }
 
         // Define graph sizes
@@ -158,7 +158,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
             case "Small" -> numNodes = 10;
             case "Medium" -> numNodes = 25;
             case "Large" -> numNodes = 50;
-            default -> throw new IllegalArgumentException("Error: invalid graph size\n" +
+            default -> throw new IllegalArgumentException("Invalid graph size. " +
                     "Available graph sizes: Small, Medium, Large");
         }
 
