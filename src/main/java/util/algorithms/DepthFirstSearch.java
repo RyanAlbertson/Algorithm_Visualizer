@@ -29,8 +29,10 @@ public class DepthFirstSearch implements Runnable {
     private boolean isStopped() {
 
         if (graphPanel.stop) {
+            // Clear animation
             Arrays.fill(graphPanel.path, Integer.MAX_VALUE);
             Arrays.fill(graphPanel.visited, false);
+            graphPanel.repaint();
             return true;
         }
         return false;
@@ -76,7 +78,7 @@ public class DepthFirstSearch implements Runnable {
         try {
             // Update animation, slowly
             graphPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

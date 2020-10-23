@@ -252,7 +252,7 @@ public class GraphPanel extends JPanel {
      *
      */
     protected void startAlgorithm() {
-
+        
         // Start new algorithm
         if (algThread == null || !algThread.isAlive()) {
 
@@ -269,6 +269,7 @@ public class GraphPanel extends JPanel {
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
             if (algThread != null) {
+                this.stop = false;
                 this.pause = false;
                 algThread.start();
             }

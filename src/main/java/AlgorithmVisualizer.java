@@ -21,7 +21,6 @@ public class AlgorithmVisualizer {
 //          -COMPLETELY REVISE ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
 //
-//          -ANIMATION DOESNT STOP THEN RESTART CORRECTLY.
 //          -DOESNT COLOR ONE EDGE/NODE SOMETIMES.
 //
 //          https://pages.github.com   -> website version of repository
