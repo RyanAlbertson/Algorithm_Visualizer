@@ -1,5 +1,6 @@
 package main.java;
 
+import main.java.util.Defs;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -54,13 +55,16 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
 
     /**
-     * Writes {@code graph} to a text file.
+     * Writes a {@code graph} to a text file. {@code graph} is connected
+     * and is cylic with high probability. {@code graph} is chosen to be either
+     * directed or undirected.
      *
      * @param graph     {@link SimpleGraph} to write to a file.
      * @param graphSize # of nodes in {@code graph}. Used to determine file name.
+     * @param algName   Used to determine if graphs should be converted to undirected.
      */
     private static void graphToFile(SimpleGraph<Integer, DefaultWeightedEdge> graph,
-                                    String graphSize) {
+                                    String graphSize, String algName) {
 
         StringBuilder line = new StringBuilder();
         List<String> lines = new ArrayList<>();
@@ -71,10 +75,12 @@ public class GraphGenerator extends DefaultWeightedEdge {
             // Get random node coordinates within GUI bounds
             int xCenter = GUI.WINDOW_WIDTH / 2;
             int yCenter = GUI.GRAPH_HEIGHT / 2;
-            int xLowerBound = -GUI.WINDOW_WIDTH / 2 + GraphPanel.NODE_RADIUS;
-            int xUpperBound = GUI.WINDOW_WIDTH / 2 - GraphPanel.NODE_RADIUS;
-            int yLowerBound = -GUI.GRAPH_HEIGHT / 2 + GraphPanel.NODE_RADIUS;
-            int yUpperBound = GUI.GRAPH_HEIGHT / 2 - GraphPanel.NODE_RADIUS;
+            int xLowerBound = -GUI.WINDOW_WIDTH / 2 + Defs.NODE_RADIUS;
+            int xUpperBound = GUI.WINDOW_WIDTH / 2 - Defs.NODE_RADIUS;
+            int textPadding = 30;
+            int yLowerBound = -GUI.GRAPH_HEIGHT / 2 + Defs.NODE_RADIUS +
+                    textPadding;
+            int yUpperBound = GUI.GRAPH_HEIGHT / 2 - Defs.NODE_RADIUS;
             int x = rand.nextInt((xUpperBound - xLowerBound) + 1) + xLowerBound + xCenter;
             int y = rand.nextInt((yUpperBound - yLowerBound) + 1) + yLowerBound + yCenter;
             line.append(x).append(" ");
@@ -83,7 +89,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
             // Get adjacent nodes
             for (DefaultWeightedEdge edge : graph.edgesOf(node)) {
                 try {
-                    // Adjacencies are undirected, so choose correct node in edge
+                    // Need to check both nodes for each edge for undirected edges
                     int source;
                     int target;
                     int adj;
@@ -96,7 +102,10 @@ public class GraphGenerator extends DefaultWeightedEdge {
                     getTarget.setAccessible(true);
                     target = Integer.parseInt(getTarget.invoke(edge).toString());
 
-                    adj = target == node ? source : target;
+                    // Make edges undirected if algorithm requires it
+                    if (Defs.isDirectedST.get(algName)) adj = target;
+                    else adj = (target == node) ? source : target;
+
                     line.append(adj).append(" ");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -107,7 +116,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
         }
 
         // Write graph to file
-        String graphFileName = GraphPanel.graphFileNames.get(graphSize);
+        String graphFileName = Defs.graphFileNamesST.get(graphSize);
         //CHANGE FOR USE WITH AN EXECUTABLE...JUST USE graphFileName?
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
@@ -139,14 +148,15 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
     /**
      * Generates a connected and weighted {@link SimpleGraph}. Calls
-     * {@link #graphToFile(SimpleGraph, String)} to write the graph to a file.
+     * graphToFile to write the provided graph to a file.
      *
      * @param graphSize Defines how many nodes will be in generated graph.
+     * @param algName   Used to determine if graph will be converted to undirected.
      * @return {@link SimpleGraph} which is connected and has {@code graphSize} nodes.
      * @throws IllegalArgumentException If {@code graphSize} is null.
      */
     public static SimpleGraph<Integer, DefaultWeightedEdge> generateGraph(
-            String graphSize) {
+            String graphSize, String algName) {
 
         if (graphSize == null) {
             throw new IllegalArgumentException("SimpleGraph is null");
@@ -175,7 +185,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
             graph.addEdge(u, v);
         } while (!isConnected(graph));
 
-        graphToFile(graph, graphSize);
+        graphToFile(graph, graphSize, algName);
 
         return graph;
     }

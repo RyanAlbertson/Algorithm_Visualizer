@@ -1,5 +1,7 @@
 package main.java;
 
+import main.java.util.Defs;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,9 +14,6 @@ public class GUI extends JFrame {
     static final int WINDOW_WIDTH = 1280;
     static final int WINDOW_HEIGHT = 720;
     static final int GRAPH_HEIGHT = WINDOW_HEIGHT - (WINDOW_HEIGHT / 15);
-    static final String[] algNames = {"Breadth-First Search", "Depth-First Search",
-            "Dijkstra", "Bellman-Ford", "Floyd-Warshall"};
-    static final String[] graphSizes = {"Small", "Medium", "Large"};
 
     private final JFrame frame;
     protected GraphPanel graphPanel;
@@ -54,6 +53,8 @@ public class GUI extends JFrame {
      */
     private void initMenuPanel() {
 
+        // CHECK ORDERING OF BUTTONS, SOMETHING IS MESSING UP GUI RENDERING
+
         JPanel menu = new JPanel();
         menu.setLayout(new GridLayout(1, 7));
         menu.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT / 15));
@@ -74,19 +75,30 @@ public class GUI extends JFrame {
         stopButton.addActionListener(event -> graphPanel.stopAlgorithm());
         menu.add(stopButton);
 
-        chooseAlgName = new JComboBox<>(algNames);
+        chooseAlgName = new JComboBox<>(Defs.algNames);
         chooseAlgName.setFont(new Font("Ariel", Font.PLAIN, 18));
+        chooseAlgName.addActionListener(event -> graphPanel.initGraph());
         chooseAlgName.addActionListener(event ->
                 graphPanel.algName = (String) chooseAlgName.getSelectedItem());
+        // Change graph to directed/undirected if needed
+        chooseAlgName.addActionListener(event -> {
+            if (Defs.isDirectedST.get(graphPanel.algName) !=
+                    Defs.isDirectedST.get((String) chooseAlgName.getSelectedItem())
+            ) {
+                GraphGenerator.generateGraph(graphPanel.graphSize,
+                        (String) chooseAlgName.getSelectedItem());
+            }
+        });
         menu.add(chooseAlgName);
 
-        chooseGraphSize = new JComboBox<>(graphSizes);
+        chooseGraphSize = new JComboBox<>(Defs.graphSizes);
         chooseGraphSize.setFont(new Font("Ariel", Font.PLAIN, 18));
         chooseGraphSize.addActionListener(event -> graphPanel.repaint());
         chooseGraphSize.addActionListener(event -> graphPanel.initGraph());
         chooseGraphSize.addActionListener(event -> graphPanel.graph =
                 GraphGenerator.generateGraph(
-                        (String) chooseGraphSize.getSelectedItem()));
+                        (String) chooseGraphSize.getSelectedItem(),
+                        graphPanel.algName));
         chooseGraphSize.addActionListener(event -> graphPanel.graphSize =
                 (String) chooseGraphSize.getSelectedItem());
         menu.add(chooseGraphSize);

@@ -9,14 +9,17 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * Implements a breadth first search to find a shortest path between a
+ * {@link GraphPanel#sourceNode} and {@link  GraphPanel#targetNode}. Note that
+ * the graph input is undirected and is cyclic with high probability.
  *
+ * @author Ryan Albertson
  */
 public class BreadthFirstSearch implements Runnable {
 
 
     private final GraphPanel graphPanel;
     private final Object pauseLock = new Object();
-    private boolean targetFound = false;
 
 
     /**
@@ -65,7 +68,7 @@ public class BreadthFirstSearch implements Runnable {
         try {
             // Update animation, slowly
             graphPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(2000);
+            TimeUnit.MILLISECONDS.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -73,7 +76,10 @@ public class BreadthFirstSearch implements Runnable {
 
 
     /**
-     * ADD DESCRIPTION
+     * Search starts at {@code node} and iterates by layer of adjacent nodes.
+     * It stops when the {@link GraphPanel#targetNode} is found. The preceding
+     * node is stored for each node such that a path back to
+     * {@link GraphPanel#sourceNode} can be traced.
      *
      * @param node Source node of the search.
      */
@@ -82,7 +88,7 @@ public class BreadthFirstSearch implements Runnable {
         Deque<Integer> queue = new ArrayDeque<>();
         queue.addLast(node);
 
-        // DOESNT STOP WHEN TARGET IS FOUND
+        search:
         while (!queue.isEmpty()) {
             // Check if user has stopped or paused algorithm
             if (isStopped()) return;
@@ -90,20 +96,21 @@ public class BreadthFirstSearch implements Runnable {
 
             int currentNode = queue.removeFirst();
             graphPanel.visited[currentNode] = true;
+            animate();
 
-
-            // Stop BFS when target is found
-            if (currentNode == graphPanel.targetNode) {
-                animate();
-                break;
-            }
             for (Integer adj : graphPanel.adjNodes.get(currentNode)) {
+                // Stop BFS when target is found
+                if (adj.equals(graphPanel.targetNode)) {
+                    graphPanel.path[adj] = currentNode;
+                    animate();
+                    break search;
+                }
+
                 if (!graphPanel.visited[adj]) {
                     graphPanel.path[adj] = currentNode;
                     queue.addLast(adj);
                 }
             }
-            animate();
         }
     }
 
@@ -117,7 +124,7 @@ public class BreadthFirstSearch implements Runnable {
     public void run() {
 
         // Don't start algorithm if user hasn't selected source & target nodes
-        if (graphPanel.sourceNode != null || graphPanel.targetNode != null) {
+        if (graphPanel.sourceNode != null && graphPanel.targetNode != null) {
             bfs(graphPanel.sourceNode);
         }
     }

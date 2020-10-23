@@ -1,5 +1,6 @@
 package main.java;
 
+import main.java.util.Defs;
 import main.java.util.algorithms.*;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -27,23 +28,6 @@ public class GraphPanel extends JPanel {
     public static final Color VISITED_COLOR = Color.CYAN;
     public static final Color UNVISITED_COLOR = Color.BLACK;
     public static final Color PATH_COLOR = Color.blue;
-    public static final int NODE_RADIUS = 20;
-
-    static final HashMap<String, String> graphFileNames = new HashMap<>();
-
-    static {
-        graphFileNames.put("Small", "sm_graph.txt");
-        graphFileNames.put("Medium", "md_graph.txt");
-        graphFileNames.put("Large", "lg_graph.txt");
-    }
-
-    static final HashMap<String, Integer> numNodes = new HashMap<>();
-
-    static {
-        numNodes.put("Small", 10);
-        numNodes.put("Medium", 25);
-        numNodes.put("Large", 50);
-    }
 
     public enum MOUSE_STATE {
         SOURCE_NODE, TARGET_NODE, RESET {
@@ -83,7 +67,7 @@ public class GraphPanel extends JPanel {
         // Defaults
         algName = "Breadth-First Search";
         graphSize = "Small";
-        graph = GraphGenerator.generateGraph(graphSize);
+        graph = GraphGenerator.generateGraph(graphSize, algName);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
@@ -133,7 +117,9 @@ public class GraphPanel extends JPanel {
         g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
         g2D.setFont(new Font("Ariel", Font.PLAIN, 18));
-        g2D.drawString("Click nodes to define a source and target", 475, 20);
+        g2D.drawString("Click nodes to define a source and target", 475, 15);
+        g2D.setFont(new Font("Ariel", Font.PLAIN, 16));
+        g2D.drawString("(Edges are not proportional to weight)", 505, 30);
 
         for (Integer node : nodeCoords.keySet()) {
             double x = nodeCoords.get(node)[0];
@@ -210,7 +196,7 @@ public class GraphPanel extends JPanel {
 //        String graphFileName = graphFileNames.get(graphSize);
 //        try {
 //            Scanner s = new Scanner(new File(graphFileName),
-        String graphFileName = graphFileNames.get(graphSize);
+        String graphFileName = Defs.graphFileNamesST.get(graphSize);
         String graphFileLocation = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         try {
@@ -226,9 +212,9 @@ public class GraphPanel extends JPanel {
                 double nodeNumX = lineData.get(1);
                 double nodeNumY = lineData.get(2);
                 Shape nodeShape = new Ellipse2D.Double(nodeNumX,
-                        nodeNumY, NODE_RADIUS, NODE_RADIUS);
-                nodeCoords.put(nodeNum, new Double[]{nodeNumX + NODE_RADIUS / 2.0,
-                        nodeNumY + NODE_RADIUS / 2.0});
+                        nodeNumY, Defs.NODE_RADIUS, Defs.NODE_RADIUS);
+                nodeCoords.put(nodeNum, new Double[]{nodeNumX + Defs.NODE_RADIUS
+                        / 2.0, nodeNumY + Defs.NODE_RADIUS / 2.0});
                 nodeShapes.put(nodeNum, nodeShape);
                 Iterator<Integer> it = lineData.listIterator(3);
                 while (it.hasNext()) {
@@ -264,7 +250,8 @@ public class GraphPanel extends JPanel {
                         new Thread(new BreadthFirstSearch(this));
                 case "Depth-First Search" -> algThread =
                         new Thread(new DepthFirstSearch(this));
-                case "Dijkstra" -> Dijkstra.dijkstra(this);
+                case "Dijkstra" -> algThread =
+                        new Thread(new Dijkstra(this));
                 case "Bellman-Ford" -> Bellman_Ford.bellmanFord(this);
                 case "Floyd_Warshall" -> Floyd_Warshall.floydWarshall(this);
                 default -> throw new IllegalArgumentException("Invalid algorithm");

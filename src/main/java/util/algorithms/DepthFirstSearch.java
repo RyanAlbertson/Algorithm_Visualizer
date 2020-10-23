@@ -7,10 +7,11 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Uses depth first search to find a path between given source and target nodes.
+ * Implements a depth first search to find a path between a
+ * {@link GraphPanel#sourceNode} and {@link GraphPanel#targetNode}.
  * Note that DFS only finds a shortest path on a tree graph, and the given graph
- * is connected but cylic. Therefore this algorithm only provides a single path,
- * out of all possible, which itself is probabilistically not the shortest.
+ * is connected but likely cylic. Therefore this algorithm only provides a single
+ * path, out of all possible, which itself is probabilistically not the shortest.
  *
  * @author Ryan Albertson
  */
@@ -117,7 +118,7 @@ public class DepthFirstSearch implements Runnable {
     public void run() {
 
         // Don't start algorithm if user hasn't selected source & target nodes
-        if (graphPanel.sourceNode != null || graphPanel.targetNode != null) {
+        if (graphPanel.sourceNode != null && graphPanel.targetNode != null) {
             dfs(graphPanel.sourceNode);
         }
     }
