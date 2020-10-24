@@ -18,7 +18,9 @@ import java.util.*;
 
 
 /**
+ * Constructs and maintains a graph for use in {@link GUI}.
  *
+ * @author Ryan Albertson
  */
 public class GraphPanel extends JPanel {
 
@@ -60,13 +62,13 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     *
+     * Constructs an initial graph for the GUI. Also manages node selection.
      */
     public GraphPanel() {
 
         // Defaults
-        algName = "Breadth-First Search";
-        graphSize = "Small";
+        algName = "Dijkstra";
+        graphSize = "Medium";
         graph = GraphGenerator.generateGraph(graphSize, algName);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
@@ -106,7 +108,9 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     * @param g
+     * Renders the current graph in the GUI. If an algorithm is running, it is
+     * also rendered.
+     * @param g {@link Graphics} object that is drawn on.
      */
     public void paint(Graphics g) {
 
@@ -119,7 +123,8 @@ public class GraphPanel extends JPanel {
         g2D.setFont(new Font("Ariel", Font.PLAIN, 18));
         g2D.drawString("Click nodes to define a source and target", 475, 15);
         g2D.setFont(new Font("Ariel", Font.PLAIN, 16));
-        g2D.drawString("(Edges are not proportional to weight)", 505, 30);
+        g2D.drawString("(Edges are not proportional to weight for BFS & DFS)",
+                450, 30);
 
         for (Integer node : nodeCoords.keySet()) {
             double x = nodeCoords.get(node)[0];
@@ -234,7 +239,8 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     *
+     * If an algorithm is running, it is unpaused. Otherwise, a new process
+     * of the currently selected algorithm is started.
      */
     protected void startAlgorithm() {
 
@@ -257,8 +263,8 @@ public class GraphPanel extends JPanel {
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
             if (algThread != null) {
-                this.stop = false;
-                this.pause = false;
+                stop = false;
+                pause = false;
                 algThread.start();
             }
             // Unpause current algorithm
@@ -267,33 +273,24 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     *
+     * Stops current algorithm, if it is running.
      */
     protected void stopAlgorithm() {
 
         if (algThread != null && algThread.isAlive()) {
-
-            switch (algName) {
-                case "Breadth-First Search", "Depth-First Search", "Dijkstra",
-                        "Bellman-Ford", "Floyd_Warshall" -> this.stop = true;
-                default -> throw new IllegalArgumentException("Invalid algorithm");
-            }
+            this.stop = true;
         }
+        sourceNode = targetNode = null;
     }
 
 
     /**
-     *
+     * Pauses current algorithm, if it is running.
      */
     protected void pauseAlgorithm() {
 
         if (algThread != null && algThread.isAlive()) {
-
-            switch (algName) {
-                case "Breadth-First Search", "Depth-First Search", "Dijkstra",
-                        "Bellman-Ford", "Floyd_Warshall" -> this.pause = !this.pause;
-                default -> throw new IllegalArgumentException("Invalid algorithm");
-            }
+            this.pause = true;
         }
     }
 }

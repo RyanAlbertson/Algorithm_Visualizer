@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -88,28 +87,15 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
             // Get adjacent nodes
             for (DefaultWeightedEdge edge : graph.edgesOf(node)) {
-                try {
-                    // Need to check both nodes for each edge for undirected edges
-                    int source;
-                    int target;
-                    int adj;
+                // Need to check both nodes for each edge for undirected edges
+                int source = graph.getEdgeSource(edge);
+                int target = graph.getEdgeTarget(edge);
+                int adj;
 
-                    Method getSource = edge.getClass().getDeclaredMethod("getSource");
-                    getSource.setAccessible(true);
-                    source = Integer.parseInt(getSource.invoke(edge).toString());
-
-                    Method getTarget = edge.getClass().getDeclaredMethod("getTarget");
-                    getTarget.setAccessible(true);
-                    target = Integer.parseInt(getTarget.invoke(edge).toString());
-
-                    // Make edges undirected if algorithm requires it
-                    if (Defs.isDirectedST.get(algName)) adj = target;
-                    else adj = (target == node) ? source : target;
-
-                    line.append(adj).append(" ");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                // Make edges undirected if algorithm requires it
+                if (Defs.isDirectedST.get(algName)) adj = target;
+                else adj = (target == node) ? source : target;
+                line.append(adj).append(" ");
             }
             lines.add(line.toString());
             line.delete(0, line.length() - 1);

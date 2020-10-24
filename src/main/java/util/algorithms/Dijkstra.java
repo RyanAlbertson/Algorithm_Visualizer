@@ -1,12 +1,17 @@
 package main.java.util.algorithms;
 
 import main.java.GraphPanel;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ *
+ */
 public class Dijkstra implements Runnable {
 
 
@@ -68,41 +73,81 @@ public class Dijkstra implements Runnable {
 
 
     /**
-     * Search starts at {@code node} and iterates by layer of adjacent nodes.
-     * It stops when the {@link GraphPanel#targetNode} is found. The preceding
-     * node is stored for each node such that a path back to
-     * {@link GraphPanel#sourceNode} can be traced.
+     * ADD
+     *
+     * @param distanceTo
+     * @return
+     */
+    private Integer getNearestReachableNode(double[] distanceTo) {
+
+        Integer nearestNode = null;
+        double shortestDist = Double.POSITIVE_INFINITY;
+
+        for (int i = 0; i < distanceTo.length; i++) {
+
+            if (graphPanel.visited[i]) continue;
+
+            double currentDist = distanceTo[i];
+            if (currentDist < shortestDist) {
+                shortestDist = currentDist;
+                nearestNode = i;
+            }
+        }
+        return nearestNode;
+    }
+
+
+    /**
+     * ADD
      *
      * @param node Source node of the search.
      */
-    private void bfs(Integer node) {
+    private void dijkstra(Integer node) {
 
-        Deque<Integer> queue = new ArrayDeque<>();
-        queue.addLast(node);
+        //TODO  -DOESNT TRAVERSE NODES CORRECTLY (DOES DFS MORE THAN BFS).
+        //      -SOMETIMES STOPS BEFORE REACHING TARGET BC NO DIST IS UPDATED
+        //             FROM INFINITY SO NO CURRENTNODE IS SELECTED.
+        //      -EVERYTIME ALL NODES ARE NOT VISITED, STOPS EARLY.
 
-        search:
-        while (!queue.isEmpty()) {
+        double[] distanceTo = new double[graphPanel.graph.vertexSet().size()];
+        Arrays.fill(distanceTo, Double.POSITIVE_INFINITY);
+        distanceTo[node] = 0.0;
+
+        while (true) {
             // Check if user has stopped or paused algorithm
             if (isStopped()) return;
             checkForPause();
 
-            int currentNode = queue.removeFirst();
+            Integer currentNode = getNearestReachableNode(distanceTo);
+
+            // Algorithm finished
+            if (currentNode == null) break;
+
+            // Target found
+            if (currentNode.equals(graphPanel.targetNode)) {
+                animate();
+            }
             graphPanel.visited[currentNode] = true;
             animate();
 
-            for (Integer adj : graphPanel.adjNodes.get(currentNode)) {
-                // Stop BFS when target is found
-                if (adj.equals(graphPanel.targetNode)) {
-                    graphPanel.path[adj] = currentNode;
-                    animate();
-                    break search;
-                }
+            // Test new paths to adjacent nodes, update their distances if needed
+            List<DefaultWeightedEdge> allEdges = new ArrayList<>();
+            allEdges.addAll(graphPanel.graph.incomingEdgesOf(currentNode));
+            allEdges.addAll(graphPanel.graph.outgoingEdgesOf(currentNode));
+            for (DefaultWeightedEdge edge : allEdges) {
 
-                if (!graphPanel.visited[adj]) {
-                    graphPanel.path[adj] = currentNode;
-                    queue.addLast(adj);
-                }
+                int adjNode = graphPanel.graph.getEdgeTarget(edge);
+                if (graphPanel.visited[adjNode]) continue;
+
+                double currentDist = distanceTo[adjNode];
+                double newDist = distanceTo[currentNode] +
+                        graphPanel.graph.getEdgeWeight(edge);
+
+                // Update edge distance if new path is shorter
+                if (newDist < currentDist) distanceTo[adjNode] = newDist;
+                graphPanel.path[adjNode] = currentNode;
             }
+
         }
     }
 
@@ -117,13 +162,13 @@ public class Dijkstra implements Runnable {
 
         // Don't start algorithm if user hasn't selected source & target nodes
         if (graphPanel.sourceNode != null && graphPanel.targetNode != null) {
-            bfs(graphPanel.sourceNode);
+            dijkstra(graphPanel.sourceNode);
         }
     }
 
 
     /**
-     * Constructs a {@link BreadthFirstSearch}.
+     * Constructs a {@link Dijkstra}.
      *
      * @param graphPanel The {@link javax.swing.JPanel} containing a graph.
      * @throws IllegalArgumentException If {@code graphPanel} is null.
