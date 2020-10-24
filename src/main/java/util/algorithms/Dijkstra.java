@@ -73,10 +73,9 @@ public class Dijkstra implements Runnable {
 
 
     /**
-     * ADD
+     * Returns the unvisited node with the least distance from the source node.
      *
-     * @param distanceTo
-     * @return
+     * @param distanceTo Distances to all nodes from source node.
      */
     private Integer getNearestReachableNode(double[] distanceTo) {
 
