@@ -199,15 +199,13 @@ public class GraphPanel extends JPanel {
         nodeShapes = new HashMap<>(nodeCount);
         adjNodes = new HashMap<>(nodeCount);
 
-        //REPLACE FOLLOWING 5 LINES WITH THIS FOR USE OF AN EXECUTABLE
-//        String graphFileName = graphFileNames.get(graphSize);
-//        try {
-//            Scanner s = new Scanner(new File(graphFileName),
+
+        // FOR EXECUTABLE: graphFileLoc -> graphFileName
         String graphFileName = Defs.graphFileNamesST.get(graphSize);
-        String graphFileLocation = System.getProperty("user.dir")
+        String graphFileLoc = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         try {
-            Scanner s = new Scanner(new File(graphFileLocation),
+            Scanner s = new Scanner(new File(graphFileLoc),
                     StandardCharsets.UTF_8);
             String line;
             while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
