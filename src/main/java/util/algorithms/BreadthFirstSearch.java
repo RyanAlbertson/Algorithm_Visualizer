@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Implements a breadth first search to find a shortest path between a
  * {@link GraphPanel#sourceNode} and {@link  GraphPanel#targetNode}. Note that
- * the graph input is undirected and is cyclic with high probability.
+ * the graph input is weighted and undirected. This implementation ignores the
+ * weights.
  *
  * @author Ryan Albertson
  */

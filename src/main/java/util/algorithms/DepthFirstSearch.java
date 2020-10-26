@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Implements a depth first search to find a path between a
  * {@link GraphPanel#sourceNode} and {@link GraphPanel#targetNode}.
- * Note that DFS only finds a shortest path on a tree graph, and the given graph
- * is connected but likely cylic. Therefore this algorithm only provides a single
+ * Note that DFS only finds a shortest path on a tree graph, but the input graph
+ * is connected and likely cylic. Therefore this algorithm only provides a single
  * path, out of all possible, which itself is probabilistically not the shortest.
  *
  * @author Ryan Albertson
@@ -79,27 +79,30 @@ public class DepthFirstSearch implements Runnable {
     /**
      * Recursively checks the given node's neighbors until the
      * {@link GraphPanel#targetNode} is found. The preceding node for every node
-     * is stored such that a path can be traced from the target node to the
-     * {@link GraphPanel#sourceNode}.
+     * is stored such that a path can be traced from the
+     * {@link GraphPanel#targetNode} to the {@link GraphPanel#sourceNode}.
      *
-     * @param node Initial argument is the source node.
+     * @param node DFS is started at this node.
      */
     private void dfs(Integer node) {
+
+        // Stop algorithm if target has been found further down the recursion
+        if (targetFound) return;
 
         // Check if user has stopped or paused algorithm
         if (isStopped()) return;
         checkForPause();
 
-        // Stop DFS when target is found
-        if (node.equals(graphPanel.targetNode)) targetFound = true;
-        if (targetFound) {
-            animate();
-            return;
-        }
-
         graphPanel.visited[node] = true;
         animate();
 
+        // Stop DFS when target is found
+        if (node.equals(graphPanel.targetNode)) {
+            targetFound = true;
+            return;
+        }
+
+        // Recursively call DFS on unvisited neighbors
         for (Integer adj : graphPanel.adjNodes.get(node)) {
             if (!graphPanel.visited[adj]) {
                 graphPanel.path[adj] = node;

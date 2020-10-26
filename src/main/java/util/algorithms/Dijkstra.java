@@ -10,7 +10,12 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * Implements a Dijkstra algorithm to find the shortest path from a
+ * {@link GraphPanel#sourceNode}source node to all other nodes. Note that the
+ * input graph is directed but I choose to implement an undirected algorithm
+ * in an effort to make the animations more substantial.
  *
+ * @author Ryan Albertson
  */
 public class Dijkstra implements Runnable {
 
@@ -97,16 +102,12 @@ public class Dijkstra implements Runnable {
 
 
     /**
-     * ADD
+     * Starts a Dijkstra search at the provided source {@code node}. It finds the
+     * shortest path to all nodes from {@code node}.
      *
      * @param node Source node of the search.
      */
     private void dijkstra(Integer node) {
-
-        //TODO  -DOESNT TRAVERSE NODES CORRECTLY (DOES DFS MORE THAN BFS).
-        //      -SOMETIMES STOPS BEFORE REACHING TARGET BC NO DIST IS UPDATED
-        //             FROM INFINITY SO NO CURRENTNODE IS SELECTED.
-        //      -EVERYTIME ALL NODES ARE NOT VISITED, STOPS EARLY.
 
         double[] distanceTo = new double[graphPanel.graph.vertexSet().size()];
         Arrays.fill(distanceTo, Double.POSITIVE_INFINITY);
@@ -122,20 +123,20 @@ public class Dijkstra implements Runnable {
             // Algorithm finished
             if (currentNode == null) break;
 
-            // Target found
-            if (currentNode.equals(graphPanel.targetNode)) {
-                animate();
-            }
             graphPanel.visited[currentNode] = true;
             animate();
 
             // Test new paths to adjacent nodes, update their distances if needed
             List<DefaultWeightedEdge> allEdges = new ArrayList<>();
+            // Account for undirected edges
             allEdges.addAll(graphPanel.graph.incomingEdgesOf(currentNode));
             allEdges.addAll(graphPanel.graph.outgoingEdgesOf(currentNode));
             for (DefaultWeightedEdge edge : allEdges) {
 
                 int adjNode = graphPanel.graph.getEdgeTarget(edge);
+                if (adjNode == currentNode) {
+                    adjNode = graphPanel.graph.getEdgeSource(edge);
+                }
                 if (graphPanel.visited[adjNode]) continue;
 
                 double currentDist = distanceTo[adjNode];
@@ -143,8 +144,10 @@ public class Dijkstra implements Runnable {
                         graphPanel.graph.getEdgeWeight(edge);
 
                 // Update edge distance if new path is shorter
-                if (newDist < currentDist) distanceTo[adjNode] = newDist;
-                graphPanel.path[adjNode] = currentNode;
+                if (newDist < currentDist) {
+                    distanceTo[adjNode] = newDist;
+                    graphPanel.path[adjNode] = currentNode;
+                }
             }
 
         }

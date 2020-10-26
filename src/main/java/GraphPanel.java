@@ -87,6 +87,8 @@ public class GraphPanel extends JPanel {
 
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
                     sourceNode = targetNode = null;
+                    Arrays.fill(visited, false);
+                    Arrays.fill(path, Integer.MAX_VALUE);
                     repaint();
                     mouseState = mouseState.next();
                 } else {
@@ -280,7 +282,6 @@ public class GraphPanel extends JPanel {
         if (algThread != null && algThread.isAlive()) {
             this.stop = true;
         }
-        sourceNode = targetNode = null;
     }
 
 

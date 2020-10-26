@@ -20,5 +20,5 @@ public class AlgorithmVisualizer {
 //
 //          -COMPLETELY REVISE ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
-////
+//
 //          https://pages.github.com   -> website version of repository
