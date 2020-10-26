@@ -88,6 +88,7 @@ public class BreadthFirstSearch implements Runnable {
 
         Deque<Integer> queue = new ArrayDeque<>();
         queue.addLast(node);
+        graphPanel.visited[node] = true;
 
         search:
         while (!queue.isEmpty()) {
@@ -96,8 +97,6 @@ public class BreadthFirstSearch implements Runnable {
             checkForPause();
 
             int currentNode = queue.removeFirst();
-            graphPanel.visited[currentNode] = true;
-            animate();
 
             for (Integer adj : graphPanel.adjNodes.get(currentNode)) {
                 // Stop BFS when target is found
@@ -107,9 +106,12 @@ public class BreadthFirstSearch implements Runnable {
                     break search;
                 }
 
+                // Visit unvisited neighbors of currentNode
                 if (!graphPanel.visited[adj]) {
+                    graphPanel.visited[adj] = true;
                     graphPanel.path[adj] = currentNode;
                     queue.addLast(adj);
+                    animate();
                 }
             }
         }

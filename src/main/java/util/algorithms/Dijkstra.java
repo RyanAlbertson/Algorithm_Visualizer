@@ -81,6 +81,7 @@ public class Dijkstra implements Runnable {
      * Returns the unvisited node with the least distance from the source node.
      *
      * @param distanceTo Distances to all nodes from source node.
+     * @return Nearest unvisited node, otherwise null.
      */
     private Integer getNearestReachableNode(double[] distanceTo) {
 
@@ -88,7 +89,6 @@ public class Dijkstra implements Runnable {
         double shortestDist = Double.POSITIVE_INFINITY;
 
         for (int i = 0; i < distanceTo.length; i++) {
-
             if (graphPanel.visited[i]) continue;
 
             double currentDist = distanceTo[i];
@@ -120,18 +120,15 @@ public class Dijkstra implements Runnable {
 
             Integer currentNode = getNearestReachableNode(distanceTo);
 
-            // Algorithm finished
+            // All nodes visited, algorithm finished.
             if (currentNode == null) break;
 
-            graphPanel.visited[currentNode] = true;
-            animate();
-
             // Test new paths to adjacent nodes, update their distances if needed
-            List<DefaultWeightedEdge> allEdges = new ArrayList<>();
+            List<DefaultWeightedEdge> adjEdges = new ArrayList<>();
             // Account for undirected edges
-            allEdges.addAll(graphPanel.graph.incomingEdgesOf(currentNode));
-            allEdges.addAll(graphPanel.graph.outgoingEdgesOf(currentNode));
-            for (DefaultWeightedEdge edge : allEdges) {
+            adjEdges.addAll(graphPanel.graph.incomingEdgesOf(currentNode));
+            adjEdges.addAll(graphPanel.graph.outgoingEdgesOf(currentNode));
+            for (DefaultWeightedEdge edge : adjEdges) {
 
                 int adjNode = graphPanel.graph.getEdgeTarget(edge);
                 if (adjNode == currentNode) {
@@ -143,13 +140,14 @@ public class Dijkstra implements Runnable {
                 double newDist = distanceTo[currentNode] +
                         graphPanel.graph.getEdgeWeight(edge);
 
-                // Update edge distance if new path is shorter
+                // Update adjNode's distance if proposed path is shorter
                 if (newDist < currentDist) {
                     distanceTo[adjNode] = newDist;
                     graphPanel.path[adjNode] = currentNode;
                 }
             }
-
+            graphPanel.visited[currentNode] = true;
+            animate();
         }
     }
 
