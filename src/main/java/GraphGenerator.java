@@ -111,9 +111,9 @@ public class GraphGenerator extends DefaultWeightedEdge {
         try {
             // Delete to prevent overwrite
             if (!file.createNewFile()) {
-                new FileOutputStream(graphFileLoc, false).close();
+                new FileOutputStream(graphFileName, false).close();
             }
-            FileOutputStream outFile = new FileOutputStream(graphFileLoc);
+            FileOutputStream outFile = new FileOutputStream(graphFileName);
             writer = new OutputStreamWriter(outFile, StandardCharsets.UTF_8);
             for (String nodeData : lines) {
                 writer.write(nodeData + System.getProperty("line.separator"));
