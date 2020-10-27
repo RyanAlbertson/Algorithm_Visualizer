@@ -15,10 +15,8 @@ public class AlgorithmVisualizer {
     }
 }
 
-// TODO:    -ADD DOCUMENTATION ONCE I CONFIRM THAT THE ALG. CLASSES PROPERLY
-//              INTERFACE WITH THE OTHER CLASSES.
-//
-//          -COMPLETELY REVISE ENCAPSULATION OF PROJECT.
+// TODO:    -ADD MISSING DOCUMENTATION.//
+//          -REFACTOR ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
 //
 //          https://pages.github.com   -> website version of repository
