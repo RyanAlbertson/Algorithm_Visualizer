@@ -15,7 +15,8 @@ public class AlgorithmVisualizer {
     }
 }
 
-// TODO:    -ADD MISSING DOCUMENTATION.//
+// TODO:    -ADD MISSING DOCUMENTATION.
+//          -WEAKEN THE COUPLING OF graphPanel.java + alg classes
 //          -REFACTOR ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
 //
