@@ -6,13 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Launches a GUI application that allows a user to interactively generate graphs
+ * and select start and end nodes for a shortest path algorithm. Then user can
+ * select and start an algorithm and see it step through an animation.
  *
+ * @author Ryan Albertson
  */
 public class GUI extends JFrame {
 
 
-    static final int WINDOW_WIDTH = 1280;
-    static final int WINDOW_HEIGHT = 720;
+    static final int WINDOW_WIDTH = 1500;
+    static final int WINDOW_HEIGHT = 900;
     static final int GRAPH_HEIGHT = WINDOW_HEIGHT - (WINDOW_HEIGHT / 15);
 
     private final JFrame frame;
@@ -22,7 +26,7 @@ public class GUI extends JFrame {
 
 
     /**
-     *
+     * Constructs a {@link GUI}.
      */
     public GUI() {
 
@@ -39,7 +43,7 @@ public class GUI extends JFrame {
 
 
     /**
-     *
+     * Initializes the graph component of the {@link GUI}.
      */
     private void initGraphPanel() {
 
@@ -84,7 +88,7 @@ public class GUI extends JFrame {
 
 
     /**
-     * Sets up the menu bar at the top of the GUI.
+     * Initializes menu bar component of the {@link GUI}.
      */
     private void initMenuPanel() {
 
@@ -126,4 +130,18 @@ public class GUI extends JFrame {
 
         frame.add(menu, BorderLayout.NORTH);
     }
+
+
+    /**
+     * Launches the application.
+     */
+    public static void main(String[] args) {
+
+        new GUI();
+    }
 }
+
+
+// TODO:    -WEAKEN THE COUPLING OF graphPanel.java + alg classes
+//          -REFACTOR ENCAPSULATION OF PROJECT.
+//          -ADD ERROR CHECKING/HANDLING.

@@ -18,18 +18,17 @@ import java.util.*;
 
 
 /**
- * Constructs and maintains a graph for use in {@link GUI}.
+ * Constructs an user-interactive graph for use in {@link GUI}.
  *
  * @author Ryan Albertson
  */
 public class GraphPanel extends JPanel {
 
-
-    public static final Color SOURCE_COLOR = Color.GREEN;
-    public static final Color TARGET_COLOR = Color.RED;
-    public static final Color VISITED_COLOR = Color.CYAN;
-    public static final Color UNVISITED_COLOR = Color.BLACK;
-    public static final Color PATH_COLOR = Color.blue;
+    public static final Color SOURCE_COLOR = new Color(0, 170, 19);
+    public static final Color TARGET_COLOR = new Color(225, 6, 0);
+    public static final Color VISITED_COLOR = new Color(0, 181, 226);
+    public static final Color UNVISITED_COLOR = new Color(0, 0, 0);
+    public static final Color PATH_COLOR = new Color(250, 108, 36);
 
     public enum MOUSE_STATE {
         SOURCE_NODE, TARGET_NODE, RESET {
@@ -68,7 +67,7 @@ public class GraphPanel extends JPanel {
 
         // Defaults
         algName = "Dijkstra";
-        graphSize = "Medium";
+        graphSize = "Large";
         graph = GraphGenerator.generateGraph(graphSize, algName);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
@@ -123,22 +122,23 @@ public class GraphPanel extends JPanel {
         g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
         g2D.setFont(new Font("Ariel", Font.PLAIN, 18));
-        g2D.drawString("Click nodes to define a source and target", 475, 15);
+        g2D.drawString("Click nodes to define a source and target",
+                (float) (GUI.WINDOW_WIDTH * 0.39), 15);
         g2D.setFont(new Font("Ariel", Font.PLAIN, 16));
         g2D.drawString("(Edges are not proportional to weight for BFS & DFS)",
-                450, 30);
+                (float) (GUI.WINDOW_WIDTH * 0.37), 30);
 
         for (Integer node : nodeCoords.keySet()) {
             double x = nodeCoords.get(node)[0];
             double y = nodeCoords.get(node)[1];
             for (Integer adjNode : adjNodes.get(node)) {
                 g2D.setColor(UNVISITED_COLOR);
-                g2D.setStroke(new BasicStroke(1f));
+                g2D.setStroke(new BasicStroke(2f));
                 try {
                     double adjX = nodeCoords.get(adjNode)[0];
                     double adjY = nodeCoords.get(adjNode)[1];
                     if (visited[node] && visited[adjNode]) {
-                        g2D.setStroke(new BasicStroke(2f));
+                        g2D.setStroke(new BasicStroke(3f));
                         g2D.setColor(VISITED_COLOR);
                     }
                     g2D.draw(new Line2D.Double(x, y, adjX, adjY));
@@ -156,11 +156,11 @@ public class GraphPanel extends JPanel {
             g2D.fill(nodeShapes.get(node));
         }
 
-        // Draw path once algorithm has finished
+        // Draw path once algorithm has found target node
         if (targetNode != null && (path[targetNode] != Integer.MAX_VALUE)) {
 
             g2D.setColor(PATH_COLOR);
-            g2D.setStroke(new BasicStroke(3f));
+            g2D.setStroke(new BasicStroke(4f));
             int currentNode = targetNode;
             int prevNode = path[targetNode];
             while (prevNode != Integer.MAX_VALUE) {
@@ -205,7 +205,7 @@ public class GraphPanel extends JPanel {
         String graphFileLoc = System.getProperty("user.dir")
                 .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
         try {
-            Scanner s = new Scanner(new File(graphFileName),
+            Scanner s = new Scanner(new File(graphFileLoc),
                     StandardCharsets.UTF_8);
             String line;
             while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
