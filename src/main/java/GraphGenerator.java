@@ -105,15 +105,15 @@ public class GraphGenerator extends DefaultWeightedEdge {
         // Write graph to file
         String graphFileName = Defs.graphFileNamesST.get(graphSize);
         String graphFileLoc = System.getProperty("user.dir")
-                .concat("\\src\\main\\java\\resources\\graphs\\" + graphFileName);
+                .concat("/src/main/java/resources/graphs/" + graphFileName);
         File file = new File(graphFileLoc);
         OutputStreamWriter writer = null;
         try {
             // Delete to prevent overwrite
             if (!file.createNewFile()) {
-                new FileOutputStream(graphFileLoc, false).close();
+                new FileOutputStream(file, false).close();
             }
-            FileOutputStream outFile = new FileOutputStream(graphFileLoc);
+            FileOutputStream outFile = new FileOutputStream(file);
             writer = new OutputStreamWriter(outFile, StandardCharsets.UTF_8);
             for (String nodeData : lines) {
                 writer.write(nodeData + System.getProperty("line.separator"));
