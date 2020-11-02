@@ -142,6 +142,7 @@ public class GUI extends JFrame {
 }
 
 
-// TODO:    -WEAKEN THE COUPLING OF graphPanel.java + alg classes
+// TODO:    -WEAKEN THE COUPLING OF graphPanel.java + ALG CLASSES.
 //          -REFACTOR ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
+//          -FIX FILE PATHS FOR EXECUTABLE.

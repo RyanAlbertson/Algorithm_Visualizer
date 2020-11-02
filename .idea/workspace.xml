@@ -128,10 +128,11 @@
     </recent_temporary>
   </component>
   <component name="WindowStateProjectService">
-    <state x="724" y="294" key="#Project_Structure" timestamp="1601264562500">
-      <screen x="0" y="0" width="2488" height="1440" />
+    <state x="1469" y="294" key="#Project_Structure" timestamp="1604292767424">
+      <screen x="0" y="0" width="5048" height="1440" />
     </state>
     <state x="724" y="294" key="#Project_Structure/-1080.243.972.1920/0.0.2488.1440@0.0.2488.1440" timestamp="1601264562500" />
+    <state x="1469" y="294" key="#Project_Structure/0.0.5048.1440@0.0.5048.1440" timestamp="1604292767424" />
     <state x="379" y="194" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604173477311">
       <screen x="0" y="0" width="1848" height="1080" />
     </state>
@@ -144,11 +145,11 @@
     <state x="778" y="321" key="#com.intellij.ide.util.MemberChooser/0.0.1844.1080@0.0.1844.1080" timestamp="1603504094238" />
     <state x="1049" y="428" key="#com.intellij.ide.util.MemberChooser/0.0.2488.1440/-1080.243.1080.1920@0.0.2488.1440" timestamp="1601354281731" />
     <state x="1049" y="428" key="#com.intellij.ide.util.MemberChooser/0.0.2488.1440@0.0.2488.1440" timestamp="1601428266032" />
-    <state x="787" y="438" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1604173445647">
-      <screen x="0" y="0" width="1848" height="1080" />
+    <state x="2151" y="584" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1604292794113">
+      <screen x="0" y="0" width="5048" height="1440" />
     </state>
     <state x="787" y="438" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1848.1080@0.0.1848.1080" timestamp="1604173445647" />
-    <state x="2151" y="584" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.5048.1440@0.0.5048.1440" timestamp="1603035073244" />
+    <state x="2151" y="584" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.5048.1440@0.0.5048.1440" timestamp="1604292794113" />
     <state x="894" y="270" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog" timestamp="1602719289911">
       <screen x="0" y="0" width="2488" height="1440" />
     </state>
@@ -269,7 +270,7 @@
     <state width="1844" height="372" key="GridCell.Tab.1.right/0.0.1844.1080@0.0.1844.1080" timestamp="1603480533834" />
     <state width="1848" height="372" key="GridCell.Tab.1.right/0.0.1848.1080@0.0.1848.1080" timestamp="1602884316858" />
     <state width="5047" height="515" key="GridCell.Tab.1.right/0.0.5048.1440@0.0.5048.1440" timestamp="1604288043801" />
-    <state x="981" y="447" width="2356" height="854" key="SettingsEditor" timestamp="1604291697097">
+    <state x="981" y="447" width="2356" height="854" key="SettingsEditor" timestamp="1604292872177">
       <screen x="0" y="0" width="5048" height="1440" />
     </state>
     <state x="544" y="151" key="SettingsEditor/-1080.243.972.1920/0.0.2488.1440@0.0.2488.1440" timestamp="1601264599473" />
@@ -278,7 +279,7 @@
     <state x="404" y="113" width="1133" height="818" key="SettingsEditor/0.0.1848.1080@0.0.1848.1080" timestamp="1604182909893" />
     <state x="544" y="151" key="SettingsEditor/0.0.2488.1440@0.0.2488.1440" timestamp="1602719291676" />
     <state x="825" y="113" width="1719" height="708" key="SettingsEditor/0.0.3774.1080@0.0.3774.1080" timestamp="1602431669739" />
-    <state x="981" y="447" width="2356" height="854" key="SettingsEditor/0.0.5048.1440@0.0.5048.1440" timestamp="1604291697097" />
+    <state x="981" y="447" width="2356" height="854" key="SettingsEditor/0.0.5048.1440@0.0.5048.1440" timestamp="1604292872177" />
     <state x="786" y="374" key="chooseDestDirectoryDialog" timestamp="1601588691915">
       <screen x="0" y="0" width="1838" height="1080" />
     </state>

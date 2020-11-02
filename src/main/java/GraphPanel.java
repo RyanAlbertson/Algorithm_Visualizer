@@ -202,10 +202,10 @@ public class GraphPanel extends JPanel {
 
         // FOR EXECUTABLE: graphFileLoc -> graphFileName
         String graphFileName = Defs.graphFileNamesST.get(graphSize);
-        String graphFileLoc = System.getProperty("user.dir")
-                .concat("/src/main/java/resources/graphs/" + graphFileName);
+//        String graphFileLoc = System.getProperty("user.dir")
+//                .concat("/src/main/java/resources/graphs/" + graphFileName);
         try {
-            Scanner s = new Scanner(new File(graphFileLoc),
+            Scanner s = new Scanner(new File(graphFileName),
                     StandardCharsets.UTF_8);
             String line;
             while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
