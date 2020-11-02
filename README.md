@@ -49,7 +49,7 @@ The application can be launched by executing _Algorithm.Visualizer.jar_.
 ## Screenshots
 
 >View of the GUI. User has selected to randomly generate a _small_ graph.
-<img src="./Algorithm_Visualizer/github/screenshots/1.PNG" width=800>
+<img src="./Algorithm_Visualizer/tree/master/github/screenshots/1.PNG" width=800>
 
 >User has selected source and target nodes on a _large_ graph.
 <img src="\github\screenshots\2.png" width=800>
