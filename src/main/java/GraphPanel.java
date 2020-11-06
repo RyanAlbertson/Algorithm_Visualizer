@@ -277,7 +277,7 @@ public class GraphPanel extends JPanel {
      */
     protected void stopAlgorithm() {
 
-        if (algThread != null && algThread.isAlive()) {
+        if (algThread != null) {
             this.stop = true;
         }
     }
@@ -288,7 +288,7 @@ public class GraphPanel extends JPanel {
      */
     protected void pauseAlgorithm() {
 
-        if (algThread != null && algThread.isAlive()) {
+        if (algThread != null) {
             this.pause = true;
         }
     }

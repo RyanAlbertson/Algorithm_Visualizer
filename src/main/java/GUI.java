@@ -123,7 +123,7 @@ public class GUI extends JFrame {
         chooseGraphSize = new JComboBox<>();
         Defs.graphSizes.forEach(chooseGraphSize::addItem);
         // Default. See GraphPanel constructor
-        chooseGraphSize.setSelectedItem("Medium");
+        chooseGraphSize.setSelectedItem("Large");
         chooseGraphSize.setFont(new Font("Ariel", Font.PLAIN, 18));
         chooseGraphSize.addActionListener(event -> chooseGraphSizeActions());
         menu.add(chooseGraphSize);
@@ -146,3 +146,5 @@ public class GUI extends JFrame {
 //          -REFACTOR ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
 //          -FIX FILE PATHS FOR EXECUTABLE.
+//          -REMOVE DEPENDENCIES FROM .JAR TO MAKE SIZE SMALLER
+//          -DIJKSTRA'S DOESNT PRIORITIZE LEAST EDGES AT EACH CURRENT NODE

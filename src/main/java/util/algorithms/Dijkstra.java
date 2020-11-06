@@ -3,9 +3,7 @@ package main.java.util.algorithms;
 import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -78,30 +76,6 @@ public class Dijkstra implements Runnable {
 
 
     /**
-     * Returns the unvisited node with the least distance from the source node.
-     *
-     * @param distanceTo Distances to all nodes from source node.
-     * @return Nearest unvisited node, otherwise null.
-     */
-    private Integer getNearestReachableNode(double[] distanceTo) {
-
-        Integer nearestNode = null;
-        double shortestDist = Double.POSITIVE_INFINITY;
-
-        for (int i = 0; i < distanceTo.length; i++) {
-            if (graphPanel.visited[i]) continue;
-
-            double currentDist = distanceTo[i];
-            if (currentDist < shortestDist) {
-                shortestDist = currentDist;
-                nearestNode = i;
-            }
-        }
-        return nearestNode;
-    }
-
-
-    /**
      * Starts a Dijkstra search at the provided source {@code node}. It finds the
      * shortest path to all nodes from {@code node}.
      *
@@ -113,41 +87,67 @@ public class Dijkstra implements Runnable {
         Arrays.fill(distanceTo, Double.POSITIVE_INFINITY);
         distanceTo[node] = 0.0;
 
-        while (true) {
-            // Check if user has stopped or paused algorithm
-            if (isStopped()) return;
-            checkForPause();
+        // Order of nodes to be visited
+        Deque<Integer> nodesQueue = new ArrayDeque<>(
+                graphPanel.graph.vertexSet().size());
+        nodesQueue.addLast(node);
 
-            Integer currentNode = getNearestReachableNode(distanceTo);
+        // Order of adjacent edges to be explored at each node
+        PriorityQueue<DefaultWeightedEdge> edges = new PriorityQueue<>((e1, e2) ->
+        {
+            Double e1Weight = Math.abs(graphPanel.graph.getEdgeWeight(e1));
+            Double e2Weight = Math.abs(graphPanel.graph.getEdgeWeight(e2));
+            return e1Weight.compareTo(e2Weight);
+        });
+        Integer currentNode;
+        Integer adjNode;
 
-            // All nodes visited, algorithm finished.
-            if (currentNode == null) break;
+        // Whether a specific edge has previously been explored.
+        HashMap<DefaultWeightedEdge, Boolean> isVisited = new HashMap<>(
+                graphPanel.graph.edgeSet().size());
+        graphPanel.graph.edgeSet().forEach(edge -> isVisited.put(edge, false));
 
-            // Test new paths to adjacent nodes, update their distances if needed
-            List<DefaultWeightedEdge> adjEdges = new ArrayList<>();
-            // Account for undirected edges
-            adjEdges.addAll(graphPanel.graph.incomingEdgesOf(currentNode));
-            adjEdges.addAll(graphPanel.graph.outgoingEdgesOf(currentNode));
-            for (DefaultWeightedEdge edge : adjEdges) {
+        graphPanel.visited[node] = true;
 
-                int adjNode = graphPanel.graph.getEdgeTarget(edge);
-                if (adjNode == currentNode) {
-                    adjNode = graphPanel.graph.getEdgeSource(edge);
+        while (!nodesQueue.isEmpty()) {
+            currentNode = nodesQueue.poll();
+
+            // Undirected graph, so use both
+            edges.addAll(graphPanel.graph.incomingEdgesOf(currentNode));
+            edges.addAll(graphPanel.graph.outgoingEdgesOf(currentNode));
+
+            // Find nearest adjacent node from available adjacent edges.
+            DefaultWeightedEdge leastEdge;
+            do {
+                // Check if user has stopped or paused algorithm
+                if (isStopped()) return;
+                checkForPause();
+
+                leastEdge = edges.poll();
+                if (leastEdge == null || isVisited.get(leastEdge)) continue;
+
+                if (graphPanel.graph.getEdgeSource(leastEdge).equals(currentNode)) {
+                    adjNode = graphPanel.graph.getEdgeTarget(leastEdge);
+                } else {
+                    adjNode = graphPanel.graph.getEdgeSource(leastEdge);
                 }
-                if (graphPanel.visited[adjNode]) continue;
+                graphPanel.visited[adjNode] = true;
 
                 double currentDist = distanceTo[adjNode];
                 double newDist = distanceTo[currentNode] +
-                        graphPanel.graph.getEdgeWeight(edge);
+                        graphPanel.graph.getEdgeWeight(leastEdge);
 
                 // Update adjNode's distance if proposed path is shorter
                 if (newDist < currentDist) {
                     distanceTo[adjNode] = newDist;
                     graphPanel.path[adjNode] = currentNode;
+                    animate();
                 }
+
+                nodesQueue.addLast(adjNode);
+                isVisited.put(leastEdge, true);
             }
-            graphPanel.visited[currentNode] = true;
-            animate();
+            while (!edges.isEmpty());
         }
     }
 

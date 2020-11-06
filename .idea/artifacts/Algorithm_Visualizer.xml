@@ -3,20 +3,7 @@
     <output-path>$PROJECT_DIR$/src</output-path>
     <root id="archive" name="Algorithm_Visualizer.jar">
       <element id="module-output" name="Algorithm_Visualizer" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jheaps-0.13.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgraphx-4.0.5.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/fastutil-8.3.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/guava-28.2-jre.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/commons-text-1.8.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-io-1.5.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/commons-lang3-3.9.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-ext-1.5.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-opt-1.5.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-core-1.5.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-demo-1.5.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-guava-1.5.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/antlr4-runtime-4.8-1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/spotbugs/spotbugs-annotations/4.0.1/spotbugs-annotations-4.0.1.jar" path-in-jar="/" />
     </root>
   </artifact>
