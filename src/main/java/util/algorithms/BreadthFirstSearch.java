@@ -106,6 +106,8 @@ public class BreadthFirstSearch implements Runnable {
             for (DefaultWeightedEdge edge : gPanel.graph.edgesOf(currentNode)) {
 
                 Integer adjNode = gPanel.graph.getEdgeTarget(edge);
+                if (adjNode.equals(currentNode)) adjNode =
+                        gPanel.graph.getEdgeSource(edge);
 
                 // Stop BFS when target is found
                 if (adjNode.equals(gPanel.targetNode)) {

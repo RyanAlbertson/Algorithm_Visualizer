@@ -232,6 +232,8 @@ public class GraphPanel extends JPanel {
     protected void stopAlgorithm() {
 
         if (algThread != null) {
+            this.sourceNode = null;
+            this.targetNode = null;
             this.stop = true;
         }
     }

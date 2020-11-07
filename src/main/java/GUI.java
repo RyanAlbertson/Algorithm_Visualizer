@@ -57,7 +57,6 @@ public class GUI extends JFrame {
      */
     private void chooseAlgNameActions() {
 
-        gPanel.stopAlgorithm();
         // Change graph to directed/undirected when needed for chosen algorithm
         String oldAlgName = gPanel.algName;
         gPanel.algName = (String) chooseAlgName.getSelectedItem();

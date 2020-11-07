@@ -104,6 +104,8 @@ public class DepthFirstSearch implements Runnable {
         // Recursively check adjacent nodes
         for (DefaultWeightedEdge edge : gPanel.graph.edgesOf(node)) {
             Integer adjNode = gPanel.graph.getEdgeTarget(edge);
+            if (adjNode.equals(node)) adjNode =
+                    gPanel.graph.getEdgeSource(edge);
             // Convert directed edges to undirected
             if (adjNode.equals(node)) adjNode = gPanel.graph.getEdgeSource(edge);
             if (!gPanel.visited[adjNode]) {
