@@ -8,7 +8,6 @@
 * [Setup](#setup)
 * [Features](#features)
 * [Screenshots](#screenshots)
-<br>
 
 ## What is a shortest path algorithm?
 Generally, a shortest path algorithm finds a path between a source node and target node
