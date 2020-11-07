@@ -2,7 +2,7 @@ package main.java.util.algorithms;
 
 import main.java.GraphPanel;
 
-public class Bellman_Ford {
+public class BellmanFord implements Runnable {
 
 
     private static boolean initialStart = true;
@@ -10,8 +10,14 @@ public class Bellman_Ford {
     static public boolean pause = false;
 
 
-    public static void bellmanFord(GraphPanel graphPanel) {
+    public BellmanFord(GraphPanel graphPanel) {
 
+
+    }
+
+
+    @Override
+    public void run() {
 
     }
 }

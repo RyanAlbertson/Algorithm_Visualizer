@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Unnamed" type="JarApplication" nameIsGenerated="true">
+    <option name="JAR_PATH" value="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-core-1.5.0.jar" />
+    <option name="WORKING_DIRECTORY" value="C:\GitHub\Algorithm_Visualizer" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2" />
+  </configuration>
+</component>

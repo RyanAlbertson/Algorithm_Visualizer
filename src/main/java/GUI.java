@@ -14,13 +14,13 @@ import java.awt.*;
  */
 public class GUI extends JFrame {
 
-
     static final int WINDOW_WIDTH = 1500;
     static final int WINDOW_HEIGHT = 900;
     static final int GRAPH_HEIGHT = WINDOW_HEIGHT - (WINDOW_HEIGHT / 15);
 
     private final JFrame frame;
-    protected GraphPanel graphPanel;
+    protected GraphPanel gPanel;
+    private JComboBox<String> chooseSpeed;
     private JComboBox<String> chooseAlgName;
     private JComboBox<String> chooseGraphSize;
 
@@ -47,8 +47,8 @@ public class GUI extends JFrame {
      */
     private void initGraphPanel() {
 
-        graphPanel = new GraphPanel();
-        frame.add(graphPanel, BorderLayout.CENTER);
+        gPanel = new GraphPanel();
+        frame.add(gPanel, BorderLayout.CENTER);
     }
 
 
@@ -57,18 +57,19 @@ public class GUI extends JFrame {
      */
     private void chooseAlgNameActions() {
 
-        graphPanel.stopAlgorithm();
-
-        // Change graph to directed/undirected if needed for chosen algorithm
-        String oldAlgName = graphPanel.algName;
-        graphPanel.algName = (String) chooseAlgName.getSelectedItem();
-        if (Defs.isDirectedST.get(graphPanel.algName) ^
+        gPanel.stopAlgorithm();
+        // Change graph to directed/undirected when needed for chosen algorithm
+        String oldAlgName = gPanel.algName;
+        gPanel.algName = (String) chooseAlgName.getSelectedItem();
+        if (Defs.isDirectedST.get(gPanel.algName) ^
                 Defs.isDirectedST.get(oldAlgName)) {
-            graphPanel.graph = GraphGenerator.generateGraph(
-                    graphPanel.graphSize, graphPanel.algName);
+            gPanel.stopAlgorithm();
+            GraphGenerator.generateGraph(gPanel);
+            gPanel.repaint();
+        } else {
+            gPanel.pauseAlgorithm();
+            gPanel.resetAnimation();
         }
-        graphPanel.initGraph();
-        graphPanel.repaint();
     }
 
 
@@ -77,13 +78,10 @@ public class GUI extends JFrame {
      */
     private void chooseGraphSizeActions() {
 
-        graphPanel.stopAlgorithm();
-        graphPanel.graphSize = (String) chooseGraphSize.getSelectedItem();
-        graphPanel.graph = GraphGenerator.generateGraph(
-                (String) chooseGraphSize.getSelectedItem(),
-                graphPanel.algName);
-        graphPanel.initGraph();
-        graphPanel.repaint();
+        gPanel.stopAlgorithm();
+        gPanel.graphSize = (String) chooseGraphSize.getSelectedItem();
+        GraphGenerator.generateGraph(gPanel);
+        gPanel.resetAnimation();
     }
 
 
@@ -93,24 +91,34 @@ public class GUI extends JFrame {
     private void initMenuPanel() {
 
         JPanel menu = new JPanel();
-        menu.setLayout(new GridLayout(1, 7));
+        menu.setLayout(new GridLayout());
         menu.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT / 15));
         menu.setBackground(Color.DARK_GRAY);
 
         JButton startButton = new JButton("Start");
         startButton.setFont(new Font("Ariel", Font.PLAIN, 18));
-        startButton.addActionListener(event -> graphPanel.startAlgorithm());
+        startButton.addActionListener(event -> gPanel.startAlgorithm());
         menu.add(startButton);
 
         JButton pauseButton = new JButton("Pause");
         pauseButton.setFont(new Font("Ariel", Font.PLAIN, 18));
-        pauseButton.addActionListener(event -> graphPanel.pauseAlgorithm());
+        pauseButton.addActionListener(event -> gPanel.pauseAlgorithm());
         menu.add(pauseButton);
 
         JButton stopButton = new JButton("Stop");
         stopButton.setFont(new Font("Ariel", Font.PLAIN, 18));
-        stopButton.addActionListener(event -> graphPanel.stopAlgorithm());
+        stopButton.addActionListener(event -> gPanel.stopAlgorithm());
         menu.add(stopButton);
+
+        chooseSpeed = new JComboBox<>();
+        Defs.speedST.keySet().forEach(chooseSpeed::addItem);
+        // Default. See GraphPanel constuctor
+        chooseSpeed.setSelectedItem("Fast");
+        chooseSpeed.setFont(new Font("Ariel", Font.PLAIN, 18));
+        chooseSpeed.addActionListener(event ->
+                gPanel.speed = Defs.speedST.get(
+                        chooseSpeed.getSelectedItem()));
+        menu.add(chooseSpeed);
 
         chooseAlgName = new JComboBox<>();
         Defs.algNames.forEach(chooseAlgName::addItem);
@@ -142,9 +150,6 @@ public class GUI extends JFrame {
 }
 
 
-// TODO:    -WEAKEN THE COUPLING OF graphPanel.java + ALG CLASSES.
+// TODO:    -WEAKEN THE COUPLING OF ALL CLASSES.
 //          -REFACTOR ENCAPSULATION OF PROJECT.
 //          -ADD ERROR CHECKING/HANDLING.
-//          -FIX FILE PATHS FOR EXECUTABLE.
-//          -REMOVE DEPENDENCIES FROM .JAR TO MAKE SIZE SMALLER
-//          -DIJKSTRA'S DOESNT PRIORITIZE LEAST EDGES AT EACH CURRENT NODE

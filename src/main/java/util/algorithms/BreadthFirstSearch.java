@@ -1,6 +1,7 @@
 package main.java.util.algorithms;
 
 import main.java.GraphPanel;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -18,8 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class BreadthFirstSearch implements Runnable {
 
-
-    private final GraphPanel graphPanel;
+    private final GraphPanel gPanel;
     private final Object pauseLock = new Object();
 
 
@@ -30,11 +30,11 @@ public class BreadthFirstSearch implements Runnable {
      */
     private boolean isStopped() {
 
-        if (graphPanel.stop) {
+        if (gPanel.stop) {
             // Clear animation
-            Arrays.fill(graphPanel.path, Integer.MAX_VALUE);
-            Arrays.fill(graphPanel.visited, false);
-            graphPanel.repaint();
+            Arrays.fill(gPanel.path, Integer.MAX_VALUE);
+            Arrays.fill(gPanel.visited, false);
+            gPanel.repaint();
             return true;
         }
         return false;
@@ -49,7 +49,7 @@ public class BreadthFirstSearch implements Runnable {
 
         synchronized (pauseLock) {
             boolean paused;
-            while (paused = graphPanel.pause) {
+            while (paused = gPanel.pause) {
                 try {
                     pauseLock.wait(100);
                 } catch (Exception e) {
@@ -67,9 +67,9 @@ public class BreadthFirstSearch implements Runnable {
     private void animate() {
 
         try {
-            // Update animation, slowly
-            graphPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(500);
+            // Update animation
+            gPanel.repaint();
+            TimeUnit.MILLISECONDS.sleep(gPanel.speed);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -88,7 +88,7 @@ public class BreadthFirstSearch implements Runnable {
 
         Deque<Integer> queue = new ArrayDeque<>();
         queue.addLast(node);
-        graphPanel.visited[node] = true;
+        gPanel.visited[node] = true;
 
         search:
         while (!queue.isEmpty()) {
@@ -96,21 +96,29 @@ public class BreadthFirstSearch implements Runnable {
             if (isStopped()) return;
             checkForPause();
 
-            int currentNode = queue.removeFirst();
+            Integer currentNode = queue.removeFirst();
+            // source node equals target node
+            if (currentNode.equals(gPanel.targetNode)) {
+                animate();
+                break;
+            }
 
-            for (Integer adj : graphPanel.adjNodes.get(currentNode)) {
+            for (DefaultWeightedEdge edge : gPanel.graph.edgesOf(currentNode)) {
+
+                Integer adjNode = gPanel.graph.getEdgeTarget(edge);
+
                 // Stop BFS when target is found
-                if (adj.equals(graphPanel.targetNode)) {
-                    graphPanel.path[adj] = currentNode;
+                if (adjNode.equals(gPanel.targetNode)) {
+                    gPanel.path[adjNode] = currentNode;
                     animate();
                     break search;
                 }
 
-                // Visit unvisited neighbors of currentNode
-                if (!graphPanel.visited[adj]) {
-                    graphPanel.visited[adj] = true;
-                    graphPanel.path[adj] = currentNode;
-                    queue.addLast(adj);
+                // Explore unvisited neighbors of currentNode
+                if (!gPanel.visited[adjNode]) {
+                    gPanel.visited[adjNode] = true;
+                    gPanel.path[adjNode] = currentNode;
+                    queue.addLast(adjNode);
                     animate();
                 }
             }
@@ -127,8 +135,8 @@ public class BreadthFirstSearch implements Runnable {
     public void run() {
 
         // Don't start algorithm if user hasn't selected source & target nodes
-        if (graphPanel.sourceNode != null && graphPanel.targetNode != null) {
-            bfs(graphPanel.sourceNode);
+        if (gPanel.sourceNode != null && gPanel.targetNode != null) {
+            bfs(gPanel.sourceNode);
         }
     }
 
@@ -136,13 +144,13 @@ public class BreadthFirstSearch implements Runnable {
     /**
      * Constructs a {@link BreadthFirstSearch}.
      *
-     * @param graphPanel The {@link javax.swing.JPanel} containing a graph.
+     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
      * @throws IllegalArgumentException If {@code graphPanel} is null.
      */
-    public BreadthFirstSearch(GraphPanel graphPanel) {
+    public BreadthFirstSearch(GraphPanel gPanel) {
 
-        if (graphPanel == null) {
+        if (gPanel == null) {
             throw new IllegalArgumentException("GraphPanel is null");
-        } else this.graphPanel = graphPanel;
+        } else this.gPanel = gPanel;
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Definitions used for {@link main.java.AlgorithmVisualizer}.
+ * Definitions.
  */
 public class Defs {
 
@@ -13,18 +13,19 @@ public class Defs {
     public static final List<String> algNames = List.of("Breadth-First Search",
             "Depth-First Search", "Dijkstra", "Bellman-Ford", "Floyd-Warshall");
 
+    // Available speeds for the algorithm animations. Values are milliseconds
+    public static final Map<String, Integer> speedST =
+            Collections.unmodifiableMap(Map.ofEntries(
+                    Map.entry("Slow", 1100),
+                    Map.entry("Fast", 400),
+                    Map.entry("Instant", 0)));
+
+
     // All graph sizes available with the visualizer
     public static final List<String> graphSizes = List.of("Small", "Medium", "Large");
 
-    // Maps graph sizes to their respective file names
-    public static final Map<String, String> graphFileNamesST =
-            Collections.unmodifiableMap(Map.ofEntries(
-                    Map.entry("Small", "sm_graph.txt"),
-                    Map.entry("Medium", "md_graph.txt"),
-                    Map.entry("Large", "lg_graph.txt")));
-
     // Maps graph sizes to the number of nodes in each of them
-    public static final Map<String, Integer> numNodesST =
+    public static final Map<String, Integer> nodeCountST =
             Collections.unmodifiableMap(Map.ofEntries(
                     Map.entry("Small", 10),
                     Map.entry("Medium", 25),

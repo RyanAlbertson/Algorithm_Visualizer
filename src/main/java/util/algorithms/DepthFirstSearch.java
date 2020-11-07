@@ -1,6 +1,7 @@
 package main.java.util.algorithms;
 
 import main.java.GraphPanel;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DepthFirstSearch implements Runnable {
 
-
-    private final GraphPanel graphPanel;
+    private final GraphPanel gPanel;
     private final Object pauseLock = new Object();
     private boolean targetFound = false;
 
@@ -30,11 +30,11 @@ public class DepthFirstSearch implements Runnable {
      */
     private boolean isStopped() {
 
-        if (graphPanel.stop) {
+        if (gPanel.stop) {
             // Clear animation
-            Arrays.fill(graphPanel.path, Integer.MAX_VALUE);
-            Arrays.fill(graphPanel.visited, false);
-            graphPanel.repaint();
+            Arrays.fill(gPanel.path, Integer.MAX_VALUE);
+            Arrays.fill(gPanel.visited, false);
+            gPanel.repaint();
             return true;
         }
         return false;
@@ -49,7 +49,7 @@ public class DepthFirstSearch implements Runnable {
 
         synchronized (pauseLock) {
             boolean paused;
-            while (paused = graphPanel.pause) {
+            while (paused = gPanel.pause) {
                 try {
                     pauseLock.wait(100);
                 } catch (Exception e) {
@@ -67,9 +67,9 @@ public class DepthFirstSearch implements Runnable {
     private void animate() {
 
         try {
-            // Update animation, slowly
-            graphPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(500);
+            // Update animation
+            gPanel.repaint();
+            TimeUnit.MILLISECONDS.sleep(gPanel.speed);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -88,25 +88,27 @@ public class DepthFirstSearch implements Runnable {
 
         // Stop algorithm if target has been found further down the recursion
         if (targetFound) return;
-
         // Check if user has stopped or paused algorithm
         if (isStopped()) return;
         checkForPause();
 
-        graphPanel.visited[node] = true;
+        gPanel.visited[node] = true;
         animate();
 
         // Stop DFS when target is found
-        if (node.equals(graphPanel.targetNode)) {
+        if (node.equals(gPanel.targetNode)) {
             targetFound = true;
             return;
         }
 
-        // Recursively call DFS on unvisited neighbors
-        for (Integer adj : graphPanel.adjNodes.get(node)) {
-            if (!graphPanel.visited[adj]) {
-                graphPanel.path[adj] = node;
-                dfs(adj);
+        // Recursively check adjacent nodes
+        for (DefaultWeightedEdge edge : gPanel.graph.edgesOf(node)) {
+            Integer adjNode = gPanel.graph.getEdgeTarget(edge);
+            // Convert directed edges to undirected
+            if (adjNode.equals(node)) adjNode = gPanel.graph.getEdgeSource(edge);
+            if (!gPanel.visited[adjNode]) {
+                gPanel.path[adjNode] = node;
+                dfs(adjNode);
             }
         }
     }
@@ -121,8 +123,8 @@ public class DepthFirstSearch implements Runnable {
     public void run() {
 
         // Don't start algorithm if user hasn't selected source & target nodes
-        if (graphPanel.sourceNode != null && graphPanel.targetNode != null) {
-            dfs(graphPanel.sourceNode);
+        if (gPanel.sourceNode != null && gPanel.targetNode != null) {
+            dfs(gPanel.sourceNode);
         }
     }
 
@@ -137,6 +139,6 @@ public class DepthFirstSearch implements Runnable {
 
         if (graphPanel == null) {
             throw new IllegalArgumentException("GraphPanel is null");
-        } else this.graphPanel = graphPanel;
+        } else this.gPanel = graphPanel;
     }
 }

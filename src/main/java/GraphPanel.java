@@ -3,18 +3,15 @@ package main.java;
 import main.java.util.Defs;
 import main.java.util.algorithms.*;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
 
 
 /**
@@ -43,21 +40,21 @@ public class GraphPanel extends JPanel {
         }
     }
 
+    private Thread algThread;
+    private MOUSE_STATE mouseState;
     protected String algName;
     protected String graphSize;
-    private MOUSE_STATE mouseState;
-    public Integer sourceNode;
-    public Integer targetNode;
-    private HashMap<Integer, Double[]> nodeCoords;
-    private HashMap<Integer, Shape> nodeShapes;
-    public HashMap<Integer, LinkedList<Integer>> adjNodes;
-
-    public SimpleGraph<Integer, DefaultWeightedEdge> graph;
+    protected HashMap<Integer, Integer[]> nodeCoords;
+    protected HashMap<Integer, Shape> nodeShapes;
+    public SimpleWeightedGraph<Integer, DefaultWeightedEdge> graph;
     public int[] path;
     public boolean[] visited;
+    public int nodeCount;
+    public Integer sourceNode;
+    public Integer targetNode;
+    public int speed;
     public boolean stop;
     public boolean pause;
-    private Thread algThread;
 
 
     /**
@@ -67,14 +64,14 @@ public class GraphPanel extends JPanel {
 
         // Defaults
         algName = "Dijkstra";
+        speed = Defs.speedST.get("Fast");
         graphSize = "Large";
-        graph = GraphGenerator.generateGraph(graphSize, algName);
+        nodeCount = Defs.nodeCountST.get(graphSize);
+        GraphGenerator.generateGraph(this);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
-        initGraph();
-
 
         // Detect user-selected start and end nodes
         addMouseListener(new MouseAdapter() {
@@ -86,9 +83,7 @@ public class GraphPanel extends JPanel {
 
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
                     sourceNode = targetNode = null;
-                    Arrays.fill(visited, false);
-                    Arrays.fill(path, Integer.MAX_VALUE);
-                    repaint();
+                    resetAnimation();
                     mouseState = mouseState.next();
                 } else {
                     for (Integer nodeNum : nodeShapes.keySet()) {
@@ -128,28 +123,27 @@ public class GraphPanel extends JPanel {
         g2D.drawString("(Edges are not proportional to weight for BFS & DFS)",
                 (float) (GUI.WINDOW_WIDTH * 0.37), 30);
 
-        for (Integer node : nodeCoords.keySet()) {
-            double x = nodeCoords.get(node)[0];
-            double y = nodeCoords.get(node)[1];
-            for (Integer adjNode : adjNodes.get(node)) {
+        // Draw edges
+        for (DefaultWeightedEdge edge : graph.edgeSet()) {
+            Integer node = graph.getEdgeSource(edge);
+            int nodeX = nodeCoords.get(node)[0];
+            int nodeY = nodeCoords.get(node)[1];
+            for (DefaultWeightedEdge adjEdge : graph.outgoingEdgesOf(node)) {
+                Integer adjNode = graph.getEdgeTarget(adjEdge);
+                int adjNodeX = nodeCoords.get(adjNode)[0];
+                int adjNodeY = nodeCoords.get(adjNode)[1];
                 g2D.setColor(UNVISITED_COLOR);
                 g2D.setStroke(new BasicStroke(2f));
-                try {
-                    double adjX = nodeCoords.get(adjNode)[0];
-                    double adjY = nodeCoords.get(adjNode)[1];
-                    if (visited[node] && visited[adjNode]) {
-                        g2D.setStroke(new BasicStroke(3f));
-                        g2D.setColor(VISITED_COLOR);
-                    }
-                    g2D.draw(new Line2D.Double(x, y, adjX, adjY));
-                } catch (NullPointerException e) {
-                    // nodeNum has no adjacent nodes
+                if (visited[node] && visited[adjNode]) {
+                    g2D.setStroke(new BasicStroke(3f));
+                    g2D.setColor(VISITED_COLOR);
                 }
+                g2D.draw(new Line2D.Double(nodeX, nodeY, adjNodeX, adjNodeY));
             }
         }
 
-        // Need second loop so that nodes are painted over all lines
-        for (Integer node : nodeCoords.keySet()) {
+        // Draw nodes over the edges
+        for (Integer node = 0; node < nodeCount; node++) {
             if (node.equals(sourceNode)) g.setColor(SOURCE_COLOR);
             else if (node.equals(targetNode)) g.setColor(TARGET_COLOR);
             else g.setColor(visited[node] ? VISITED_COLOR : UNVISITED_COLOR);
@@ -158,7 +152,6 @@ public class GraphPanel extends JPanel {
 
         // Draw path once algorithm has found target node
         if (targetNode != null && (path[targetNode] != Integer.MAX_VALUE)) {
-
             g2D.setColor(PATH_COLOR);
             g2D.setStroke(new BasicStroke(4f));
             int currentNode = targetNode;
@@ -189,52 +182,13 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     * Reads and stores graph data from a file, as defined by {@code graphSize}.
+     * Removes the current animation from the {@link GraphPanel}.
      */
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    protected void initGraph() {
+    public void resetAnimation() {
 
-        int nodeCount = graph.vertexSet().size();
-        nodeCoords = new HashMap<>(nodeCount);
-        nodeShapes = new HashMap<>(nodeCount);
-        adjNodes = new HashMap<>(nodeCount);
-
-
-        // FOR EXECUTABLE: graphFileLoc -> graphFileName
-        String graphFileName = Defs.graphFileNamesST.get(graphSize);
-//        String graphFileLoc = System.getProperty("user.dir")
-//                .concat("/src/main/java/resources/graphs/" + graphFileName);
-        try {
-            Scanner s = new Scanner(new File(graphFileName),
-                    StandardCharsets.UTF_8);
-            String line;
-            while (s.hasNextLine() && !(line = s.nextLine()).isEmpty()) {
-                LinkedList<Integer> lineData = new LinkedList<>();
-                for (String str : line.split(" ")) {
-                    if (!str.equals("")) lineData.add(Integer.parseInt(str));
-                }
-                Integer nodeNum = lineData.get(0);
-                double nodeNumX = lineData.get(1);
-                double nodeNumY = lineData.get(2);
-                Shape nodeShape = new Ellipse2D.Double(nodeNumX,
-                        nodeNumY, Defs.NODE_RADIUS, Defs.NODE_RADIUS);
-                nodeCoords.put(nodeNum, new Double[]{nodeNumX + Defs.NODE_RADIUS
-                        / 2.0, nodeNumY + Defs.NODE_RADIUS / 2.0});
-                nodeShapes.put(nodeNum, nodeShape);
-                Iterator<Integer> it = lineData.listIterator(3);
-                while (it.hasNext()) {
-                    adjNodes.computeIfAbsent(nodeNum,
-                            key -> new LinkedList<>()).add(it.next());
-                }
-            }
-            s.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        visited = new boolean[nodeCoords.size()];
-        //PATH SIZE NEEDS TO CHANGE IF NEW GRAPH SIZE IS SELECTED
-        path = new int[nodeCoords.size()];
+        Arrays.fill(visited, false);
         Arrays.fill(path, Integer.MAX_VALUE);
+        repaint();
     }
 
 
@@ -258,15 +212,15 @@ public class GraphPanel extends JPanel {
                         new Thread(new DepthFirstSearch(this));
                 case "Dijkstra" -> algThread =
                         new Thread(new Dijkstra(this));
-                case "Bellman-Ford" -> Bellman_Ford.bellmanFord(this);
-                case "Floyd_Warshall" -> Floyd_Warshall.floydWarshall(this);
+                case "Bellman-Ford" -> algThread =
+                        new Thread(new BellmanFord(this));
+                case "Floyd_Warshall" -> algThread =
+                        new Thread(new FloydWarshall(this));
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
-            if (algThread != null) {
-                stop = false;
-                pause = false;
-                algThread.start();
-            }
+            stop = false;
+            pause = false;
+            algThread.start();
             // Unpause current algorithm
         } else this.pause = false;
     }
