@@ -36,7 +36,7 @@ All other dependencies are packaged into the .JAR executable, which can be found
 The application can be launched by executing _Algorithm.Visualizer.jar_.
 
 ## Features
-- Generate different sized connected directed or undirected graphs
+- Randomly generate different sized connected directed or undirected graphs
 - Animate shortest path algorithms
   - Breadth-First Search
   - Depth-First Search
@@ -45,7 +45,7 @@ The application can be launched by executing _Algorithm.Visualizer.jar_.
   - Floyd-Warshall Algorithm
 - Select source and target nodes
 - Start/Stop/Pause algorithm animations
-- Change speed _(slow/fast/instant)_ of animations
+- Change speed of animations _(slow/fast/instant)_
 
 ## Screenshots
 
