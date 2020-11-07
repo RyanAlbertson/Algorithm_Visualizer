@@ -36,29 +36,27 @@ All other dependencies are packaged into the .JAR executable, which can be found
 The application can be launched by executing _Algorithm.Visualizer.jar_.
 
 ## Features
-- Generate different sized connected directed or undirected graphs.
+- Generate different sized connected directed or undirected graphs
 - Animate shortest path algorithms
   - Breadth-First Search
   - Depth-First Search
   - Dijkstra's Algorithm
   - Bellman-Ford Algorithm
   - Floyd-Warshall Algorithm
-- User selects source and target nodes.
-- Start/Stop/Pause functionality for animations.
+- Select source and target nodes
+- Start/Stop/Pause algorithm animations
+- Change speed _(slow/fast/instant)_ of animations
 
 ## Screenshots
 
->View of the GUI. User has selected to randomly generate a _small_ graph.
+>User has selected to randomly generate a _small_ graph and has selected a source node and target node
 ><img src="./github/screenshots/1.PNG" width=800>
 
->User has selected source and target nodes on a _large_ graph.
+>A _Breadth-First Search_ has started at the selected source node
 ><img src="./github/screenshots/2.PNG" width=800>
 
->A _Breadth-First Search_ has started at the selected source node.
+>The _BFS_ has found the target node and drawn the shortest path
 ><img src="./github/screenshots/3.PNG" width=800>
 
->The _BFS_ has found the target node and drawn the shortest path.
+>Finished _Dijkstra's_ algorithm run on a different graph
 ><img src="./github/screenshots/4.PNG" width=800>
-
->Finished _Dijkstra's_ algorithm applied to a different graph.
-><img src="./github/screenshots/5.PNG" width=800>
