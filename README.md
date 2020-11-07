@@ -32,7 +32,7 @@ then please install [JDK 15](https://www.oracle.com/java/technologies/javase-jdk
 
 All other dependencies are packaged into the .JAR executable, which can be found [here](https://github.com/ryanalbertson/Algorithm_Visualizer/releases).
 
-The application can be launched by executing _Algorithm.Visualizer.jar_.
+The application can be launched by executing _Algorithm_Visualizer.jar_.
 
 ## Features
 - Randomly generate different sized connected directed or undirected graphs
