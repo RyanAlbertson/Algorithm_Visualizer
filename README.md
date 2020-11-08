@@ -48,7 +48,7 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
 
 ## Screenshots
 
->User has selected to randomly generate a _small_ graph and has selected a source node and target node
+>User has selected to randomly generate a _small_ graph and has choosen a source node and target node
 ><img src="./github/screenshots/1.PNG" width=800>
 
 >A _Breadth-First Search_ has started at the selected source node
@@ -57,5 +57,5 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
 >The _BFS_ has found the target node and drawn the shortest path
 ><img src="./github/screenshots/3.PNG" width=800>
 
->Finished _Dijkstra's_ algorithm run on a different graph
+>Finished _Dijkstra's_ algorithm, run on a different graph
 ><img src="./github/screenshots/4.PNG" width=800>
