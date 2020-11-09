@@ -81,6 +81,9 @@ public class GraphPanel extends JPanel {
 
                 super.mouseClicked(me);
 
+                // Block node selection during animation
+                if (algThread != null && algThread.isAlive()) return;
+
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
                     sourceNode = targetNode = null;
                     resetAnimation();
@@ -104,13 +107,16 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     * Renders the current graph in the GUI. If an algorithm is running, it is
+     * Renders the current graph in the GUI. If an algorithm is running, this is
      * also rendered.
+     *
      * @param g {@link Graphics} object that is drawn on.
+     * @see JPanel#paintComponent(Graphics)
      */
-    public void paint(Graphics g) {
+    @Override
+    protected void paintComponent(Graphics g) {
 
-        super.paint(g);
+        super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -182,12 +188,17 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     * Removes the current animation from the {@link GraphPanel}.
+     * Resets the current animation.
      */
     public void resetAnimation() {
 
+        pause = false;
         Arrays.fill(visited, false);
         Arrays.fill(path, Integer.MAX_VALUE);
+        if (stop) {
+            sourceNode = null;
+            targetNode = null;
+        }
         repaint();
     }
 
@@ -200,11 +211,11 @@ public class GraphPanel extends JPanel {
 
         // Start new algorithm
         if (algThread == null || !algThread.isAlive()) {
+            // Don't start algorithm if user hasn't selected source & target nodes
+            if (sourceNode == null || targetNode == null) return;
 
-            // Reset for next animation
-            Arrays.fill(path, Integer.MAX_VALUE);
-            Arrays.fill(visited, false);
-
+            stop = false;
+            resetAnimation();
             switch (algName) {
                 case "Breadth-First Search" -> algThread =
                         new Thread(new BreadthFirstSearch(this));
@@ -218,11 +229,10 @@ public class GraphPanel extends JPanel {
                         new Thread(new FloydWarshall(this));
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
-            stop = false;
-            pause = false;
             algThread.start();
+
             // Unpause current algorithm
-        } else this.pause = false;
+        } else pause = false;
     }
 
 
@@ -232,9 +242,8 @@ public class GraphPanel extends JPanel {
     protected void stopAlgorithm() {
 
         if (algThread != null) {
-            this.sourceNode = null;
-            this.targetNode = null;
-            this.stop = true;
+            stop = true;
+            resetAnimation();
         }
     }
 
@@ -245,7 +254,7 @@ public class GraphPanel extends JPanel {
     protected void pauseAlgorithm() {
 
         if (algThread != null) {
-            this.pause = true;
+            pause = true;
         }
     }
 }

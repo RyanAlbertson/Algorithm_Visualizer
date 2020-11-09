@@ -124,10 +124,7 @@ public class DepthFirstSearch implements Runnable {
     @Override
     public void run() {
 
-        // Don't start algorithm if user hasn't selected source & target nodes
-        if (gPanel.sourceNode != null && gPanel.targetNode != null) {
-            dfs(gPanel.sourceNode);
-        }
+        dfs(gPanel.sourceNode);
     }
 
 

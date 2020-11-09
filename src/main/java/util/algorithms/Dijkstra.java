@@ -25,20 +25,13 @@ public class Dijkstra implements Runnable {
 
 
     /**
-     * If user has stopped the animation, clears the animation .
+     * If user has stopped the animation, clears the animation.
      *
      * @return True if user has stopped the animation, false otherwise.
      */
     private boolean isStopped() {
 
-        if (gPanel.stop) {
-            // Clear animation
-            Arrays.fill(gPanel.path, Integer.MAX_VALUE);
-            Arrays.fill(gPanel.visited, false);
-            gPanel.repaint();
-            return true;
-        }
-        return false;
+        return gPanel.stop;
     }
 
 
@@ -148,10 +141,7 @@ public class Dijkstra implements Runnable {
     @Override
     public void run() {
 
-        // Don't start algorithm if user hasn't selected source & target nodes
-        if (gPanel.sourceNode != null && gPanel.targetNode != null) {
-            dijkstra(gPanel.sourceNode);
-        }
+        dijkstra(gPanel.sourceNode);
     }
 
 

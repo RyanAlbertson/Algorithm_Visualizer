@@ -66,6 +66,7 @@ public class GUI extends JFrame {
             GraphGenerator.generateGraph(gPanel);
             gPanel.repaint();
         } else {
+            // Keep source and target nodes
             gPanel.pauseAlgorithm();
             gPanel.resetAnimation();
         }
@@ -151,6 +152,5 @@ public class GUI extends JFrame {
 
 // TODO:    -WEAKEN THE COUPLING OF ALL CLASSES.
 //          -REFACTOR ENCAPSULATION OF PROJECT.
-//          -ADD ERROR CHECKING/HANDLING.
-//          -AFTER ANIMATION FINISHES, ONLY WAY TO RESTART OR STOP IS TO
-//              CHOOSE NEW SOURCE/TARGET NODES.
+//          -ADD ERROR CHECKING/
+//          -ONCE ALG ANIMATION FINISHES, CANT RESTART DIRECTLY FROM START BUTTON
