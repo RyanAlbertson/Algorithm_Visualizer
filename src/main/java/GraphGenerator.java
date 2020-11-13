@@ -1,6 +1,7 @@
 package main.java;
 
 import main.java.util.Defs;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -9,8 +10,8 @@ import java.awt.geom.Ellipse2D;
 import java.util.*;
 
 /**
- * Generates a {@link SimpleWeightedGraph} that is connected and weighted.Then
- * writes it to a file. The graph size can be provided.
+ * Generates a {@link DefaultUndirectedWeightedGraph} that is minimally connected
+ * and weighted.Then writes it to a file. The graph size can be provided.
  *
  * @author Ryan Albertson
  */
@@ -20,7 +21,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
      * @param graph {@link SimpleWeightedGraph} to check for connectivity.
      * @return True if {@code graph} is connected, otherwise false.
      */
-    private static boolean isConnected(SimpleWeightedGraph<Integer,
+    private static boolean isConnected(DefaultUndirectedWeightedGraph<Integer,
             DefaultWeightedEdge> graph) {
 
         Set<Integer> vertices = graph.vertexSet();
@@ -51,7 +52,8 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
 
     /**
-     * Generates a connected, undirected, and weighted {@link SimpleWeightedGraph}.
+     * Generates a connected, undirected, and weighted
+     * {@link DefaultUndirectedWeightedGraph}.
      *
      * @param gPanel A {@link GraphPanel} that has all graph metadata.
      * @throws IllegalArgumentException If {@code graphSize} is null.
@@ -59,7 +61,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
     public static void generateGraph(GraphPanel gPanel) {
 
         if (gPanel.graphSize == null) {
-            throw new IllegalArgumentException("SimpleWeightedGraph is null");
+            throw new IllegalArgumentException("ERROR: GraphPanel not initialized.");
         }
 
         // Define graph sizes
@@ -71,19 +73,32 @@ public class GraphGenerator extends DefaultWeightedEdge {
         gPanel.path = new int[gPanel.nodeCount];
         Arrays.fill(gPanel.path, Integer.MAX_VALUE);
 
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         for (int i = 0; i < gPanel.nodeCount; i++) graph.addVertex(i);
 
-        // Add random edges until graph is connected
+        // Generate either min. connected graph or a more complete graph.
         Random rand = new Random();
-        do {
-            int node = rand.nextInt(gPanel.nodeCount);
-            int adjNode = rand.nextInt(gPanel.nodeCount);
-            while (node == adjNode) adjNode = rand.nextInt(gPanel.nodeCount);
-            graph.addEdge(node, adjNode);
+        if (gPanel.isMinConnected) {
+            System.out.println("TEST1");
+            do {
+                int node = rand.nextInt(gPanel.nodeCount);
+                int adjNode = rand.nextInt(gPanel.nodeCount);
+                while (node == adjNode) adjNode = rand.nextInt(gPanel.nodeCount);
+                graph.addEdge(node, adjNode);
+            }
+            while (!isConnected(graph) && graph.vertexSet().size() <= gPanel.nodeCount);
+        } else {
+            System.out.println("TEST2");
+            int maxEdges = gPanel.nodeCount * 6;
+            do {
+                int node = rand.nextInt(gPanel.nodeCount);
+                int adjNode = rand.nextInt(gPanel.nodeCount);
+                while (node == adjNode) adjNode = rand.nextInt(gPanel.nodeCount);
+                graph.addEdge(node, adjNode);
+            }
+            while (!isConnected(graph) || graph.edgeSet().size() <= maxEdges);
         }
-        while (!isConnected(graph) && graph.vertexSet().size() <= gPanel.nodeCount);
 
         // Calculate random coordinates for nodes.
         for (int node = 0; node < gPanel.nodeCount; node++) {

@@ -2,8 +2,8 @@ package main.java;
 
 import main.java.util.Defs;
 import main.java.util.algorithms.*;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -46,7 +48,10 @@ public class GraphPanel extends JPanel {
     protected String graphSize;
     protected HashMap<Integer, Integer[]> nodeCoords;
     protected HashMap<Integer, Shape> nodeShapes;
-    public SimpleWeightedGraph<Integer, DefaultWeightedEdge> graph;
+    protected boolean isMinConnected;
+    public DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
+    public Set<DefaultWeightedEdge> visitedEdges;
+    public Set<DefaultWeightedEdge> pathEdges;
     public int[] path;
     public boolean[] visited;
     public int nodeCount;
@@ -66,7 +71,11 @@ public class GraphPanel extends JPanel {
         algName = "Dijkstra";
         speed = Defs.speedST.get("Fast");
         graphSize = "Large";
+        isMinConnected = Defs.isMinConnected.get(algName);
         nodeCount = Defs.nodeCountST.get(graphSize);
+        visitedEdges = new HashSet<>();
+        pathEdges = new HashSet<>();
+
         GraphGenerator.generateGraph(this);
         mouseState = MOUSE_STATE.SOURCE_NODE;
 
@@ -83,6 +92,8 @@ public class GraphPanel extends JPanel {
 
                 // Block node selection during animation
                 if (algThread != null && algThread.isAlive()) return;
+                // Block node selection during MST algorithms
+                if (!isMinConnected) return;
 
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
                     sourceNode = targetNode = null;
@@ -131,28 +142,28 @@ public class GraphPanel extends JPanel {
 
         // Draw edges
         for (DefaultWeightedEdge edge : graph.edgeSet()) {
-            Integer node = graph.getEdgeSource(edge);
-            int nodeX = nodeCoords.get(node)[0];
-            int nodeY = nodeCoords.get(node)[1];
-            for (DefaultWeightedEdge adjEdge : graph.outgoingEdgesOf(node)) {
-                Integer adjNode = graph.getEdgeTarget(adjEdge);
-                int adjNodeX = nodeCoords.get(adjNode)[0];
-                int adjNodeY = nodeCoords.get(adjNode)[1];
-                g2D.setColor(UNVISITED_COLOR);
-                g2D.setStroke(new BasicStroke(2f));
-                if (visited[node] && visited[adjNode]) {
-                    g2D.setStroke(new BasicStroke(3f));
-                    g2D.setColor(VISITED_COLOR);
-                }
-                g2D.draw(new Line2D.Double(nodeX, nodeY, adjNodeX, adjNodeY));
+            Integer edgeSource = graph.getEdgeSource(edge);
+            Integer edgeTarget = graph.getEdgeTarget(edge);
+
+            int sourceX = nodeCoords.get(edgeSource)[0];
+            int sourceY = nodeCoords.get(edgeSource)[1];
+            int targetX = nodeCoords.get(edgeTarget)[0];
+            int targetY = nodeCoords.get(edgeTarget)[1];
+
+            g2D.setColor(UNVISITED_COLOR);
+            g2D.setStroke(new BasicStroke(2f));
+            if (visited[edgeSource] && visited[edgeTarget]) {
+                g2D.setStroke(new BasicStroke(3f));
+                g2D.setColor(VISITED_COLOR);
             }
+            g2D.draw(new Line2D.Double(sourceX, sourceY, targetX, targetY));
         }
 
         // Draw nodes over the edges
         for (Integer node = 0; node < nodeCount; node++) {
             if (node.equals(sourceNode)) g.setColor(SOURCE_COLOR);
             else if (node.equals(targetNode)) g.setColor(TARGET_COLOR);
-            else g.setColor(visited[node] ? VISITED_COLOR : UNVISITED_COLOR);
+            else g2D.setColor(visited[node] ? VISITED_COLOR : UNVISITED_COLOR);
             g2D.fill(nodeShapes.get(node));
         }
 
@@ -212,7 +223,7 @@ public class GraphPanel extends JPanel {
         // Start new algorithm
         if (algThread == null || !algThread.isAlive()) {
             // Don't start algorithm if user hasn't selected source & target nodes
-            if (sourceNode == null || targetNode == null) return;
+            if (isMinConnected && (sourceNode == null || targetNode == null)) return;
 
             stop = false;
             resetAnimation();
@@ -223,10 +234,10 @@ public class GraphPanel extends JPanel {
                         new Thread(new DepthFirstSearch(this));
                 case "Dijkstra" -> algThread =
                         new Thread(new Dijkstra(this));
-                case "Bellman-Ford" -> algThread =
-                        new Thread(new BellmanFord(this));
-                case "Floyd_Warshall" -> algThread =
-                        new Thread(new FloydWarshall(this));
+                case "Kruskal" -> algThread =
+                        new Thread(new Kruskal(this));
+                case "Prim" -> algThread =
+                        new Thread(new Prim(this));
                 default -> throw new IllegalArgumentException("Invalid algorithm");
             }
             algThread.start();

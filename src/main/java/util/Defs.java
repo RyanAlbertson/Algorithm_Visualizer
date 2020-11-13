@@ -13,13 +13,21 @@ public class Defs {
     public static final List<String> algNames = List.of("Breadth-First Search",
             "Depth-First Search", "Dijkstra", "Kruskal", "Prim");
 
+    // Maps algorithms to whether they should use minimum connected graphs or not.
+    public static final Map<String, Boolean> isMinConnected =
+            Collections.unmodifiableMap(Map.ofEntries(
+                    Map.entry("Breadth-First Search", true),
+                    Map.entry("Depth-First Search", true),
+                    Map.entry("Dijkstra", true),
+                    Map.entry("Kruskal", false),
+                    Map.entry("Prim", false)));
+
     // Available speeds for the algorithm animations. Values are milliseconds
     public static final Map<String, Integer> speedST =
             Collections.unmodifiableMap(Map.ofEntries(
                     Map.entry("Slow", 1100),
                     Map.entry("Fast", 400),
                     Map.entry("Instant", 0)));
-
 
     // All graph sizes available with the visualizer
     public static final List<String> graphSizes = List.of("Small", "Medium", "Large");

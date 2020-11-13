@@ -24,6 +24,20 @@ public class DepthFirstSearch implements Runnable {
 
 
     /**
+     * Constructs a {@link DepthFirstSearch}.
+     *
+     * @param graphPanel The {@link javax.swing.JPanel} containing a graph.
+     * @throws IllegalArgumentException If {@code graphPanel} is null.
+     */
+    public DepthFirstSearch(GraphPanel graphPanel) {
+
+        if (graphPanel == null) {
+            throw new IllegalArgumentException("GraphPanel is null");
+        } else this.gPanel = graphPanel;
+    }
+
+
+    /**
      * If user has stopped the animation, clears the animation .
      *
      * @return True if user has stopped the animation, false otherwise.
@@ -125,19 +139,5 @@ public class DepthFirstSearch implements Runnable {
     public void run() {
 
         dfs(gPanel.sourceNode);
-    }
-
-
-    /**
-     * Constructs a {@link DepthFirstSearch}.
-     *
-     * @param graphPanel The {@link javax.swing.JPanel} containing a graph.
-     * @throws IllegalArgumentException If {@code graphPanel} is null.
-     */
-    public DepthFirstSearch(GraphPanel graphPanel) {
-
-        if (graphPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
-        } else this.gPanel = graphPanel;
     }
 }

@@ -57,7 +57,14 @@ public class GUI extends JFrame {
      */
     private void chooseAlgNameActions() {
 
+        String prevAlgName = gPanel.algName;
         gPanel.algName = (String) chooseAlgName.getSelectedItem();
+        // Regenerate graph if needed, for the given algorithm
+        if (Defs.isMinConnected.get(gPanel.algName) ^
+                Defs.isMinConnected.get(prevAlgName)) {
+            gPanel.isMinConnected = Defs.isMinConnected.get(gPanel.algName);
+            GraphGenerator.generateGraph(gPanel);
+        }
         gPanel.pauseAlgorithm();
         gPanel.resetAnimation();
     }

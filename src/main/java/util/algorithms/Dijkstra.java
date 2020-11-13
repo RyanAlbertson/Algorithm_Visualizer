@@ -25,6 +25,20 @@ public class Dijkstra implements Runnable {
 
 
     /**
+     * Constructs a {@link Dijkstra}.
+     *
+     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
+     * @throws IllegalArgumentException If {@code graphPanel} is null.
+     */
+    public Dijkstra(GraphPanel gPanel) {
+
+        if (gPanel == null) {
+            throw new IllegalArgumentException("GraphPanel is null");
+        } else this.gPanel = gPanel;
+    }
+
+
+    /**
      * If user has stopped the animation, clears the animation.
      *
      * @return True if user has stopped the animation, false otherwise.
@@ -87,7 +101,7 @@ public class Dijkstra implements Runnable {
                 gPanel.graph.vertexSet().size());
         nodesQueue.addLast(node);
 
-        // Order of adjacent edges to be explored at each node (min. priority)
+        // Order of adjacent edges to be explored at each node (min. priority bv weight)
         PriorityQueue<DefaultWeightedEdge> edgesPQ = new PriorityQueue<>((e1, e2) ->
         {
             Double e1Weight = gPanel.graph.getEdgeWeight(e1);
@@ -142,19 +156,5 @@ public class Dijkstra implements Runnable {
     public void run() {
 
         dijkstra(gPanel.sourceNode);
-    }
-
-
-    /**
-     * Constructs a {@link Dijkstra}.
-     *
-     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
-     * @throws IllegalArgumentException If {@code graphPanel} is null.
-     */
-    public Dijkstra(GraphPanel gPanel) {
-
-        if (gPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
-        } else this.gPanel = gPanel;
     }
 }

@@ -24,6 +24,20 @@ public class BreadthFirstSearch implements Runnable {
 
 
     /**
+     * Constructs a {@link BreadthFirstSearch}.
+     *
+     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
+     * @throws IllegalArgumentException If {@code graphPanel} is null.
+     */
+    public BreadthFirstSearch(GraphPanel gPanel) {
+
+        if (gPanel == null) {
+            throw new IllegalArgumentException("GraphPanel is null");
+        } else this.gPanel = gPanel;
+    }
+
+
+    /**
      * If user has stopped the animation, clears the animation .
      *
      * @return True if user has stopped the animation, false otherwise.
@@ -137,19 +151,5 @@ public class BreadthFirstSearch implements Runnable {
     public void run() {
 
         bfs(gPanel.sourceNode);
-    }
-
-
-    /**
-     * Constructs a {@link BreadthFirstSearch}.
-     *
-     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
-     * @throws IllegalArgumentException If {@code graphPanel} is null.
-     */
-    public BreadthFirstSearch(GraphPanel gPanel) {
-
-        if (gPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
-        } else this.gPanel = gPanel;
     }
 }
