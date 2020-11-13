@@ -2,7 +2,11 @@ package main.java.util.algorithms;
 
 import main.java.GraphPanel;
 
-public class FloydWarshall implements Runnable {
+
+/**
+ *
+ */
+public class Prim implements Runnable {
 
 
     private static boolean initialStart = true;
@@ -10,15 +14,23 @@ public class FloydWarshall implements Runnable {
     static public boolean pause = false;
 
 
-    public FloydWarshall(GraphPanel graphPanel) {
+    /**
+     *
+     * @param graphPanel
+     */
+    public Prim(GraphPanel graphPanel) {
 
 
     }
 
 
+    /**
+     *
+     */
     @Override
     public void run() {
 
     }
 }
+
 

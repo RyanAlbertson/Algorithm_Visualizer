@@ -11,7 +11,7 @@ public class Defs {
 
     // All algorithms available with the visualizer
     public static final List<String> algNames = List.of("Breadth-First Search",
-            "Depth-First Search", "Dijkstra", "Bellman-Ford", "Floyd-Warshall");
+            "Depth-First Search", "Dijkstra", "Kruskal", "Prim");
 
     // Available speeds for the algorithm animations. Values are milliseconds
     public static final Map<String, Integer> speedST =
@@ -30,15 +30,6 @@ public class Defs {
                     Map.entry("Small", 10),
                     Map.entry("Medium", 25),
                     Map.entry("Large", 50)));
-
-    // Maps algorithms to whether or not the graph input is directed for each
-    public static final Map<String, Boolean> isDirectedST =
-            Collections.unmodifiableMap(Map.ofEntries(
-                    Map.entry("Breadth-First Search", false),
-                    Map.entry("Depth-First Search", false),
-                    Map.entry("Dijkstra", false),
-                    Map.entry("Bellman-Ford", true),
-                    Map.entry("Floyd-Warshall", true)));
 
     // Pixel radius for nodes in the graph animations
     public static final int NODE_RADIUS = 20;
