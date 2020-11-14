@@ -57,12 +57,17 @@ public class GUI extends JFrame {
      */
     private void chooseAlgNameActions() {
 
+        // Don't interupt an animation in progress
+        if (gPanel.algThread != null && gPanel.algThread.isAlive()) {
+            chooseAlgName.setSelectedItem(gPanel.algName);
+            return;
+        }
         String prevAlgName = gPanel.algName;
         gPanel.algName = (String) chooseAlgName.getSelectedItem();
         // Regenerate graph if needed, for the given algorithm
-        if (Defs.isMinConnected.get(gPanel.algName) ^
-                Defs.isMinConnected.get(prevAlgName)) {
-            gPanel.isMinConnected = Defs.isMinConnected.get(gPanel.algName);
+        if (Defs.isShortPathAlg.get(gPanel.algName) ^
+                Defs.isShortPathAlg.get(prevAlgName)) {
+            gPanel.isShortPathAlg = Defs.isShortPathAlg.get(gPanel.algName);
             GraphGenerator.generateGraph(gPanel);
         }
         gPanel.pauseAlgorithm();
@@ -79,6 +84,7 @@ public class GUI extends JFrame {
         gPanel.graphSize = (String) chooseGraphSize.getSelectedItem();
         GraphGenerator.generateGraph(gPanel);
         gPanel.resetAnimation();
+
     }
 
 
@@ -147,7 +153,6 @@ public class GUI extends JFrame {
 }
 
 
-// TODO:    -WEAKEN THE COUPLING OF ALL CLASSES.
+// TODO:    -WEAKEN THE COUPLING OF ALG CLASSES.
 //          -REFACTOR ENCAPSULATION OF PROJECT.
-//          -ADD ERROR CHECKING/
-//          -ONCE ALG ANIMATION FINISHES, CANT RESTART DIRECTLY FROM START BUTTON
+//          -ADD MORE ERROR CHECKING.

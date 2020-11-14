@@ -3,29 +3,33 @@ package main.java.util.algorithms;
 import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
 
 /**
+ * Implements a Kruskal's algorithm to find the minimum spanning tree of a
+ * {@link org.jgrapht.graph.DefaultUndirectedWeightedGraph}.
  *
+ * @author Ryan Albertson
  */
 public class Kruskal implements Runnable {
 
     private final GraphPanel gPanel;
+    private final int[] parent;
     private final Object pauseLock = new Object();
-    private int[] parent;
 
 
     /**
+     * Constructs a {@link Kruskal}.
      *
-     * @param gPanel
+     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
+     * @throws IllegalArgumentException If {@code gPanel} is null.
      */
-    public Kruskal(GraphPanel gPanel) {
+    public Kruskal(GraphPanel gPanel) throws IllegalArgumentException {
 
         if (gPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
+            throw new IllegalArgumentException("Error: GraphPanel is null");
         } else {
             this.gPanel = gPanel;
             parent = new int[gPanel.nodeCount];
@@ -41,10 +45,7 @@ public class Kruskal implements Runnable {
     private boolean isStopped() {
 
         if (gPanel.stop) {
-            // Clear animation
-            Arrays.fill(gPanel.path, Integer.MAX_VALUE);
-            Arrays.fill(gPanel.visited, false);
-            gPanel.repaint();
+            gPanel.resetAnimation();
             return true;
         }
         return false;
@@ -58,11 +59,10 @@ public class Kruskal implements Runnable {
     private void checkForPause() {
 
         synchronized (pauseLock) {
-            boolean paused;
-            while (paused = gPanel.pause) {
+            while (gPanel.pause) {
                 try {
                     pauseLock.wait(100);
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -76,9 +76,9 @@ public class Kruskal implements Runnable {
      */
     private void animate() {
 
+        // Update animation
+        gPanel.repaint();
         try {
-            // Update animation
-            gPanel.repaint();
             TimeUnit.MILLISECONDS.sleep(gPanel.speed);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -101,7 +101,8 @@ public class Kruskal implements Runnable {
 
 
     /**
-     *
+     * Uses a Kruskal's algorithm implementation to find the MST of a
+     * {@link GraphPanel#graph}
      */
     private void kruskal() {
 
@@ -114,7 +115,7 @@ public class Kruskal implements Runnable {
         });
         edgesPQ.addAll(gPanel.graph.edgeSet());
 
-        // Initialize each node's parent to itself.
+        // Initialize each node's parent node to itself.
         for (int node = 0; node < gPanel.nodeCount; node++) {
             parent[node] = node;
         }
@@ -138,19 +139,19 @@ public class Kruskal implements Runnable {
             if (set1Root == set2Root) continue;
 
             // Add edge to MST. (mark as visited)
-            gPanel.visited[sourceNode] = true;
-            gPanel.visited[targetNode] = true;
+            gPanel.visitedEdges.add(leastEdge);
 
             parent[set2Root] = set1Root;
             sizeMST++;
-
             animate();
         }
     }
 
 
     /**
+     * Starts the algorithm process.
      *
+     * @see Thread#run()
      */
     @Override
     public void run() {

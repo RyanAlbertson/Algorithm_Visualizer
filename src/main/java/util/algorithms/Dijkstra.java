@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Implements a Dijkstra algorithm to find the shortest path from a
+ * Implements Dijkstra's algorithm to find a shortest path from a
  * {@link GraphPanel#sourceNode}source node to all other nodes. Note that the
  * input graph is directed but I choose to implement an undirected algorithm
  * in an effort to make the animations more appealing.
@@ -30,7 +30,7 @@ public class Dijkstra implements Runnable {
      * @param gPanel The {@link javax.swing.JPanel} containing a graph.
      * @throws IllegalArgumentException If {@code graphPanel} is null.
      */
-    public Dijkstra(GraphPanel gPanel) {
+    public Dijkstra(GraphPanel gPanel) throws IllegalArgumentException {
 
         if (gPanel == null) {
             throw new IllegalArgumentException("GraphPanel is null");
@@ -56,8 +56,7 @@ public class Dijkstra implements Runnable {
     private void checkForPause() {
 
         synchronized (pauseLock) {
-            boolean paused;
-            while (paused = gPanel.pause) {
+            while (gPanel.pause) {
                 try {
                     pauseLock.wait(100);
                 } catch (Exception e) {
@@ -109,7 +108,6 @@ public class Dijkstra implements Runnable {
             return e1Weight.compareTo(e2Weight);
         });
         boolean[] isExplored = new boolean[gPanel.nodeCount];
-        gPanel.visited[node] = true;
         Integer currentNode;
         Integer adjNode;
 
@@ -128,7 +126,7 @@ public class Dijkstra implements Runnable {
                     adjNode = gPanel.graph.getEdgeSource(leastEdge);
                 }
                 if (isExplored[adjNode]) continue;
-                gPanel.visited[adjNode] = true;
+                gPanel.visitedEdges.add(leastEdge);
 
                 // Update adjNode's distance if proposed predecessor is shorter
                 double currentDist = distanceTo[adjNode];

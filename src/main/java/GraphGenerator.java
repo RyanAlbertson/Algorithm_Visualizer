@@ -3,7 +3,6 @@ package main.java;
 import main.java.util.Defs;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -18,7 +17,7 @@ import java.util.*;
 public class GraphGenerator extends DefaultWeightedEdge {
 
     /**
-     * @param graph {@link SimpleWeightedGraph} to check for connectivity.
+     * @param graph {@link DefaultUndirectedWeightedGraph} to check for connectivity.
      * @return True if {@code graph} is connected, otherwise false.
      */
     private static boolean isConnected(DefaultUndirectedWeightedGraph<Integer,
@@ -31,20 +30,20 @@ public class GraphGenerator extends DefaultWeightedEdge {
         if (vertices.size() - 1 > graph.edgeSet().size()) return false;
 
         Set<Integer> visited = new HashSet<>();
-        Deque<DefaultWeightedEdge> queue = new LinkedList<>();
+        Deque<DefaultWeightedEdge> queue = new ArrayDeque<>();
         Integer startNode = vertices.iterator().next();
 
+        // BFS to determine connectivity
         visited.add(startNode);
         graph.edgesOf(startNode).forEach(queue::addLast);
         while (visited.size() != vertices.size() && queue.size() != 0) {
-            DefaultWeightedEdge currentEdge = queue.pollFirst();
-            Integer source = graph.getEdgeSource(currentEdge);
-            Integer dest = graph.getEdgeTarget(currentEdge);
-
-            Integer targetNode = visited.contains(source) ? dest : source;
-            if (!visited.contains(targetNode)) {
-                visited.add(targetNode);
-                graph.edgesOf(targetNode).forEach(queue::addLast);
+            DefaultWeightedEdge edge = queue.pollFirst();
+            Integer source = graph.getEdgeSource(edge);
+            Integer target = graph.getEdgeTarget(edge);
+            Integer adjNode = visited.contains(source) ? target : source;
+            if (!visited.contains(adjNode)) {
+                visited.add(adjNode);
+                graph.edgesOf(adjNode).forEach(queue::addLast);
             }
         }
         return visited.size() == vertices.size();
@@ -58,7 +57,8 @@ public class GraphGenerator extends DefaultWeightedEdge {
      * @param gPanel A {@link GraphPanel} that has all graph metadata.
      * @throws IllegalArgumentException If {@code graphSize} is null.
      */
-    public static void generateGraph(GraphPanel gPanel) {
+    public static void generateGraph(GraphPanel gPanel)
+            throws IllegalArgumentException {
 
         if (gPanel.graphSize == null) {
             throw new IllegalArgumentException("ERROR: GraphPanel not initialized.");
@@ -69,7 +69,7 @@ public class GraphGenerator extends DefaultWeightedEdge {
 
         gPanel.nodeCoords = new HashMap<>(gPanel.nodeCount);
         gPanel.nodeShapes = new HashMap<>(gPanel.nodeCount);
-        gPanel.visited = new boolean[gPanel.nodeCount];
+        gPanel.visitedEdges = new HashSet<>(gPanel.nodeCount);
         gPanel.path = new int[gPanel.nodeCount];
         Arrays.fill(gPanel.path, Integer.MAX_VALUE);
 
@@ -77,10 +77,9 @@ public class GraphGenerator extends DefaultWeightedEdge {
                 new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         for (int i = 0; i < gPanel.nodeCount; i++) graph.addVertex(i);
 
-        // Generate either min. connected graph or a more complete graph.
+        // Generate either approx. min. connected graph or a more complete graph.
         Random rand = new Random();
-        if (gPanel.isMinConnected) {
-            System.out.println("TEST1");
+        if (gPanel.isShortPathAlg) {
             do {
                 int node = rand.nextInt(gPanel.nodeCount);
                 int adjNode = rand.nextInt(gPanel.nodeCount);
@@ -89,8 +88,10 @@ public class GraphGenerator extends DefaultWeightedEdge {
             }
             while (!isConnected(graph) && graph.vertexSet().size() <= gPanel.nodeCount);
         } else {
-            System.out.println("TEST2");
-            int maxEdges = gPanel.nodeCount * 6;
+            int maxEdges;
+            if (gPanel.graphSize.equals("Small")) maxEdges = gPanel.nodeCount * 2;
+            else maxEdges = gPanel.nodeCount * 5;
+
             do {
                 int node = rand.nextInt(gPanel.nodeCount);
                 int adjNode = rand.nextInt(gPanel.nodeCount);

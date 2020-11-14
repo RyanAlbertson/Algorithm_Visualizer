@@ -28,6 +28,7 @@ public class GraphPanel extends JPanel {
     public static final Color VISITED_COLOR = new Color(0, 181, 226);
     public static final Color UNVISITED_COLOR = new Color(0, 0, 0);
     public static final Color PATH_COLOR = new Color(250, 108, 36);
+    public static final Color MST_COLOR = new Color(255, 0, 127);
 
     public enum MOUSE_STATE {
         SOURCE_NODE, TARGET_NODE, RESET {
@@ -42,18 +43,16 @@ public class GraphPanel extends JPanel {
         }
     }
 
-    private Thread algThread;
     private MOUSE_STATE mouseState;
+    protected Thread algThread;
     protected String algName;
+    protected boolean isShortPathAlg;
     protected String graphSize;
     protected HashMap<Integer, Integer[]> nodeCoords;
     protected HashMap<Integer, Shape> nodeShapes;
-    protected boolean isMinConnected;
     public DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
     public Set<DefaultWeightedEdge> visitedEdges;
-    public Set<DefaultWeightedEdge> pathEdges;
     public int[] path;
-    public boolean[] visited;
     public int nodeCount;
     public Integer sourceNode;
     public Integer targetNode;
@@ -71,10 +70,9 @@ public class GraphPanel extends JPanel {
         algName = "Dijkstra";
         speed = Defs.speedST.get("Fast");
         graphSize = "Large";
-        isMinConnected = Defs.isMinConnected.get(algName);
+        isShortPathAlg = Defs.isShortPathAlg.get(algName);
         nodeCount = Defs.nodeCountST.get(graphSize);
-        visitedEdges = new HashSet<>();
-        pathEdges = new HashSet<>();
+        visitedEdges = new HashSet<>(nodeCount);
 
         GraphGenerator.generateGraph(this);
         mouseState = MOUSE_STATE.SOURCE_NODE;
@@ -93,19 +91,19 @@ public class GraphPanel extends JPanel {
                 // Block node selection during animation
                 if (algThread != null && algThread.isAlive()) return;
                 // Block node selection during MST algorithms
-                if (!isMinConnected) return;
+                if (!isShortPathAlg) return;
 
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
                     sourceNode = targetNode = null;
                     resetAnimation();
                     mouseState = mouseState.next();
                 } else {
-                    for (Integer nodeNum : nodeShapes.keySet()) {
-                        if (nodeShapes.get(nodeNum).contains(me.getPoint())) {
+                    for (Integer node = 0; node < nodeCount; node++) {
+                        if (nodeShapes.get(node).contains(me.getPoint())) {
                             if (mouseState.equals(MOUSE_STATE.SOURCE_NODE)) {
-                                sourceNode = nodeNum;
-                            } else {
-                                targetNode = nodeNum;
+                                sourceNode = node;
+                            } else if (!node.equals(sourceNode)) {
+                                targetNode = node;
                             }
                             repaint();
                             mouseState = mouseState.next();
@@ -134,37 +132,54 @@ public class GraphPanel extends JPanel {
         g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
         g2D.setFont(new Font("Ariel", Font.PLAIN, 18));
-        g2D.drawString("Click nodes to define a source and target",
-                (float) (GUI.WINDOW_WIDTH * 0.39), 15);
-        g2D.setFont(new Font("Ariel", Font.PLAIN, 16));
-        g2D.drawString("(Edges are not proportional to weight for BFS & DFS)",
-                (float) (GUI.WINDOW_WIDTH * 0.37), 30);
-
+        if (isShortPathAlg) {
+            g2D.drawString("Click nodes to define a source and target",
+                    (float) (GUI.WINDOW_WIDTH * 0.39), 15);
+            g2D.setFont(new Font("Ariel", Font.PLAIN, 16));
+            g2D.drawString("(Edges are not proportional to weight for BFS & DFS)",
+                    (float) (GUI.WINDOW_WIDTH * 0.37), 30);
+        }
         // Draw edges
         for (DefaultWeightedEdge edge : graph.edgeSet()) {
             Integer edgeSource = graph.getEdgeSource(edge);
             Integer edgeTarget = graph.getEdgeTarget(edge);
 
+            g2D.setColor(UNVISITED_COLOR);
+            g2D.setStroke(new BasicStroke(2f));
             int sourceX = nodeCoords.get(edgeSource)[0];
             int sourceY = nodeCoords.get(edgeSource)[1];
             int targetX = nodeCoords.get(edgeTarget)[0];
             int targetY = nodeCoords.get(edgeTarget)[1];
-
-            g2D.setColor(UNVISITED_COLOR);
-            g2D.setStroke(new BasicStroke(2f));
-            if (visited[edgeSource] && visited[edgeTarget]) {
-                g2D.setStroke(new BasicStroke(3f));
-                g2D.setColor(VISITED_COLOR);
-            }
             g2D.draw(new Line2D.Double(sourceX, sourceY, targetX, targetY));
         }
 
-        // Draw nodes over the edges
-        for (Integer node = 0; node < nodeCount; node++) {
-            if (node.equals(sourceNode)) g.setColor(SOURCE_COLOR);
-            else if (node.equals(targetNode)) g.setColor(TARGET_COLOR);
-            else g2D.setColor(visited[node] ? VISITED_COLOR : UNVISITED_COLOR);
-            g2D.fill(nodeShapes.get(node));
+        // Draw unvisited nodes on top of the edges
+        for (DefaultWeightedEdge edge : graph.edgeSet()) {
+            g2D.setColor(UNVISITED_COLOR);
+            g2D.fill(nodeShapes.get(graph.getEdgeSource(edge)));
+            g2D.fill(nodeShapes.get(graph.getEdgeTarget(edge)));
+        }
+
+        // Draw visited edges and nodes on top of unvisited components
+        for (DefaultWeightedEdge edge : visitedEdges) {
+            if (isShortPathAlg) {
+                g2D.setColor(VISITED_COLOR);
+                g2D.setStroke(new BasicStroke(3f));
+            } else {
+                g2D.setColor(MST_COLOR);
+                g2D.setStroke(new BasicStroke(6f));
+            }
+            g2D.fill(nodeShapes.get(graph.getEdgeSource(edge)));
+            g2D.fill(nodeShapes.get(graph.getEdgeTarget(edge)));
+
+            Integer edgeSource = graph.getEdgeSource(edge);
+            Integer edgeTarget = graph.getEdgeTarget(edge);
+            int sourceX = nodeCoords.get(edgeSource)[0];
+            int sourceY = nodeCoords.get(edgeSource)[1];
+            int targetX = nodeCoords.get(edgeTarget)[0];
+            int targetY = nodeCoords.get(edgeTarget)[1];
+            g2D.draw(new Line2D.Double(sourceX, sourceY, targetX, targetY));
+
         }
 
         // Draw path once algorithm has found target node
@@ -180,19 +195,23 @@ public class GraphPanel extends JPanel {
                 double prevNodeY = nodeCoords.get(prevNode)[1];
                 g2D.draw(new Line2D.Double(currentNodeX, currentNodeY,
                         prevNodeX, prevNodeY));
-                // Maintain source and target node coloring
-                if (currentNode == sourceNode) g2D.setColor(SOURCE_COLOR);
-                else if (currentNode == targetNode) g2D.setColor(TARGET_COLOR);
-                g2D.fill(nodeShapes.get(currentNode));
-                g2D.setColor(PATH_COLOR);
-                if (prevNode == sourceNode) g2D.setColor(SOURCE_COLOR);
-                else if (prevNode == targetNode) g2D.setColor(TARGET_COLOR);
                 g2D.fill(nodeShapes.get(prevNode));
-                g2D.setColor(PATH_COLOR);
 
                 // Tranverse path back to source node
                 currentNode = prevNode;
                 prevNode = path[prevNode];
+            }
+        }
+
+        // Draw source and target nodes for shortest path algortihms
+        if (isShortPathAlg) {
+            if (sourceNode != null) {
+                g2D.setColor(SOURCE_COLOR);
+                g2D.fill(nodeShapes.get(sourceNode));
+            }
+            if (targetNode != null) {
+                g2D.setColor(TARGET_COLOR);
+                g2D.fill(nodeShapes.get(targetNode));
             }
         }
     }
@@ -204,8 +223,8 @@ public class GraphPanel extends JPanel {
     public void resetAnimation() {
 
         pause = false;
-        Arrays.fill(visited, false);
         Arrays.fill(path, Integer.MAX_VALUE);
+        visitedEdges = new HashSet<>(nodeCount);
         if (stop) {
             sourceNode = null;
             targetNode = null;
@@ -223,8 +242,7 @@ public class GraphPanel extends JPanel {
         // Start new algorithm
         if (algThread == null || !algThread.isAlive()) {
             // Don't start algorithm if user hasn't selected source & target nodes
-            if (isMinConnected && (sourceNode == null || targetNode == null)) return;
-
+            if (isShortPathAlg && (sourceNode == null || targetNode == null)) return;
             stop = false;
             resetAnimation();
             switch (algName) {

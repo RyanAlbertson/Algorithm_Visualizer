@@ -3,9 +3,7 @@ package main.java.util.algorithms;
 import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -21,6 +19,7 @@ public class BreadthFirstSearch implements Runnable {
 
     private final GraphPanel gPanel;
     private final Object pauseLock = new Object();
+    private final boolean[] visited;
 
 
     /**
@@ -29,11 +28,14 @@ public class BreadthFirstSearch implements Runnable {
      * @param gPanel The {@link javax.swing.JPanel} containing a graph.
      * @throws IllegalArgumentException If {@code graphPanel} is null.
      */
-    public BreadthFirstSearch(GraphPanel gPanel) {
+    public BreadthFirstSearch(GraphPanel gPanel) throws IllformedLocaleException {
 
         if (gPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
-        } else this.gPanel = gPanel;
+            throw new IllegalArgumentException("Error: GraphPanel is null");
+        } else {
+            this.gPanel = gPanel;
+            visited = new boolean[gPanel.nodeCount];
+        }
     }
 
 
@@ -47,7 +49,7 @@ public class BreadthFirstSearch implements Runnable {
         if (gPanel.stop) {
             // Clear animation
             Arrays.fill(gPanel.path, Integer.MAX_VALUE);
-            Arrays.fill(gPanel.visited, false);
+            gPanel.visitedEdges = new HashSet<>(gPanel.nodeCount);
             gPanel.repaint();
             return true;
         }
@@ -62,8 +64,7 @@ public class BreadthFirstSearch implements Runnable {
     private void checkForPause() {
 
         synchronized (pauseLock) {
-            boolean paused;
-            while (paused = gPanel.pause) {
+            while (gPanel.pause) {
                 try {
                     pauseLock.wait(100);
                 } catch (Exception e) {
@@ -102,7 +103,7 @@ public class BreadthFirstSearch implements Runnable {
 
         Deque<Integer> queue = new ArrayDeque<>();
         queue.addLast(node);
-        gPanel.visited[node] = true;
+        visited[node] = true;
 
         search:
         while (!queue.isEmpty()) {
@@ -131,10 +132,11 @@ public class BreadthFirstSearch implements Runnable {
                 }
 
                 // Explore unvisited neighbors of currentNode
-                if (!gPanel.visited[adjNode]) {
-                    gPanel.visited[adjNode] = true;
+                if (!visited[adjNode]) {
+                    visited[adjNode] = true;
                     gPanel.path[adjNode] = currentNode;
                     queue.addLast(adjNode);
+                    gPanel.visitedEdges.add(edge);
                     animate();
                 }
             }

@@ -14,7 +14,7 @@ public class Defs {
             "Depth-First Search", "Dijkstra", "Kruskal", "Prim");
 
     // Maps algorithms to whether they should use minimum connected graphs or not.
-    public static final Map<String, Boolean> isMinConnected =
+    public static final Map<String, Boolean> isShortPathAlg =
             Collections.unmodifiableMap(Map.ofEntries(
                     Map.entry("Breadth-First Search", true),
                     Map.entry("Depth-First Search", true),

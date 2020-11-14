@@ -4,6 +4,7 @@ import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 
@@ -20,6 +21,7 @@ public class DepthFirstSearch implements Runnable {
 
     private final GraphPanel gPanel;
     private final Object pauseLock = new Object();
+    private final boolean[] visited;
     private boolean targetFound = false;
 
 
@@ -29,11 +31,14 @@ public class DepthFirstSearch implements Runnable {
      * @param graphPanel The {@link javax.swing.JPanel} containing a graph.
      * @throws IllegalArgumentException If {@code graphPanel} is null.
      */
-    public DepthFirstSearch(GraphPanel graphPanel) {
+    public DepthFirstSearch(GraphPanel graphPanel) throws IllegalArgumentException {
 
         if (graphPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
-        } else this.gPanel = graphPanel;
+            throw new IllegalArgumentException("Error: GraphPanel is null");
+        } else {
+            this.gPanel = graphPanel;
+            visited = new boolean[gPanel.nodeCount];
+        }
     }
 
 
@@ -47,7 +52,7 @@ public class DepthFirstSearch implements Runnable {
         if (gPanel.stop) {
             // Clear animation
             Arrays.fill(gPanel.path, Integer.MAX_VALUE);
-            Arrays.fill(gPanel.visited, false);
+            gPanel.visitedEdges = new HashSet<>(gPanel.nodeCount);
             gPanel.repaint();
             return true;
         }
@@ -62,8 +67,7 @@ public class DepthFirstSearch implements Runnable {
     private void checkForPause() {
 
         synchronized (pauseLock) {
-            boolean paused;
-            while (paused = gPanel.pause) {
+            while (gPanel.pause) {
                 try {
                     pauseLock.wait(100);
                 } catch (Exception e) {
@@ -106,8 +110,7 @@ public class DepthFirstSearch implements Runnable {
         if (isStopped()) return;
         checkForPause();
 
-        gPanel.visited[node] = true;
-        animate();
+        visited[node] = true;
 
         // Stop DFS when target is found
         if (node.equals(gPanel.targetNode)) {
@@ -122,8 +125,10 @@ public class DepthFirstSearch implements Runnable {
                     gPanel.graph.getEdgeSource(edge);
             // Convert directed edges to undirected
             if (adjNode.equals(node)) adjNode = gPanel.graph.getEdgeSource(edge);
-            if (!gPanel.visited[adjNode]) {
+            if (!visited[adjNode]) {
+                gPanel.visitedEdges.add(edge);
                 gPanel.path[adjNode] = node;
+                animate();
                 dfs(adjNode);
             }
         }
