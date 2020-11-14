@@ -53,10 +53,12 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
 
 > Slow Bread-First Search on a medium graph. Edge weights are ignored.
 > <img src="./github/gifs/bfs.gif" width=800>
-<br></br>
+
+
 > Slow Depth-First Search on a small graph. It's an extremely inaccurate implementation.
 > <img src="./github/gifs/dfs.gif" width=800>
-<br></br> <br></br>
+
+
 > Fast Dijkstra's algorithm on a large graph.
 > <img src="./github/gifs/dijkstra1.gif" width=800>
 
