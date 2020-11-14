@@ -55,12 +55,10 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
 - Change speed of animations _(slow/fast/instant)_
 
 ## Demo
-> Slow Bread-First Search on a medium graph. Edge weights are ignored.
-=======
 > User selecting different graph sizes, which randomly generates them each time.
 > <img src="./github/gifs/graphSizes.gif" width=800>
 
-> Slow Bread-First Search on a medium graph.
+> Slow Bread-First Search on a medium graph. Edge weights are ignored.
 > <img src="./github/gifs/bfs.gif" width=800>
 
 > Slow Depth-First Search on a small graph. It's an extremely inaccurate implementation.
