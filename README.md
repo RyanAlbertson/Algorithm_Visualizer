@@ -1,4 +1,4 @@
-# Shortest Path Algorithm Visualizer
+# Shortest Path & MST Algorithm Visualizer
 <img src=https://img.shields.io/github/v/release/ryanalbertson/Algorithm_Visualizer>
 <img src=https://img.shields.io/github/downloads/ryanalbertson/Algorithm_Visualizer/total>
 
@@ -7,10 +7,10 @@
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Features](#features)
-* [Screenshots](#screenshots)
+* [Demo](#demo)
 
-## What is a shortest path algorithm?
-Generally, a shortest path algorithm finds a path between a source node and target node
+## What is a Shortest Path Algorithm?
+Optimally, a shortest path algorithm finds a path between a source node and target node
 such that the total weight of the path is minimized. In other words, let's designate major
 United States cities as nodes. Perhaps the start node is _Boston_ and the target node is
 _Dallas_. Let's pretend there isn't a direct path from Boston to Dallas, and we must travel
@@ -20,6 +20,9 @@ finish is minimized.
 
 One such path may be:
  _Boston_ --> NYC --> Philadelphia --> Washington DC --> Nashville --> _Dallas_
+
+ ## What is a Minimum Spanning Tree? (MST)
+ A MST algorithm finds a tree of paths that connect all nodes such that the total weight of the tree is minimized. For example, pretend that we have a 50 cities and there are a total of 200 individual direct _edges_ between arbitrary pairs of cities. A MST algorithm will find a tree of _edges_ that connects every city such that the combined weights of all _edges_ in the tree is minimized. Another way to think of the produced tree, is that it's a path to visit every city such that the total distance traveled is minimized.
 
 ## Technologies
 Application was built with:
@@ -35,7 +38,7 @@ All other dependencies are packaged into the .JAR executable, which can be found
 The application can be launched by executing _Algorithm_Visualizer.jar_.
 
 ## Features
-- Randomly generate different sized connected directed or undirected graphs
+- Randomly generate different sized connected directed graphs
 - Animate shortest path algorithms
   - Breadth-First Search
   - Depth-First Search
@@ -46,16 +49,25 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
 - Start/Stop/Pause algorithm animations
 - Change speed of animations _(slow/fast/instant)_
 
-## Screenshots
+## Demo
 
->User has selected to randomly generate a _small_ graph and has choosen a source node and target node
-><img src="./github/screenshots/1.PNG" width=800>
+> Slow Bread-First Search on a medium graph.
+> <img src="./github/gifs/bfs.gif" width=800>
 
->A _Breadth-First Search_ has started at the selected source node
-><img src="./github/screenshots/2.PNG" width=800>
+> Slow Depth-First Search on a small graph. It's an extremely inaccurate implementation.
+> <img src="./github/gifs/dfs.gif" width=800>
 
->The _BFS_ has found the target node and drawn the shortest path
-><img src="./github/screenshots/3.PNG" width=800>
+> Fast Dijkstra's algorithm on a large graph.
+> <img src="./github/gifs/dijkstra1.gif" width=800>
 
->Finished _Dijkstra's_ algorithm, run on a different graph
-><img src="./github/screenshots/4.PNG" width=800>
+> Instant Dijkstra's algorithm on a large graph.
+> <img src="./github/gifs/dijkstra2.gif" width=800>
+
+> Fast Kruskal's algorithm on a large graph.
+> <img src="./github/gifs/kruskal.gif" width=800>
+
+> Fast Prim's algorithm on a large graph.
+> <img src="./github/gifs/prim1.gif" width=800>
+
+> Instant Prim's algorithm on a large graph.
+> <img src="./github/gifs/prim2.gif" width=800>
