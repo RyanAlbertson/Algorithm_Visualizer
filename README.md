@@ -48,8 +48,8 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
   - Breadth-First Search
   - Depth-First Search
   - Dijkstra's Algorithm
-  - Bellman-Ford Algorithm
-  - Floyd-Warshall Algorithm
+  - Kruskal's Algorithm
+  - Prim's Algorithm
 - Select source and target nodes
 - Start/Stop/Pause algorithm animations
 - Change speed of animations _(slow/fast/instant)_
