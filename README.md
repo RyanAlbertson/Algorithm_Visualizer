@@ -56,25 +56,25 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
 
 ## Demo
 > User selecting different graph sizes, which randomly generates them each time.
-> <img src="./github/gifs/graphSizes.gif" width=800>
+> <img src="./readme_gifs/graphSizes.gif" width=800>
 
 > Slow Bread-First Search on a medium graph. Edge weights are ignored.
-> <img src="./github/gifs/bfs.gif" width=800>
+> <img src="./readme_gifs/bfs.gif" width=800>
 
 > Slow Depth-First Search on a small graph. It's an extremely inaccurate implementation.
-> <img src="./github/gifs/dfs.gif" width=800>
+> <img src="./readme_gifs/dfs.gif" width=800>
 
 > Fast Dijkstra's algorithm on a large graph.
-> <img src="./github/gifs/dijkstra1.gif" width=800>
+> <img src="./readme_gifs/dijkstra1.gif" width=800>
 
 > Instant Dijkstra's algorithm on a large graph.
-> <img src="./github/gifs/dijkstra2.gif" width=800>
+> <img src="./readme_gifs/dijkstra2.gif" width=800>
 
 > Fast Kruskal's algorithm on a large graph.
-> <img src="./github/gifs/kruskal.gif" width=800>
+> <img src="./readme_gifs/kruskal.gif" width=800>
 
 > Fast Prim's algorithm on a large graph.
-> <img src="./github/gifs/prim1.gif" width=800>
+> <img src="./readme_gifs/prim1.gif" width=800>
 
 > Instant Prim's algorithm on a large graph.
-> <img src="./github/gifs/prim2.gif" width=800>
+> <img src="./readme_gifs/prim2.gif" width=800>
