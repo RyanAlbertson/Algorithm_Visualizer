@@ -6,9 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Launches a GUI application that allows a user to interactively generate graphs
- * and select start and end nodes for a shortest path algorithm. Then user can
- * select and start an algorithm and see it step through an animation.
+ * Launches a GUI application that allows users to interactively generate graphs
+ * and control algorithm animations on those graphs.
  *
  * @author Ryan Albertson
  */
