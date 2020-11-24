@@ -135,9 +135,9 @@ public class Dijkstra implements Runnable {
                 if (newDist < currentDist) {
                     distanceTo[adjNode] = newDist;
                     gPanel.path[adjNode] = currentNode;
-                    animate();
                 }
                 nodesQueue.addLast(adjNode);
+                animate();
             }
             while (!edgesPQ.isEmpty());
             isExplored[currentNode] = true;
