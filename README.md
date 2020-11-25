@@ -29,7 +29,7 @@ One such path may be:
  the tree is minimized. Another way to think of the MST, is that if you start from any city in
  the tree, then you have individual paths to every other city such that the sum of all these
  path lengths is minimized. A MST is also a useful in approximations of the infamous NP-Hard
- [_Traveling Salesman Problem_](#https://en.wikipedia.org/wiki/Travelling_salesman_problem).
+ [_Traveling Salesman Problem_](https://en.wikipedia.org/wiki/Travelling_salesman_problem).
 
 ## Technologies
 Application was built with:
