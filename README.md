@@ -22,12 +22,14 @@ One such path may be:
  _Boston_ --> NYC --> Philadelphia --> Washington DC --> Nashville --> _Dallas_
 
  ## What is a Minimum Spanning Tree? (MST)
- A MST algorithm finds a tree of paths that connect all nodes such that the total weight of
+ A MST algorithm finds a tree of edges that connects all nodes such that the total weight of
  the tree is minimized. For example, pretend that we have 50 cities and there are a total of
  200 individual direct _edges_ between arbitrary pairs of cities. A MST algorithm will find
- a tree of _edges_ that connects every city such that the combined weights of all _edges_ in
- the tree is minimized. Another way to think of the produced tree, is that it's a path to
- visit every city such that the total distance traveled is minimized.
+ a tree of 49 edges that connects every city such that the combined weights of all edges in
+ the tree is minimized. Another way to think of the MST, is that if you start from any city in
+ the tree, then you have individual paths to every other city such that the sum of all these
+ path lengths is minimized. A MST is also a good approximation for the infamous NP-Hard
+ _Traveling Salesman Problem_.
 
 ## Technologies
 Application was built with:
