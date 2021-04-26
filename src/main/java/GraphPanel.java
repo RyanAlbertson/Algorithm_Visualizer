@@ -46,10 +46,10 @@ public class GraphPanel extends JPanel {
     private MOUSE_STATE mouseState;
     protected Thread algThread;
     protected String algName;
-    protected boolean isShortPathAlg;
     protected String graphSize;
     protected HashMap<Integer, Integer[]> nodeCoords;
     protected HashMap<Integer, Shape> nodeShapes;
+    public boolean isShortPathAlg;
     public DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
     public Set<DefaultWeightedEdge> visitedEdges;
     public int[] path;

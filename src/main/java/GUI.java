@@ -155,3 +155,7 @@ public class GUI extends JFrame {
 // TODO:    -WEAKEN THE COUPLING OF ALG CLASSES.
 //          -REFACTOR ENCAPSULATION OF PROJECT.
 //          -ADD MORE ERROR CHECKING.
+//          - Improve installation instructions in README.
+//          - Create an algorithm abstract class.
+//          - Change icon for executable.
+//          - Dijkstra's slows down at end of animation.

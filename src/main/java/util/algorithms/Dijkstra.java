@@ -7,7 +7,6 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.PriorityQueue;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -18,78 +17,22 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Ryan Albertson
  */
-public class Dijkstra implements Runnable {
-
-    private final GraphPanel gPanel;
-    private final Object pauseLock = new Object();
+public class Dijkstra extends Algorithm {
 
 
-    /**
-     * Constructs a {@link Dijkstra}.
-     *
-     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
-     * @throws IllegalArgumentException If {@code graphPanel} is null.
-     */
-    public Dijkstra(GraphPanel gPanel) throws IllegalArgumentException {
+    public Dijkstra(GraphPanel gPanel) {
 
-        if (gPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
-        } else this.gPanel = gPanel;
+        super(gPanel);
     }
 
 
-    /**
-     * If user has stopped the animation, clears the animation.
-     *
-     * @return True if user has stopped the animation, false otherwise.
-     */
-    private boolean isStopped() {
+    protected boolean isStopped() {
 
         return gPanel.stop;
     }
 
 
-    /**
-     * Checks if user has paused the animation. If so, the animation process is
-     * held until the user has unpaused it.
-     */
-    private void checkForPause() {
-
-        synchronized (pauseLock) {
-            while (gPanel.pause) {
-                try {
-                    pauseLock.wait(100);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Repaints the animation within the {@link GraphPanel}. Does it slowly such
-     * that the user can visualize the algorithm stepping through.
-     */
-    private void animate() {
-
-        try {
-            // Update animation
-            gPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(gPanel.speed);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * Starts a Dijkstra search at the provided source {@code node}. It finds the
-     * shortest path to all nodes from {@code node}.
-     *
-     * @param node Source node of the search.
-     */
-    private void dijkstra(Integer node) {
+    public void runAlgorithm(Integer node) {
 
         double[] distanceTo = new double[gPanel.nodeCount];
         Arrays.fill(distanceTo, Double.POSITIVE_INFINITY);
@@ -114,7 +57,7 @@ public class Dijkstra implements Runnable {
         while (!nodesQueue.isEmpty()) {
             currentNode = nodesQueue.poll();
             edgesPQ.addAll(gPanel.graph.edgesOf(currentNode));
-            do {
+            while (!edgesPQ.isEmpty()) {
                 // Check if user has stopped or paused algorithm
                 if (isStopped()) return;
                 checkForPause();
@@ -126,6 +69,7 @@ public class Dijkstra implements Runnable {
                     adjNode = gPanel.graph.getEdgeSource(leastEdge);
                 }
                 if (isExplored[adjNode]) continue;
+                nodesQueue.addLast(adjNode);
                 gPanel.visitedEdges.add(leastEdge);
 
                 // Update adjNode's distance if proposed predecessor is shorter
@@ -136,23 +80,15 @@ public class Dijkstra implements Runnable {
                     distanceTo[adjNode] = newDist;
                     gPanel.path[adjNode] = currentNode;
                 }
-                nodesQueue.addLast(adjNode);
                 animate();
             }
-            while (!edgesPQ.isEmpty());
             isExplored[currentNode] = true;
         }
     }
 
 
-    /**
-     * Starts the algorithm process.
-     *
-     * @see Thread#run()
-     */
-    @Override
-    public void run() {
+    public void runAlgorithm() {
 
-        dijkstra(gPanel.sourceNode);
+        // This signature isn't needed for this algorithm.
     }
 }

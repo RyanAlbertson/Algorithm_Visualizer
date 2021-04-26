@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -16,39 +15,22 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Ryan Albertson
  */
-public class Prim implements Runnable {
+public class Prim extends Algorithm {
 
 
-    private final GraphPanel gPanel;
     private final Set<DefaultWeightedEdge> reached;
     private final boolean[] inMST;
-    private final Object pauseLock = new Object();
 
 
-    /**
-     * Constructs a {@link Prim}.
-     *
-     * @param gPanel The {@link javax.swing.JPanel} containing a graph.
-     * @throws IllegalArgumentException If {@code gPanel} is null.
-     */
-    public Prim(GraphPanel gPanel) throws IllegalArgumentException {
+    public Prim(GraphPanel gPanel) {
 
-        if (gPanel == null) {
-            throw new IllegalArgumentException("Error: GraphPanel is null");
-        } else {
-            this.gPanel = gPanel;
-            inMST = new boolean[gPanel.nodeCount];
-            reached = new HashSet<>(gPanel.nodeCount);
-        }
+        super(gPanel);
+        inMST = new boolean[gPanel.nodeCount];
+        reached = new HashSet<>(gPanel.nodeCount);
     }
 
 
-    /**
-     * If user has stopped the animation, clears the animation .
-     *
-     * @return True if user has stopped the animation, false otherwise.
-     */
-    private boolean isStopped() {
+    protected boolean isStopped() {
 
         if (gPanel.stop) {
             // Clear animation
@@ -58,40 +40,6 @@ public class Prim implements Runnable {
             return true;
         }
         return false;
-    }
-
-
-    /**
-     * Checks if user has paused the animation. If so, the animation process is
-     * held until the user has unpaused it.
-     */
-    private void checkForPause() {
-
-        synchronized (pauseLock) {
-            while (gPanel.pause) {
-                try {
-                    pauseLock.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Repaints the animation within the {@link GraphPanel}. Does it slowly such
-     * that the user can visualize the algorithm stepping through.
-     */
-    private void animate() {
-
-        // Update animation
-        gPanel.repaint();
-        try {
-            TimeUnit.MILLISECONDS.sleep(gPanel.speed);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -134,11 +82,7 @@ public class Prim implements Runnable {
     }
 
 
-    /**
-     * Uses a Prim's algorithm implementation to find the MST of a
-     * {@link GraphPanel#graph}.
-     */
-    private void prim() {
+    protected void runAlgorithm() {
 
         // Start at the smallest edge
         PriorityQueue<DefaultWeightedEdge> edgesPQ = new PriorityQueue<>((e1, e2) ->
@@ -165,19 +109,12 @@ public class Prim implements Runnable {
             reached.add(edge);
             animate();
         }
-
     }
 
 
-    /**
-     * Starts the algorithm process.
-     *
-     * @see Thread#run()
-     */
-    @Override
-    public void run() {
+    protected void runAlgorithm(Integer node) {
 
-        prim();
+        // This signature isn't needed for this algorithm.
     }
 }
 
