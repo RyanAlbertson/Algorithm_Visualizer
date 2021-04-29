@@ -24,16 +24,6 @@ public class Kruskal extends Algorithm {
     }
 
 
-    protected boolean isStopped() {
-
-        if (gPanel.stop) {
-            gPanel.resetAnimation();
-            return true;
-        }
-        return false;
-    }
-
-
     /**
      * Traces through edges of a set of edges to find the root node.
      * @param node Search starts at this node.
@@ -71,10 +61,6 @@ public class Kruskal extends Algorithm {
         // Build the MST
         int sizeMST = 0;
         while (sizeMST < gPanel.nodeCount - 1) {
-            // Check if user has stopped or paused algorithm
-            if (isStopped()) return;
-            checkForPause();
-
             DefaultWeightedEdge leastEdge = edgesPQ.poll();
 
             // Find root nodes for each set of edges.
@@ -91,6 +77,8 @@ public class Kruskal extends Algorithm {
 
             parent[set2Root] = set1Root;
             sizeMST++;
+            // Check if user has stopped or paused algorithm
+            if (isStopped()) return;
             animate();
         }
     }

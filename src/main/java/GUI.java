@@ -57,7 +57,7 @@ public class GUI extends JFrame {
     private void chooseAlgNameActions() {
 
         // Don't interupt an animation in progress
-        if (gPanel.algThread != null && gPanel.algThread.isAlive()) {
+        if (null != gPanel.algorithm && gPanel.algorithm.isAlive()) {
             chooseAlgName.setSelectedItem(gPanel.algName);
             return;
         }
@@ -152,10 +152,15 @@ public class GUI extends JFrame {
 }
 
 
-// TODO:    -WEAKEN THE COUPLING OF ALG CLASSES.
-//          -REFACTOR ENCAPSULATION OF PROJECT.
-//          -ADD MORE ERROR CHECKING.
-//          - Improve installation instructions in README.
-//          - Create an algorithm abstract class.
+// TODO:    - Improve installation instructions in README.
 //          - Change icon for executable.
 //          - Dijkstra's slows down at end of animation.
+//          - Clarify that DFS and BFS are not shortest path algorithms.
+//          - DFS doesnt work.
+//          - Little lag after pressing stop
+
+
+// Updates this patch:
+// - Improved the use of concurrency
+// - Improved code reusability
+// -

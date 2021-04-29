@@ -6,17 +6,11 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class Algorithm implements Runnable {
 
-
     protected GraphPanel gPanel;
-    protected final Object pauseLock = new Object();
-
-
-    /**
-     * If user has stopped the animation, clears the animation.
-     *
-     * @return True if user has stopped the animation, false otherwise.
-     */
-    protected abstract boolean isStopped();
+    private boolean isAlive;
+    private final Object lock;
+    private volatile boolean paused;
+    protected volatile boolean stopped;
 
 
     /**
@@ -42,8 +36,14 @@ public abstract class Algorithm implements Runnable {
     protected Algorithm(GraphPanel gPanel) throws IllegalArgumentException {
 
         if (gPanel == null) {
-            throw new IllegalArgumentException("GraphPanel is null");
-        } else this.gPanel = gPanel;
+            throw new IllegalArgumentException("ERROR: GraphPanel is null");
+        } else {
+            this.gPanel = gPanel;
+            lock = new Object();
+            isAlive = true;
+            paused = false;
+            stopped = false;
+        }
     }
 
 
@@ -53,14 +53,40 @@ public abstract class Algorithm implements Runnable {
      */
     protected void checkForPause() {
 
-        while (gPanel.pause) {
-            try {
-                pauseLock.wait(100);
-            } catch (Exception e) {
-                e.printStackTrace();
+        synchronized (lock) {
+            while (paused) {
+                try {
+                    lock.wait(100);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
+    }
+
+
+    /**
+     * @return True if animation is currently stopped. False otherwise.
+     */
+    protected boolean isStopped() {
+
+        if (stopped) {
+            // Clear the current animation
+            gPanel.resetAnimation();
+            isAlive = false;
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * @return True if animation is currently paused. False otherwise.
+     */
+    public boolean isPaused() {
+
+        return paused;
     }
 
 
@@ -70,6 +96,7 @@ public abstract class Algorithm implements Runnable {
      */
     protected void animate() {
 
+        checkForPause();
         try {
             // Update animation
             gPanel.repaint();
@@ -77,6 +104,42 @@ public abstract class Algorithm implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * Signals to pause the animation.
+     */
+    public void pause() {
+
+        paused = true;
+    }
+
+
+    /**
+     * Signals to unpause the animation.
+     */
+    public void unPause() {
+
+        paused = false;
+    }
+
+
+    /**
+     * Signals to stop the animation.
+     */
+    public void stop() {
+
+        stopped = true;
+    }
+
+
+    /**
+     * @return True if algorithm animation is live. False otherwise.
+     */
+    public boolean isAlive() {
+
+        return isAlive;
     }
 
 

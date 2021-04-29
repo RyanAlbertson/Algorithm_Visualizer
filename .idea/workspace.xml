@@ -31,15 +31,19 @@
     <option name="sortByType" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Program Files (x86)/jgrapht-1.5.0/lib/jgrapht-core-1.5.0.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2736842" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -137,9 +141,72 @@
     </recent_temporary>
   </component>
   <component name="WindowStateProjectService">
-    <state x="440" y="113" width="1360" height="902" key="SettingsEditor" timestamp="1619461928285">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="1840" y="234" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog" timestamp="1619672215411">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state x="1840" y="234" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog/0.0.5120.1440@0.0.5120.1440" timestamp="1619672215411" />
+    <state x="2918" y="559" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1619671835472">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state x="2918" y="559" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.5120.1440@0.0.5120.1440" timestamp="1619671835472" />
+    <state x="1678" y="443" key="DetectedRootsChooserDialog" timestamp="1619672667903">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state x="1678" y="443" key="DetectedRootsChooserDialog/0.0.5120.1440@0.0.5120.1440" timestamp="1619672667903" />
+    <state x="1498" y="272" key="FileChooserDialogImpl" timestamp="1619673144994">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state x="1498" y="272" key="FileChooserDialogImpl/0.0.5120.1440@0.0.5120.1440" timestamp="1619673144994" />
+    <state width="3662" height="210" key="GridCell.Tab.0.bottom" timestamp="1619670959673">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state width="1922" height="156" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="3662" height="210" key="GridCell.Tab.0.bottom/0.0.5120.1440@0.0.5120.1440" timestamp="1619670959673" />
+    <state width="3662" height="210" key="GridCell.Tab.0.center" timestamp="1619670959672">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state width="1922" height="156" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="3662" height="210" key="GridCell.Tab.0.center/0.0.5120.1440@0.0.5120.1440" timestamp="1619670959672" />
+    <state width="3662" height="210" key="GridCell.Tab.0.left" timestamp="1619670959672">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state width="1922" height="156" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="3662" height="210" key="GridCell.Tab.0.left/0.0.5120.1440@0.0.5120.1440" timestamp="1619670959672" />
+    <state width="3662" height="210" key="GridCell.Tab.0.right" timestamp="1619670959673">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state width="1922" height="156" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="3662" height="210" key="GridCell.Tab.0.right/0.0.5120.1440@0.0.5120.1440" timestamp="1619670959673" />
+    <state x="1940" y="306" key="Maven.ArtifactSearchDialog" timestamp="1619672700658">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state x="1940" y="306" key="Maven.ArtifactSearchDialog/0.0.5120.1440@0.0.5120.1440" timestamp="1619672700658" />
+    <state x="1173" y="151" width="1682" height="883" key="SettingsEditor" timestamp="1619673149721">
+      <screen x="0" y="0" width="5120" height="1440" />
     </state>
     <state x="440" y="113" width="1360" height="902" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1619461928285" />
+    <state x="1173" y="151" width="1682" height="883" key="SettingsEditor/0.0.5120.1440@0.0.5120.1440" timestamp="1619673149721" />
+    <state x="1546" y="464" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1619672884361">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state x="1546" y="464" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.5120.1440@0.0.5120.1440" timestamp="1619672884361" />
+    <state x="2962" y="439" key="refactoring.ChangeSignatureDialog" timestamp="1619670457442">
+      <screen x="0" y="0" width="5120" height="1440" />
+    </state>
+    <state x="2962" y="439" key="refactoring.ChangeSignatureDialog/0.0.5120.1440@0.0.5120.1440" timestamp="1619670457442" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/util/algorithms/DepthFirstSearch.java</url>
+          <line>38</line>
+          <properties class="main.java.util.algorithms.DepthFirstSearch" method="runAlgorithm">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -60,7 +60,12 @@ The application can be launched by executing _Algorithm_Visualizer.jar_.
 > User selecting different graph sizes, which randomly generates them each time.
 > <img src="./readme_gifs/graphSizes.gif" width=800>
 
+<<<<<<< Updated upstream
 > Slow Bread-First Search on a medium graph. Edge weights are ignored.
+=======
+> Slow Bread-First Search on a medium graph.
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 > <img src="./readme_gifs/bfs.gif" width=800>
 
 > Slow Depth-First Search on a small graph. It's an extremely inaccurate implementation.

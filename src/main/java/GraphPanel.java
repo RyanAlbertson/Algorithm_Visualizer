@@ -44,7 +44,7 @@ public class GraphPanel extends JPanel {
     }
 
     private MOUSE_STATE mouseState;
-    protected Thread algThread;
+    protected Algorithm algorithm;
     protected String algName;
     protected String graphSize;
     protected HashMap<Integer, Integer[]> nodeCoords;
@@ -57,8 +57,6 @@ public class GraphPanel extends JPanel {
     public Integer sourceNode;
     public Integer targetNode;
     public int speed;
-    public boolean stop;
-    public boolean pause;
 
 
     /**
@@ -80,7 +78,7 @@ public class GraphPanel extends JPanel {
         this.setPreferredSize(new Dimension(GUI.WINDOW_WIDTH, GUI.GRAPH_HEIGHT));
         this.setBackground(Color.WHITE);
 
-        // Detect user-selected start and end nodes
+        // Detect user-selected source and target nodes
         addMouseListener(new MouseAdapter() {
 
             @Override
@@ -89,12 +87,11 @@ public class GraphPanel extends JPanel {
                 super.mouseClicked(me);
 
                 // Block node selection during animation
-                if (algThread != null && algThread.isAlive()) return;
+                if (null != algorithm && algorithm.isAlive()) return;
                 // Block node selection during MST algorithms
                 if (!isShortPathAlg) return;
 
                 if (mouseState.equals(MOUSE_STATE.RESET)) {
-                    sourceNode = targetNode = null;
                     resetAnimation();
                     mouseState = mouseState.next();
                 } else {
@@ -136,8 +133,6 @@ public class GraphPanel extends JPanel {
             g2D.drawString("Click nodes to define a source and target",
                     (float) (GUI.WINDOW_WIDTH * 0.39), 15);
             g2D.setFont(new Font("Ariel", Font.PLAIN, 16));
-            g2D.drawString("(Edges are not proportional to weight for BFS & DFS)",
-                    (float) (GUI.WINDOW_WIDTH * 0.37), 30);
         }
         // Draw edges
         for (DefaultWeightedEdge edge : graph.edgeSet()) {
@@ -222,13 +217,10 @@ public class GraphPanel extends JPanel {
      */
     public void resetAnimation() {
 
-        pause = false;
         Arrays.fill(path, Integer.MAX_VALUE);
         visitedEdges = new HashSet<>(nodeCount);
-        if (stop) {
-            sourceNode = null;
-            targetNode = null;
-        }
+        sourceNode = null;
+        targetNode = null;
         repaint();
     }
 
@@ -240,28 +232,23 @@ public class GraphPanel extends JPanel {
     protected void startAlgorithm() {
 
         // Start new algorithm
-        if (algThread == null || !algThread.isAlive()) {
+        if (null == algorithm || !algorithm.isAlive()) {
             // Don't start algorithm if user hasn't selected source & target nodes
             if (isShortPathAlg && (sourceNode == null || targetNode == null)) return;
-            stop = false;
-            resetAnimation();
             switch (algName) {
-                case "Breadth-First Search" -> algThread =
-                        new Thread(new BreadthFirstSearch(this));
-                case "Depth-First Search" -> algThread =
-                        new Thread(new DepthFirstSearch(this));
-                case "Dijkstra" -> algThread =
-                        new Thread(new Dijkstra(this));
-                case "Kruskal" -> algThread =
-                        new Thread(new Kruskal(this));
-                case "Prim" -> algThread =
-                        new Thread(new Prim(this));
-                default -> throw new IllegalArgumentException("Invalid algorithm");
+                case "Breadth-First Search" -> algorithm = new BreadthFirstSearch(this);
+                case "Depth-First Search" -> algorithm = new DepthFirstSearch(this);
+                case "Dijkstra" -> algorithm = new Dijkstra(this);
+                case "Kruskal" -> algorithm = new Kruskal(this);
+                case "Prim" -> algorithm = new Prim(this);
+                default -> throw new IllegalArgumentException("ERROR: Invalid algorithm");
             }
-            algThread.start();
+            new Thread(algorithm).start();
 
-            // Unpause current algorithm
-        } else pause = false;
+            // Unpause if in an animation already
+        } else {
+            algorithm.unPause();
+        }
     }
 
 
@@ -270,10 +257,7 @@ public class GraphPanel extends JPanel {
      */
     protected void stopAlgorithm() {
 
-        if (algThread != null) {
-            stop = true;
-            resetAnimation();
-        }
+        if (algorithm != null) algorithm.stop();
     }
 
 
@@ -282,8 +266,9 @@ public class GraphPanel extends JPanel {
      */
     protected void pauseAlgorithm() {
 
-        if (algThread != null) {
-            pause = true;
+        if (algorithm != null) {
+            if (algorithm.isPaused()) algorithm.unPause();
+            else algorithm.pause();
         }
     }
 }

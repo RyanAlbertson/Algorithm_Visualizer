@@ -25,8 +25,8 @@ public class Defs {
     // Available speeds for the algorithm animations. Values are milliseconds
     public static final Map<String, Integer> speedST =
             Collections.unmodifiableMap(Map.ofEntries(
-                    Map.entry("Slow", 1100),
-                    Map.entry("Fast", 400),
+                    Map.entry("Slow", 1300),
+                    Map.entry("Fast", 500),
                     Map.entry("Instant", 0)));
 
     // All graph sizes available with the visualizer

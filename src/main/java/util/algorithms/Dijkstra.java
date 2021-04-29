@@ -11,9 +11,9 @@ import java.util.PriorityQueue;
 
 /**
  * Implements Dijkstra's algorithm to find a shortest path from a
- * {@link GraphPanel#sourceNode}source node to all other nodes. Note that the
- * input graph is directed but I choose to implement an undirected algorithm
- * in an effort to make the animations more appealing.
+ * {@link GraphPanel#sourceNode} to a {@link  GraphPanel#targetNode}. Note that
+ * the input graph is directed but I choose to implement an undirected algorithm
+ * in an effort to make the animations more complete.
  *
  * @author Ryan Albertson
  */
@@ -23,12 +23,6 @@ public class Dijkstra extends Algorithm {
     public Dijkstra(GraphPanel gPanel) {
 
         super(gPanel);
-    }
-
-
-    protected boolean isStopped() {
-
-        return gPanel.stop;
     }
 
 
@@ -58,10 +52,6 @@ public class Dijkstra extends Algorithm {
             currentNode = nodesQueue.poll();
             edgesPQ.addAll(gPanel.graph.edgesOf(currentNode));
             while (!edgesPQ.isEmpty()) {
-                // Check if user has stopped or paused algorithm
-                if (isStopped()) return;
-                checkForPause();
-
                 // Find nearest adjacent node from available adjacent edges.
                 DefaultWeightedEdge leastEdge = edgesPQ.poll();
                 adjNode = gPanel.graph.getEdgeTarget(leastEdge);
@@ -80,6 +70,8 @@ public class Dijkstra extends Algorithm {
                     distanceTo[adjNode] = newDist;
                     gPanel.path[adjNode] = currentNode;
                 }
+                // Check if user has stopped or paused algorithm
+                if (isStopped()) return;
                 animate();
             }
             isExplored[currentNode] = true;

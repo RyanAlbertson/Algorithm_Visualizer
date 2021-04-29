@@ -3,41 +3,28 @@ package main.java.util.algorithms;
 import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 
 /**
  * Implements a depth first search to find a path between a
  * {@link GraphPanel#sourceNode} and {@link GraphPanel#targetNode}.
- * Note that DFS only finds a shortest path on a tree graph, but the input graph
- * is connected and likely cylic. Therefore this algorithm only provides a single
- * path, out of all possible, which itself is probabilistically not the shortest.
  *
  * @author Ryan Albertson
  */
 public class DepthFirstSearch extends Algorithm {
 
     private final boolean[] visited;
-    private boolean targetFound = false;
+    private final Map<Integer, Integer> prev;
 
 
     public DepthFirstSearch(GraphPanel gPanel) {
 
         super(gPanel);
         visited = new boolean[gPanel.nodeCount];
-    }
-
-
-    protected boolean isStopped() {
-
-        if (gPanel.stop) {
-            Arrays.fill(gPanel.path, Integer.MAX_VALUE);
-            gPanel.visitedEdges = new HashSet<>(gPanel.nodeCount);
-            gPanel.repaint();
-            return true;
-        }
-        return false;
+        prev = new HashMap<>(gPanel.nodeCount);
     }
 
 
@@ -51,32 +38,38 @@ public class DepthFirstSearch extends Algorithm {
      */
     protected void runAlgorithm(Integer node) {
 
-        // Stop algorithm if target has been found further down the recursion
-        if (targetFound) return;
-        // Check if user has stopped or paused algorithm
-        if (isStopped()) return;
-        checkForPause();
+        // ALGORITHM DOESNT CHECK EVERY EDGE. ONLY ONE EDGE BETWEEN EVERY PAIR OF NODES.
+        // NEED TO VISIT EVERY NODE WHILE NOT REVISITING PREVIOUSLY VISITED NODES.
 
-        visited[node] = true;
+        Stack<Integer> stack = new Stack<>();
+        stack.push(node);
+        prev.put(node, node);
 
-        // Stop DFS when target is found
-        if (node.equals(gPanel.targetNode)) {
-            targetFound = true;
-            return;
-        }
+        while (!stack.empty()) {
+            Integer currNode = stack.pop();
+            Integer prevNode = prev.get(currNode);
 
-        // Recursively check adjacent nodes
-        for (DefaultWeightedEdge edge : gPanel.graph.edgesOf(node)) {
-            Integer adjNode = gPanel.graph.getEdgeTarget(edge);
-            if (adjNode.equals(node)) adjNode =
-                    gPanel.graph.getEdgeSource(edge);
-            // Convert directed edges to undirected
-            if (adjNode.equals(node)) adjNode = gPanel.graph.getEdgeSource(edge);
-            if (!visited[adjNode]) {
-                gPanel.visitedEdges.add(edge);
-                gPanel.path[adjNode] = node;
-                animate();
-                runAlgorithm(adjNode);
+            visited[currNode] = true;
+            gPanel.path[currNode] = prevNode;
+            DefaultWeightedEdge edge = gPanel.graph.getEdge(prevNode, currNode);
+            if (null == edge) edge = gPanel.graph.getEdge(currNode, prevNode);
+            if (null != edge) gPanel.visitedEdges.add(edge);
+            // Check if user has stopped or paused algorithm
+            if (isStopped()) return;
+            animate();
+
+            // Stop DFS when target is found
+            if (currNode.equals(gPanel.targetNode)) return;
+
+            // Search adjacent nodes
+            for (DefaultWeightedEdge adjEdge : gPanel.graph.edgesOf(currNode)) {
+                Integer adjNode = gPanel.graph.getEdgeTarget(adjEdge);
+                // Convert directed edges to undirected
+                if (adjNode.equals(currNode)) adjNode = gPanel.graph.getEdgeSource(adjEdge);
+                if (!visited[adjNode]) {
+                    stack.push(adjNode);
+                    prev.put(adjNode, currNode);
+                }
             }
         }
     }

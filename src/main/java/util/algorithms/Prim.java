@@ -3,7 +3,6 @@ package main.java.util.algorithms;
 import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -27,19 +26,6 @@ public class Prim extends Algorithm {
         super(gPanel);
         inMST = new boolean[gPanel.nodeCount];
         reached = new HashSet<>(gPanel.nodeCount);
-    }
-
-
-    protected boolean isStopped() {
-
-        if (gPanel.stop) {
-            // Clear animation
-            Arrays.fill(gPanel.path, Integer.MAX_VALUE);
-            gPanel.visitedEdges = new HashSet<>(gPanel.nodeCount);
-            gPanel.repaint();
-            return true;
-        }
-        return false;
     }
 
 
@@ -98,15 +84,13 @@ public class Prim extends Algorithm {
 
         // Build MST
         while (gPanel.visitedEdges.size() < gPanel.nodeCount - 1) {
-            // Check if user has stopped or paused algorithm
-            if (isStopped()) return;
-            checkForPause();
-
             // Find and add least costly edge to MST
             edge = getLeastEdge();
             if (edge == null) return;
             gPanel.visitedEdges.add(edge);
             reached.add(edge);
+            // Check if user has stopped or paused algorithm
+            if (isStopped()) return;
             animate();
         }
     }

@@ -4,9 +4,7 @@ import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
-import java.util.HashSet;
 
 
 /**
@@ -30,18 +28,6 @@ public class BreadthFirstSearch extends Algorithm {
     }
 
 
-    protected boolean isStopped() {
-
-        if (gPanel.stop) {
-            Arrays.fill(gPanel.path, Integer.MAX_VALUE);
-            gPanel.visitedEdges = new HashSet<>(gPanel.nodeCount);
-            gPanel.repaint();
-            return true;
-        }
-        return false;
-    }
-
-
     protected void runAlgorithm(Integer node) {
 
         Deque<Integer> queue = new ArrayDeque<>();
@@ -50,13 +36,10 @@ public class BreadthFirstSearch extends Algorithm {
 
         search:
         while (!queue.isEmpty()) {
-            // Check if user has stopped or paused algorithm
-            if (isStopped()) return;
-            checkForPause();
-
             Integer currentNode = queue.removeFirst();
             // source node equals target node
             if (currentNode.equals(gPanel.targetNode)) {
+                checkForPause();
                 animate();
                 break;
             }
@@ -70,6 +53,8 @@ public class BreadthFirstSearch extends Algorithm {
                 // Stop BFS when target is found
                 if (adjNode.equals(gPanel.targetNode)) {
                     gPanel.path[adjNode] = currentNode;
+                    // Check if user has stopped or paused algorithm
+                    if (isStopped()) return;
                     animate();
                     break search;
                 }
@@ -80,6 +65,8 @@ public class BreadthFirstSearch extends Algorithm {
                     gPanel.path[adjNode] = currentNode;
                     queue.addLast(adjNode);
                     gPanel.visitedEdges.add(edge);
+                    // Check if user has stopped or paused algorithm
+                    if (isStopped()) return;
                     animate();
                 }
             }
