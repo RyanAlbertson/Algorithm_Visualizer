@@ -45,16 +45,16 @@ public class Dijkstra extends Algorithm {
             return e1Weight.compareTo(e2Weight);
         });
         boolean[] isExplored = new boolean[gPanel.nodeCount];
-        Integer currentNode;
-        Integer adjNode;
 
         while (!nodesQueue.isEmpty()) {
-            currentNode = nodesQueue.poll();
+            Integer currentNode = nodesQueue.poll();
             edgesPQ.addAll(gPanel.graph.edgesOf(currentNode));
             while (!edgesPQ.isEmpty()) {
-                // Find nearest adjacent node from available adjacent edges.
+                // Find nearest adjacent node from available adjacent edges
                 DefaultWeightedEdge leastEdge = edgesPQ.poll();
-                adjNode = gPanel.graph.getEdgeTarget(leastEdge);
+                if (gPanel.visitedEdges.contains(leastEdge)) continue;
+                Integer adjNode = gPanel.graph.getEdgeTarget(leastEdge);
+                // Account for directed edges
                 if (adjNode.equals(currentNode)) {
                     adjNode = gPanel.graph.getEdgeSource(leastEdge);
                 }

@@ -62,7 +62,6 @@ public abstract class Algorithm implements Runnable {
                 }
             }
         }
-
     }
 
 
@@ -151,7 +150,9 @@ public abstract class Algorithm implements Runnable {
     @Override
     public void run() {
 
+        isAlive = true;
         if (gPanel.isShortPathAlg) runAlgorithm(gPanel.sourceNode);
         else runAlgorithm();
+        isAlive = false;
     }
 }

@@ -245,7 +245,7 @@ public class GraphPanel extends JPanel {
             }
             new Thread(algorithm).start();
 
-            // Unpause if in an animation already
+            // Unpause if animation is live
         } else {
             algorithm.unPause();
         }
@@ -257,7 +257,8 @@ public class GraphPanel extends JPanel {
      */
     protected void stopAlgorithm() {
 
-        if (algorithm != null) algorithm.stop();
+        if (algorithm != null && algorithm.isAlive()) algorithm.stop();
+        else resetAnimation();
     }
 
 

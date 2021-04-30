@@ -45,7 +45,6 @@ public class BreadthFirstSearch extends Algorithm {
             }
 
             for (DefaultWeightedEdge edge : gPanel.graph.edgesOf(currentNode)) {
-
                 Integer adjNode = gPanel.graph.getEdgeTarget(edge);
                 if (adjNode.equals(currentNode)) adjNode =
                         gPanel.graph.getEdgeSource(edge);

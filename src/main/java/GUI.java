@@ -56,20 +56,15 @@ public class GUI extends JFrame {
      */
     private void chooseAlgNameActions() {
 
-        // Don't interupt an animation in progress
-        if (null != gPanel.algorithm && gPanel.algorithm.isAlive()) {
-            chooseAlgName.setSelectedItem(gPanel.algName);
-            return;
-        }
+        gPanel.stopAlgorithm();
         String prevAlgName = gPanel.algName;
         gPanel.algName = (String) chooseAlgName.getSelectedItem();
-        // Regenerate graph if needed, for the given algorithm
+        // Regenerate graph if needed for the given algorithm
         if (Defs.isShortPathAlg.get(gPanel.algName) ^
                 Defs.isShortPathAlg.get(prevAlgName)) {
             gPanel.isShortPathAlg = Defs.isShortPathAlg.get(gPanel.algName);
             GraphGenerator.generateGraph(gPanel);
         }
-        gPanel.pauseAlgorithm();
         gPanel.resetAnimation();
     }
 
@@ -83,7 +78,6 @@ public class GUI extends JFrame {
         gPanel.graphSize = (String) chooseGraphSize.getSelectedItem();
         GraphGenerator.generateGraph(gPanel);
         gPanel.resetAnimation();
-
     }
 
 
@@ -154,13 +148,12 @@ public class GUI extends JFrame {
 
 // TODO:    - Improve installation instructions in README.
 //          - Change icon for executable.
-//          - Dijkstra's slows down at end of animation.
 //          - Clarify that DFS and BFS are not shortest path algorithms.
-//          - DFS doesnt work.
-//          - Little lag after pressing stop
+//          - Wrap .JAR into an executable.
 
 
 // Updates this patch:
 // - Improved the use of concurrency
 // - Improved code reusability
-// -
+// - Improved time complexity of Dijkstra's implementation
+// - DFS correctly stops exactly when it finds the target.

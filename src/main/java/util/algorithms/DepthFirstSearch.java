@@ -3,10 +3,6 @@ package main.java.util.algorithms;
 import main.java.GraphPanel;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-
 
 /**
  * Implements a depth first search to find a path between a
@@ -17,14 +13,14 @@ import java.util.Stack;
 public class DepthFirstSearch extends Algorithm {
 
     private final boolean[] visited;
-    private final Map<Integer, Integer> prev;
+    private boolean targetFound;
 
 
     public DepthFirstSearch(GraphPanel gPanel) {
 
         super(gPanel);
         visited = new boolean[gPanel.nodeCount];
-        prev = new HashMap<>(gPanel.nodeCount);
+        targetFound = false;
     }
 
 
@@ -38,38 +34,27 @@ public class DepthFirstSearch extends Algorithm {
      */
     protected void runAlgorithm(Integer node) {
 
-        // ALGORITHM DOESNT CHECK EVERY EDGE. ONLY ONE EDGE BETWEEN EVERY PAIR OF NODES.
-        // NEED TO VISIT EVERY NODE WHILE NOT REVISITING PREVIOUSLY VISITED NODES.
+        // Stop DFS when target is found
+        if (node.equals(gPanel.targetNode)) {
+            targetFound = true;
+            return;
+        }
+        visited[node] = true;
 
-        Stack<Integer> stack = new Stack<>();
-        stack.push(node);
-        prev.put(node, node);
-
-        while (!stack.empty()) {
-            Integer currNode = stack.pop();
-            Integer prevNode = prev.get(currNode);
-
-            visited[currNode] = true;
-            gPanel.path[currNode] = prevNode;
-            DefaultWeightedEdge edge = gPanel.graph.getEdge(prevNode, currNode);
-            if (null == edge) edge = gPanel.graph.getEdge(currNode, prevNode);
-            if (null != edge) gPanel.visitedEdges.add(edge);
-            // Check if user has stopped or paused algorithm
-            if (isStopped()) return;
-            animate();
-
-            // Stop DFS when target is found
-            if (currNode.equals(gPanel.targetNode)) return;
-
-            // Search adjacent nodes
-            for (DefaultWeightedEdge adjEdge : gPanel.graph.edgesOf(currNode)) {
-                Integer adjNode = gPanel.graph.getEdgeTarget(adjEdge);
-                // Convert directed edges to undirected
-                if (adjNode.equals(currNode)) adjNode = gPanel.graph.getEdgeSource(adjEdge);
-                if (!visited[adjNode]) {
-                    stack.push(adjNode);
-                    prev.put(adjNode, currNode);
-                }
+        // Recursively check adjacent nodes
+        for (DefaultWeightedEdge edge : gPanel.graph.edgesOf(node)) {
+            // Stop searching if target has been found further down the recursion
+            if (targetFound) return;
+            Integer adjNode = gPanel.graph.getEdgeTarget(edge);
+            // Convert directed edges to undirected
+            if (adjNode.equals(node)) adjNode = gPanel.graph.getEdgeSource(edge);
+            if (!visited[adjNode]) {
+                gPanel.visitedEdges.add(edge);
+                gPanel.path[adjNode] = node;
+                // Check if user has stopped or paused algorithm
+                if (isStopped()) return;
+                animate();
+                runAlgorithm(adjNode);
             }
         }
     }
