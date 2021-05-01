@@ -21,6 +21,10 @@ public class Prim extends Algorithm {
     private final boolean[] inMST;
 
 
+    /**
+     * Constructor.
+     * @param gPanel {@link GraphPanel}.
+     */
     public Prim(GraphPanel gPanel) {
 
         super(gPanel);

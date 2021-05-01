@@ -11,15 +11,17 @@ import java.util.PriorityQueue;
 
 /**
  * Implements Dijkstra's algorithm to find a shortest path from a
- * {@link GraphPanel#sourceNode} to a {@link  GraphPanel#targetNode}. Note that
- * the input graph is directed but I choose to implement an undirected algorithm
- * in an effort to make the animations more complete.
+ * {@link GraphPanel#sourceNode} to a {@link  GraphPanel#targetNode}.
  *
  * @author Ryan Albertson
  */
 public class Dijkstra extends Algorithm {
 
 
+    /**
+     * Constructor.
+     * @param gPanel {@link GraphPanel}.
+     */
     public Dijkstra(GraphPanel gPanel) {
 
         super(gPanel);

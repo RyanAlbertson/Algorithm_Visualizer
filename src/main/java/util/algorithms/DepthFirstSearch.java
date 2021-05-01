@@ -16,6 +16,10 @@ public class DepthFirstSearch extends Algorithm {
     private boolean targetFound;
 
 
+    /**
+     * Constructor.
+     * @param gPanel {@link GraphPanel}.
+     */
     public DepthFirstSearch(GraphPanel gPanel) {
 
         super(gPanel);

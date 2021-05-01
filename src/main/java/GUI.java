@@ -144,16 +144,3 @@ public class GUI extends JFrame {
         new GUI();
     }
 }
-
-
-// TODO:    - Improve installation instructions in README.
-//          - Change icon for executable.
-//          - Clarify that DFS and BFS are not shortest path algorithms.
-//          - Wrap .JAR into an executable.
-
-
-// Updates this patch:
-// - Improved the use of concurrency
-// - Improved code reusability
-// - Improved time complexity of Dijkstra's implementation
-// - DFS correctly stops exactly when it finds the target.

@@ -1,87 +1,122 @@
-# Shortest Path & MST Algorithm Visualizer
+<a id="top"></a>
+# Algorithm Visualizer
+**Software application that runs in the Java Runtime Environment and provides interactive algorithm animations. 
+Users can learn and practice with assorted search, shortest path  and minimum spanning tree algorithms.**
+
 <img src=https://img.shields.io/github/v/release/ryanalbertson/Algorithm_Visualizer>
 <img src=https://img.shields.io/github/downloads/ryanalbertson/Algorithm_Visualizer/total>
 
+
 ## Table of contents
-* [What is a shortest path algorithm?](#What-is-a-shortest-path-algorithm?)
-* [Technologies](#technologies)
+* [What is a Graph?](#graph)
+* [What is a shortest path algorithm?](#shortest_path)
+* [What is a Minimum Spanning Tree (MST)?](#mst)
 * [Setup](#setup)
 * [Features](#features)
 * [Demo](#demo)
 
-## What is a Shortest Path Algorithm?
-Optimally, a shortest path algorithm finds a path between a source node and target node
-such that the total weight of the path is minimized. In other words, let's designate major
-United States cities as nodes. Perhaps the start node is _Boston_ and the target node is
-_Dallas_. Let's pretend there isn't a direct path from Boston to Dallas, and we must travel
-directly to and from major cities. Therefore, the shortest path would be some collection
-of cities between Boston and Dallas such that the total distance traveled from start to
-finish is minimized.
 
-One such path may be:
+<a id="graph"></a>
+## What is a Graph?
+In general terms, a graph refers to a network of nodes (_dots_) that are connected by edges (_lines_). There's an 
+ entire field of research about graphs, namely graph theory. For instance, the direction of edges is a often a 
+ significant consideration, but we will disregard it for this software. 
+ To learn a some more about graph terminology, [click here.](http://web.cecs.pdx.edu/~sheard/course/Cs163/Doc/Graphs.html)
+
+> Example of a graph.
+> <img src="./media/sampleGraph.PNG" width=800>
+
+
+<a id="shortest_path"></a>
+## What is a Shortest Path?
+A shortest path is a path between a designated source node and target node within a graph. The path is an ordering 
+of nodes that starts from the source and ends at the target. The nodes in the path are connected by edges. These 
+edges each have a respective weight. The shortest path will be the path of nodes between the source and target that 
+minimizes the total weight of all edges connecting those path nodes.
+
+> Example:
+Let our graph have nodes that represent US cities. The edges between those nodes are select roads that travel 
+between the cities. Each road has an associated distance, this is the edge weight. Let's say our source node is 
+Boston and our target node is Dallas. We want the shortest path between the two cities, given our graph of cities 
+and roads. Such a path will indeed span between the two cities, but it will also be the least distance out of all 
+possible paths between Boston and Dallas.
+>
+>Perhaps the shortest path is:
  _Boston_ --> NYC --> Philadelphia --> Washington DC --> Nashville --> _Dallas_
 
- ## What is a Minimum Spanning Tree? (MST)
- A MST algorithm finds a tree of edges that connects all nodes such that the total weight of
- the tree is minimized. For example, pretend that we have 50 cities and there are a total of
- 200 individual direct _edges_ between arbitrary pairs of cities. A MST algorithm will find
- a tree of 49 edges that connects every city such that the combined weights of all edges in
- the tree is minimized. Another way to think of the MST, is that if you start from any city in
- the tree, then you have individual paths to every other city such that the sum of all these
- path lengths is minimized. A MST is also a useful in approximations of the infamous NP-Hard
- [_Traveling Salesman Problem_](https://en.wikipedia.org/wiki/Travelling_salesman_problem).
+ > Example of a shortest path between two nodes in a graph.
+> <img src="./media/sampleShortestPath.PNG" width=800>
 
-## Technologies
-Application was built with:
-- [Java SE 15.0.1](https://docs.oracle.com/en/java/javase/15)
-- [JGraphT 1.5.0](https://jgrapht.org)
 
+<a id="mst"></a>
+## What is a Minimum Spanning Tree? (MST)
+To understand what a minimum spanning tree is, we must first define what a tree is. Let's simply define a tree as a 
+subgraph of some parent graph such that:
+
+- Every node from the parent graph exists in the tree.
+- Every node is connected to every node. There's a path between any pair of nodes in the tree.
+- There are no cycles. Meaning that there isn't a path that can start and finish at the same node.
+
+Considering all this, a minimum spanning tree is just a tree that minimizes the total edge weights within it.
+
+>Example:
+Using the cities and roads analogy, a MST would be a collection of roads that together connect every city and the 
+sum of distances of these roads is the least possible such that all cities are still linked together with this network 
+of roads.
+
+> Example of the minimum spanning tree of a graph.
+> <img src="./media/sampleMST.PNG" width=800>
+
+
+<a id="setup"></a>
 ## Setup
-If you don't currently have Java SE 15 (or newer) installed on your system,
-then please install [JDK 15](https://www.oracle.com/java/technologies/javase-jdk15-downloads.html).
+[Here is the download](https://github.com/ryanalbertson/Algorithm_Visualizer/releases) for the application. Look for _Algorithm Visualizer.exe_ under _Assets_.
 
-All other dependencies are packaged into the .JAR executable, which can be found [here](https://github.com/ryanalbertson/Algorithm_Visualizer/releases).
+If you don't currently have Java SE 11 (or newer) installed on your system, then please 
+install the [JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
 
-The application can be launched by executing _Algorithm_Visualizer.jar_.
+This application also uses [JGraphT](https://jgrapht.org), but it's included with the download.
 
+The application is launched by executing _Algorithm Visualizer.exe_
+
+
+<a id="features"></a>
 ## Features
-- Randomly generate different sized connected directed graphs
-- Animate shortest path and MST algorithms
+- Randomly generate various sized undirected connected graphs.
+- Control animations of search, shortest path and MST algorithms.
   - Breadth-First Search
   - Depth-First Search
   - Dijkstra's Algorithm
   - Kruskal's Algorithm
   - Prim's Algorithm
-- Select source and target nodes
 - Start/Stop/Pause algorithm animations
-- Change speed of animations _(slow/fast/instant)_
+- Change speed of animations _(Slow/Fast/Instant)_
 
+
+<a id="demo"></a>
 ## Demo
-> User selecting different graph sizes, which randomly generates them each time.
-> <img src="./readme_gifs/graphSizes.gif" width=800>
+> Generating random different sized graphs.
+> <img src="./media/graphSizes.gif" width=800>
 
-<<<<<<< Updated upstream
-> Slow Bread-First Search on a medium graph. Edge weights are ignored.
-=======
+> Slow Depth-First Search on a small graph.
+> <img src="./media/dfs.gif" width=800>
+
 > Slow Bread-First Search on a medium graph.
->>>>>>> Stashed changes
->>>>>>> Stashed changes
-> <img src="./readme_gifs/bfs.gif" width=800>
-
-> Slow Depth-First Search on a small graph. It's an extremely inaccurate implementation.
-> <img src="./readme_gifs/dfs.gif" width=800>
+> <img src="./media/bfs.gif" width=800>
 
 > Fast Dijkstra's algorithm on a large graph.
-> <img src="./readme_gifs/dijkstra1.gif" width=800>
+> <img src="./media/dijkstra1.gif" width=800>
 
 > Instant Dijkstra's algorithm on a large graph.
-> <img src="./readme_gifs/dijkstra2.gif" width=800>
+> <img src="./media/dijkstra2.gif" width=800>
 
 > Fast Kruskal's algorithm on a large graph.
-> <img src="./readme_gifs/kruskal.gif" width=800>
+> <img src="./media/kruskal.gif" width=800>
 
 > Fast Prim's algorithm on a large graph.
-> <img src="./readme_gifs/prim1.gif" width=800>
+> <img src="./media/prim1.gif" width=800>
 
 > Instant Prim's algorithm on a large graph.
-> <img src="./readme_gifs/prim2.gif" width=800>
+> <img src="./media/prim2.gif" width=800>
+
+[Return to Top](#top)

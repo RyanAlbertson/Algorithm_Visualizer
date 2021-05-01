@@ -219,8 +219,10 @@ public class GraphPanel extends JPanel {
 
         Arrays.fill(path, Integer.MAX_VALUE);
         visitedEdges = new HashSet<>(nodeCount);
-        sourceNode = null;
-        targetNode = null;
+        if (null != algorithm && !algorithm.isAlive()) {
+            sourceNode = null;
+            targetNode = null;
+        }
         repaint();
     }
 

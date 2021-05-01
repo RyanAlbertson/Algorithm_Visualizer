@@ -17,6 +17,10 @@ public class Kruskal extends Algorithm {
     private final int[] parent;
 
 
+    /**
+     * Constructor.
+     * @param gPanel {@link GraphPanel}.
+     */
     public Kruskal(GraphPanel gPanel) {
 
         super(gPanel);

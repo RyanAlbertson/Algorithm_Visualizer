@@ -4,6 +4,13 @@ import main.java.GraphPanel;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This {@link Algorithm} class implements methods that are used for animating
+ * an algorithm. It defines other methods that allow specific implementations
+ * for whichever algorithm is needed.
+ *
+ * @author Ryan Albertson
+ */
 public abstract class Algorithm implements Runnable {
 
     protected GraphPanel gPanel;
@@ -143,13 +150,14 @@ public abstract class Algorithm implements Runnable {
 
 
     /**
-     * Starts the algorithm.
+     * Starts the algorithm animation.
      *
      * @see Thread#run()
      */
     @Override
     public void run() {
 
+        gPanel.resetAnimation();
         isAlive = true;
         if (gPanel.isShortPathAlg) runAlgorithm(gPanel.sourceNode);
         else runAlgorithm();

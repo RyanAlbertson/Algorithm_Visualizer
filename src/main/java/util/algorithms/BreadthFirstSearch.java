@@ -21,6 +21,10 @@ public class BreadthFirstSearch extends Algorithm {
     private final boolean[] visited;
 
 
+    /**
+     * Constructor.
+     * @param gPanel {@link GraphPanel}.
+     */
     public BreadthFirstSearch(GraphPanel gPanel) {
 
         super(gPanel);
