@@ -23,7 +23,7 @@ In general terms, a graph refers to a network of nodes (_dots_) that are connect
  significant consideration, but we will disregard it for this software. 
  To learn a some more about graph terminology, [click here.](http://web.cecs.pdx.edu/~sheard/course/Cs163/Doc/Graphs.html)
 
-> Example of a graph.
+> Example of a graph
 > <img src="./media/sampleGraph.PNG" width=800>
 
 
@@ -44,7 +44,7 @@ possible paths between Boston and Dallas.
 >Perhaps the shortest path is:
  _Boston_ --> NYC --> Philadelphia --> Washington DC --> Nashville --> _Dallas_
 
- > Example of a shortest path between two nodes in a graph.
+ > Example of a shortest path between two nodes in a graph
 > <img src="./media/sampleShortestPath.PNG" width=800>
 
 
@@ -64,7 +64,7 @@ Using the cities and roads analogy, a MST would be a collection of roads that to
 sum of distances of these roads is the least possible such that all cities are still linked together with this network 
 of roads.
 
-> Example of the minimum spanning tree of a graph.
+> Example of the minimum spanning tree of a graph
 > <img src="./media/sampleMST.PNG" width=800>
 
 
@@ -82,8 +82,8 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 
 <a id="features"></a>
 ## Features
-- Randomly generate various sized undirected connected graphs.
-- Control animations of search, shortest path and MST algorithms.
+- Randomly generate various sized undirected connected graphs
+- Control animations of search, shortest path, and MST algorithms
   - Breadth-First Search
   - Depth-First Search
   - Dijkstra's Algorithm
@@ -95,28 +95,28 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 
 <a id="demo"></a>
 ## Demo
-> Generating random different sized graphs.
+> Generating random different sized graphs
 > <img src="./media/graphSizes.gif" width=800>
 
-> Slow Depth-First Search on a small graph.
+> Slow Depth-First Search on a small graph
 > <img src="./media/dfs.gif" width=800>
 
-> Slow Bread-First Search on a medium graph.
+> Slow Bread-First Search on a medium graph
 > <img src="./media/bfs.gif" width=800>
 
-> Fast Dijkstra's algorithm on a large graph.
+> Fast Dijkstra's algorithm on a large graph
 > <img src="./media/dijkstra1.gif" width=800>
 
-> Instant Dijkstra's algorithm on a large graph.
+> Instant Dijkstra's algorithm on a large graph
 > <img src="./media/dijkstra2.gif" width=800>
 
-> Fast Kruskal's algorithm on a large graph.
+> Fast Kruskal's algorithm on a large graph
 > <img src="./media/kruskal.gif" width=800>
 
-> Fast Prim's algorithm on a large graph.
+> Fast Prim's algorithm on a large graph
 > <img src="./media/prim1.gif" width=800>
 
-> Instant Prim's algorithm on a large graph.
+> Instant Prim's algorithm on a large graph
 > <img src="./media/prim2.gif" width=800>
 
 [Return to Top](#top)
