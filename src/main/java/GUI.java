@@ -144,3 +144,10 @@ public class GUI extends JFrame {
         new GUI();
     }
 }
+
+/*
+    PATCH NOTES:
+
+    BUG FIXES
+        - Stop button properly works while animation is paused.
+ */

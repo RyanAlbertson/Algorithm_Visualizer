@@ -61,7 +61,7 @@ public abstract class Algorithm implements Runnable {
     protected void checkForPause() {
 
         synchronized (lock) {
-            while (paused) {
+            while (paused && !stopped) {
                 try {
                     lock.wait(100);
                 } catch (Exception e) {
@@ -102,7 +102,6 @@ public abstract class Algorithm implements Runnable {
      */
     protected void animate() {
 
-        checkForPause();
         try {
             // Update animation
             gPanel.repaint();
@@ -110,6 +109,8 @@ public abstract class Algorithm implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        checkForPause();
     }
 
 

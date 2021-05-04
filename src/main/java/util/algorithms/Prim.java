@@ -94,8 +94,8 @@ public class Prim extends Algorithm {
             gPanel.visitedEdges.add(edge);
             reached.add(edge);
             // Check if user has stopped or paused algorithm
-            if (isStopped()) return;
             animate();
+            if (isStopped()) return;
         }
     }
 

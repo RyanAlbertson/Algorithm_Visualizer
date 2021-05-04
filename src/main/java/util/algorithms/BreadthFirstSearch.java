@@ -69,8 +69,8 @@ public class BreadthFirstSearch extends Algorithm {
                     queue.addLast(adjNode);
                     gPanel.visitedEdges.add(edge);
                     // Check if user has stopped or paused algorithm
-                    if (isStopped()) return;
                     animate();
+                    if (isStopped()) return;
                 }
             }
         }

@@ -56,8 +56,8 @@ public class DepthFirstSearch extends Algorithm {
                 gPanel.visitedEdges.add(edge);
                 gPanel.path[adjNode] = node;
                 // Check if user has stopped or paused algorithm
-                if (isStopped()) return;
                 animate();
+                if (isStopped()) return;
                 runAlgorithm(adjNode);
             }
         }

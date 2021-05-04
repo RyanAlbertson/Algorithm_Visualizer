@@ -73,8 +73,8 @@ public class Dijkstra extends Algorithm {
                     gPanel.path[adjNode] = currentNode;
                 }
                 // Check if user has stopped or paused algorithm
-                if (isStopped()) return;
                 animate();
+                if (isStopped()) return;
             }
             isExplored[currentNode] = true;
         }

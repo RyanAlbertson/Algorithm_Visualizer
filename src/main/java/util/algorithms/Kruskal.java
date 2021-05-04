@@ -82,8 +82,8 @@ public class Kruskal extends Algorithm {
             parent[set2Root] = set1Root;
             sizeMST++;
             // Check if user has stopped or paused algorithm
-            if (isStopped()) return;
             animate();
+            if (isStopped()) return;
         }
     }
 
