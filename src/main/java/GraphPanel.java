@@ -238,12 +238,23 @@ public class GraphPanel extends JPanel {
             // Don't start algorithm if user hasn't selected source & target nodes
             if (isShortPathAlg && (sourceNode == null || targetNode == null)) return;
             switch (algName) {
-                case "Breadth-First Search" -> algorithm = new BreadthFirstSearch(this);
-                case "Depth-First Search" -> algorithm = new DepthFirstSearch(this);
-                case "Dijkstra" -> algorithm = new Dijkstra(this);
-                case "Kruskal" -> algorithm = new Kruskal(this);
-                case "Prim" -> algorithm = new Prim(this);
-                default -> throw new IllegalArgumentException("ERROR: Invalid algorithm");
+                case "Breadth-First Search":
+                    algorithm = new BreadthFirstSearch(this);
+                    break;
+                case "Depth-First Search":
+                    algorithm = new DepthFirstSearch(this);
+                    break;
+                case "Dijkstra":
+                    algorithm = new Dijkstra(this);
+                    break;
+                case "Kruskal":
+                    algorithm = new Kruskal(this);
+                    break;
+                case "Prim":
+                    algorithm = new Prim(this);
+                    break;
+                default:
+                    throw new IllegalArgumentException("ERROR: Invalid algorithm");
             }
             new Thread(algorithm).start();
 
