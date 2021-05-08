@@ -12,8 +12,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -45,10 +45,10 @@ public class GraphPanel extends JPanel {
 
     private MOUSE_STATE mouseState;
     protected Algorithm algorithm;
-    protected String algName;
     protected String graphSize;
     protected HashMap<Integer, Integer[]> nodeCoords;
     protected HashMap<Integer, Shape> nodeShapes;
+    public String algName;
     public boolean isShortPathAlg;
     public DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
     public Set<DefaultWeightedEdge> visitedEdges;
@@ -70,7 +70,7 @@ public class GraphPanel extends JPanel {
         graphSize = "Large";
         isShortPathAlg = Defs.isShortPathAlg.get(algName);
         nodeCount = Defs.nodeCountST.get(graphSize);
-        visitedEdges = new HashSet<>(nodeCount);
+        visitedEdges = ConcurrentHashMap.newKeySet();
 
         GraphGenerator.generateGraph(this);
         mouseState = MOUSE_STATE.SOURCE_NODE;
@@ -218,7 +218,7 @@ public class GraphPanel extends JPanel {
     public void resetAnimation() {
 
         Arrays.fill(path, Integer.MAX_VALUE);
-        visitedEdges = new HashSet<>(nodeCount);
+        visitedEdges = ConcurrentHashMap.newKeySet();
         if (null != algorithm && !algorithm.isAlive()) {
             sourceNode = null;
             targetNode = null;
@@ -238,14 +238,17 @@ public class GraphPanel extends JPanel {
             // Don't start algorithm if user hasn't selected source & target nodes
             if (isShortPathAlg && (sourceNode == null || targetNode == null)) return;
             switch (algName) {
-                case "Breadth-First Search":
-                    algorithm = new BreadthFirstSearch(this);
-                    break;
                 case "Depth-First Search":
                     algorithm = new DepthFirstSearch(this);
                     break;
+                case "Breadth-First Search":
+                    algorithm = new BreadthFirstSearch(this);
+                    break;
                 case "Dijkstra":
                     algorithm = new Dijkstra(this);
+                    break;
+                case "Reverse Delete":
+                    algorithm = new ReverseDelete(this);
                     break;
                 case "Kruskal":
                     algorithm = new Kruskal(this);

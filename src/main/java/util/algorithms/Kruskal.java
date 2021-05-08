@@ -5,9 +5,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.PriorityQueue;
 
-
 /**
- * Implements a Kruskal's algorithm to find the minimum spanning tree of a
+ * Implements Kruskal's algorithm to find the minimum spanning tree of a
  * {@link org.jgrapht.graph.DefaultUndirectedWeightedGraph}.
  *
  * @author Ryan Albertson
@@ -42,10 +41,6 @@ public class Kruskal extends Algorithm {
     }
 
 
-    /**
-     * Uses a Kruskal's algorithm implementation to find the MST of a
-     * {@link GraphPanel#graph}
-     */
     protected void runAlgorithm() {
 
         // All edges in the graph (min. priority by weight)
@@ -67,7 +62,7 @@ public class Kruskal extends Algorithm {
         while (sizeMST < gPanel.nodeCount - 1) {
             DefaultWeightedEdge leastEdge = edgesPQ.poll();
 
-            // Find root nodes for each set of edges.
+            // Find root nodes for each pair of edges.
             int sourceNode = gPanel.graph.getEdgeSource(leastEdge);
             int targetNode = gPanel.graph.getEdgeTarget(leastEdge);
             int set1Root = findParent(sourceNode);

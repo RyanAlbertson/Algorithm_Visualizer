@@ -84,9 +84,10 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 ## Features
 - Randomly generate various sized undirected connected graphs
 - Control animations of search, shortest path, and MST algorithms
-  - Breadth-First Search
   - Depth-First Search
+  - Breadth-First Search
   - Dijkstra's Algorithm
+  - Reverse Delete
   - Kruskal's Algorithm
   - Prim's Algorithm
 - Start/Stop/Pause algorithm animations
@@ -118,5 +119,8 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 
 > Instant Prim's algorithm on a large graph
 > <img src="./media/prim2.gif" width=800>
+
+> Fast Reverse Delete on a medium graph
+> <img src="./media/reverse_delete.gif">
 
 [Return to Top](#top)

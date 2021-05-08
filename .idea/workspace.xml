@@ -161,25 +161,25 @@
       <screen x="0" y="0" width="5120" height="1440" />
     </state>
     <state x="1498" y="272" key="FileChooserDialogImpl/0.0.5120.1440@0.0.5120.1440" timestamp="1619674420586" />
-    <state width="4128" height="204" key="GridCell.Tab.0.bottom" timestamp="1620096305651">
-      <screen x="0" y="0" width="5120" height="1440" />
+    <state width="1920" height="278" key="GridCell.Tab.0.bottom" timestamp="1620491827576">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1922" height="156" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="1920" height="278" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1620491827576" />
     <state width="4128" height="204" key="GridCell.Tab.0.bottom/0.0.5120.1440@0.0.5120.1440" timestamp="1620096305651" />
-    <state width="4128" height="204" key="GridCell.Tab.0.center" timestamp="1620096305651">
-      <screen x="0" y="0" width="5120" height="1440" />
+    <state width="1920" height="278" key="GridCell.Tab.0.center" timestamp="1620491827576">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1922" height="156" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="1920" height="278" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1620491827576" />
     <state width="4128" height="204" key="GridCell.Tab.0.center/0.0.5120.1440@0.0.5120.1440" timestamp="1620096305651" />
-    <state width="4128" height="204" key="GridCell.Tab.0.left" timestamp="1620096305651">
-      <screen x="0" y="0" width="5120" height="1440" />
+    <state width="1920" height="278" key="GridCell.Tab.0.left" timestamp="1620491827576">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1922" height="156" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="1920" height="278" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1620491827576" />
     <state width="4128" height="204" key="GridCell.Tab.0.left/0.0.5120.1440@0.0.5120.1440" timestamp="1620096305651" />
-    <state width="4128" height="204" key="GridCell.Tab.0.right" timestamp="1620096305651">
-      <screen x="0" y="0" width="5120" height="1440" />
+    <state width="1920" height="278" key="GridCell.Tab.0.right" timestamp="1620491827576">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1922" height="156" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1619473910965" />
+    <state width="1920" height="278" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1620491827576" />
     <state width="4128" height="204" key="GridCell.Tab.0.right/0.0.5120.1440@0.0.5120.1440" timestamp="1620096305651" />
     <state width="4128" height="164" key="GridCell.Tab.1.bottom" timestamp="1619742321799">
       <screen x="0" y="0" width="5120" height="1440" />
@@ -201,10 +201,10 @@
       <screen x="0" y="0" width="5120" height="1440" />
     </state>
     <state x="1940" y="306" key="Maven.ArtifactSearchDialog/0.0.5120.1440@0.0.5120.1440" timestamp="1619672700658" />
-    <state x="1173" y="151" width="1682" height="883" key="SettingsEditor" timestamp="1620096430008">
-      <screen x="0" y="0" width="5120" height="1440" />
+    <state x="440" y="113" width="1682" height="883" key="SettingsEditor" timestamp="1620402831390">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="440" y="113" width="1360" height="902" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1619461928285" />
+    <state x="440" y="113" width="1360" height="902" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1620402831390" />
     <state x="1173" y="151" width="1682" height="883" key="SettingsEditor/0.0.5120.1440@0.0.5120.1440" timestamp="1620096430008" />
     <state x="1546" y="464" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1619672884361">
       <screen x="0" y="0" width="5120" height="1440" />

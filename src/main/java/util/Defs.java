@@ -10,15 +10,16 @@ import java.util.Map;
 public class Defs {
 
     // All algorithms available with the visualizer
-    public static final List<String> algNames = List.of("Breadth-First Search",
-            "Depth-First Search", "Dijkstra", "Kruskal", "Prim");
+    public static final List<String> algNames = List.of("Depth-First Search",
+            "Breadth-First Search", "Dijkstra", "Reverse Delete", "Kruskal", "Prim");
 
     // Maps algorithms to whether they should use minimum connected graphs or not.
     public static final Map<String, Boolean> isShortPathAlg =
             Collections.unmodifiableMap(Map.ofEntries(
-                    Map.entry("Breadth-First Search", true),
                     Map.entry("Depth-First Search", true),
+                    Map.entry("Breadth-First Search", true),
                     Map.entry("Dijkstra", true),
+                    Map.entry("Reverse Delete", false),
                     Map.entry("Kruskal", false),
                     Map.entry("Prim", false)));
 
