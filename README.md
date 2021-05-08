@@ -108,7 +108,7 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 > Fast Dijkstra's algorithm on a large graph
 > <img src="./media/dijkstra1.gif" width=800>
 
-> Instant Dijkstra's algorithm on a large graph
+> Instant Dijkstra's algorithm on large graphs
 > <img src="./media/dijkstra2.gif" width=800>
 
 > Fast Kruskal's algorithm on a large graph
@@ -117,7 +117,7 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 > Fast Prim's algorithm on a large graph
 > <img src="./media/prim1.gif" width=800>
 
-> Instant Prim's algorithm on a large graph
+> Instant Prim's algorithm on assorted graphs
 > <img src="./media/prim2.gif" width=800>
 
 > Fast Reverse Delete on a medium graph
