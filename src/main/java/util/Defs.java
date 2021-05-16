@@ -11,7 +11,8 @@ public class Defs {
 
     // All algorithms available with the visualizer
     public static final List<String> algNames = List.of("Depth-First Search",
-            "Breadth-First Search", "Dijkstra", "Reverse Delete", "Kruskal", "Prim");
+            "Breadth-First Search", "Dijkstra", "A*",
+            "Reverse Delete", "Kruskal", "Prim");
 
     // Maps algorithms to whether they should use minimum connected graphs or not.
     public static final Map<String, Boolean> isShortPathAlg =
@@ -19,6 +20,7 @@ public class Defs {
                     Map.entry("Depth-First Search", true),
                     Map.entry("Breadth-First Search", true),
                     Map.entry("Dijkstra", true),
+                    Map.entry("A*", true),
                     Map.entry("Reverse Delete", false),
                     Map.entry("Kruskal", false),
                     Map.entry("Prim", false)));

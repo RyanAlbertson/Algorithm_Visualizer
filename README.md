@@ -87,6 +87,7 @@ The application is launched by executing _Algorithm.Visualizer.exe_
   - Depth-First Search
   - Breadth-First Search
   - Dijkstra's Algorithm
+  - A* Search
   - Reverse Delete
   - Kruskal's Algorithm
   - Prim's Algorithm
@@ -110,6 +111,9 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 
 > Instant Dijkstra's algorithm on large graphs
 > <img src="./media/dijkstra2.gif" width=800>
+
+> Slow A* Search algorithm on a large graph
+> <img src="./media/a_star.gif" width=800>
 
 > Fast Kruskal's algorithm on a large graph
 > <img src="./media/kruskal.gif" width=800>

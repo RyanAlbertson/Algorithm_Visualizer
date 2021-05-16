@@ -46,8 +46,8 @@ public class GraphPanel extends JPanel {
     private MOUSE_STATE mouseState;
     protected Algorithm algorithm;
     protected String graphSize;
-    protected HashMap<Integer, Integer[]> nodeCoords;
     protected HashMap<Integer, Shape> nodeShapes;
+    public HashMap<Integer, Integer[]> nodeCoords;
     public String algName;
     public boolean isShortPathAlg;
     public DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
@@ -246,6 +246,9 @@ public class GraphPanel extends JPanel {
                     break;
                 case "Dijkstra":
                     algorithm = new Dijkstra(this);
+                    break;
+                case "A*":
+                    algorithm = new A_Star(this);
                     break;
                 case "Reverse Delete":
                     algorithm = new ReverseDelete(this);
