@@ -88,6 +88,7 @@ The application is launched by executing _Algorithm.Visualizer.exe_
   - Breadth-First Search
   - Dijkstra's Algorithm
   - A* Search
+  - Bellman-Ford
   - Reverse Delete
   - Kruskal's Algorithm
   - Prim's Algorithm
@@ -115,6 +116,9 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 > Slow A* Search algorithm on a large graph
 > <img src="./media/a_star.gif" width=800>
 
+> Fast Bellman-Ford algorithm on a medium graph
+> <img src="./media/bellman_ford.gif" width=800>
+
 > Fast Kruskal's algorithm on a large graph
 > <img src="./media/kruskal.gif" width=800>
 
@@ -125,6 +129,6 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 > <img src="./media/prim2.gif" width=800>
 
 > Fast Reverse Delete on a medium graph
-> <img src="./media/reverse_delete.gif">
+> <img src="./media/reverse_delete.gif" width=800>
 
 [Return to Top](#top)

@@ -250,6 +250,9 @@ public class GraphPanel extends JPanel {
                 case "A*":
                     algorithm = new A_Star(this);
                     break;
+                case "Bellman-Ford":
+                    algorithm = new BellmanFord(this);
+                    break;
                 case "Reverse Delete":
                     algorithm = new ReverseDelete(this);
                     break;
