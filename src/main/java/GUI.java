@@ -38,6 +38,7 @@ public class GUI extends JFrame {
         initMenuPanel();
         frame.pack();
         frame.setVisible(true);
+        frame.setResizable(false);
     }
 
 
@@ -119,7 +120,7 @@ public class GUI extends JFrame {
         chooseAlgName = new JComboBox<>();
         Defs.algNames.forEach(chooseAlgName::addItem);
         // Default. See GraphPanel constuctor
-        chooseAlgName.setSelectedItem("Dijkstra");
+        chooseAlgName.setSelectedItem("A*");
         chooseAlgName.setFont(new Font("Ariel", Font.PLAIN, 18));
         chooseAlgName.addActionListener(event -> chooseAlgNameActions());
         menu.add(chooseAlgName);

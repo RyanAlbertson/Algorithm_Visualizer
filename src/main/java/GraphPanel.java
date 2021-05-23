@@ -65,12 +65,13 @@ public class GraphPanel extends JPanel {
     public GraphPanel() {
 
         // Defaults
-        algName = "Dijkstra";
+        algName = "A*";
         speed = Defs.speedST.get("Fast");
         graphSize = "Large";
         isShortPathAlg = Defs.isShortPathAlg.get(algName);
         nodeCount = Defs.nodeCountST.get(graphSize);
         visitedEdges = ConcurrentHashMap.newKeySet();
+        path = new int[nodeCount];
 
         GraphGenerator.generateGraph(this);
         mouseState = MOUSE_STATE.SOURCE_NODE;
@@ -83,7 +84,6 @@ public class GraphPanel extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent me) {
-
                 super.mouseClicked(me);
 
                 // Block node selection during animation
@@ -129,7 +129,7 @@ public class GraphPanel extends JPanel {
         g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
         g2D.setFont(new Font("Ariel", Font.PLAIN, 18));
-        if (isShortPathAlg) {
+        if (isShortPathAlg && null != algorithm && !algorithm.isAlive()) {
             g2D.drawString("Click nodes to define a source and target",
                     (float) (GUI.WINDOW_WIDTH * 0.39), 15);
             g2D.setFont(new Font("Ariel", Font.PLAIN, 16));
@@ -183,6 +183,7 @@ public class GraphPanel extends JPanel {
             g2D.setStroke(new BasicStroke(4f));
             int currentNode = targetNode;
             int prevNode = path[targetNode];
+            // Tranverse path back to source node
             while (prevNode != Integer.MAX_VALUE) {
                 double currentNodeX = nodeCoords.get(currentNode)[0];
                 double currentNodeY = nodeCoords.get(currentNode)[1];
@@ -191,8 +192,6 @@ public class GraphPanel extends JPanel {
                 g2D.draw(new Line2D.Double(currentNodeX, currentNodeY,
                         prevNodeX, prevNodeY));
                 g2D.fill(nodeShapes.get(prevNode));
-
-                // Tranverse path back to source node
                 currentNode = prevNode;
                 prevNode = path[prevNode];
             }
@@ -228,7 +227,7 @@ public class GraphPanel extends JPanel {
 
 
     /**
-     * If an algorithm is running, it is unpaused. Otherwise, a new process
+     * If an algorithm is running, then it is unpaused. Otherwise, a new process
      * of the currently selected algorithm is started.
      */
     protected void startAlgorithm() {
@@ -252,6 +251,9 @@ public class GraphPanel extends JPanel {
                     break;
                 case "Bellman-Ford":
                     algorithm = new BellmanFord(this);
+                    break;
+                case "Floyd-Warshall":
+                    algorithm = new FloydWarshall(this);
                     break;
                 case "Reverse Delete":
                     algorithm = new ReverseDelete(this);

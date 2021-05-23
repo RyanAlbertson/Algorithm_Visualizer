@@ -34,8 +34,7 @@ of nodes that starts from the source and ends at the target. The nodes in the pa
 edges each have a respective weight. The shortest path will be the path of nodes between the source and target that 
 minimizes the total weight of all edges connecting those path nodes.
 
-> Example:
-Let our graph have nodes that represent US cities. The edges between those nodes are select roads that travel 
+> Let our graph have nodes that represent US cities. The edges between those nodes are select roads that travel 
 between the cities. Each road has an associated distance, this is the edge weight. Let's say our source node is 
 Boston and our target node is Dallas. We want the shortest path between the two cities, given our graph of cities 
 and roads. Such a path will indeed span between the two cities, but it will also be the least distance out of all 
@@ -59,8 +58,7 @@ subgraph of some parent graph such that:
 
 Considering all this, a minimum spanning tree is just a tree that minimizes the total edge weights within it.
 
->Example:
-Using the cities and roads analogy, a MST would be a collection of roads that together connect every city and the 
+> Using the cities and roads analogy, a MST would be a collection of roads that together connect every city and the 
 sum of distances of these roads is the least possible such that all cities are still linked together with this network 
 of roads.
 
@@ -89,6 +87,7 @@ The application is launched by executing _Algorithm.Visualizer.exe_
   - Dijkstra's Algorithm
   - A* Search
   - Bellman-Ford
+  - Floyd-Warshall
   - Reverse Delete
   - Kruskal's Algorithm
   - Prim's Algorithm
@@ -118,6 +117,9 @@ The application is launched by executing _Algorithm.Visualizer.exe_
 
 > Fast Bellman-Ford algorithm on a medium graph
 > <img src="./media/bellman_ford.gif" width=800>
+
+> Fast Floyd-Warshall algorithm on a small graph
+> <img src="./media/floyd_warshall.gif" width=800>
 
 > Fast Kruskal's algorithm on a large graph
 > <img src="./media/kruskal.gif" width=800>
