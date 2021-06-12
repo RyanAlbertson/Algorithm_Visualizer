@@ -3,8 +3,10 @@
 **Software application that runs in the Java Runtime Environment and provides interactive algorithm animations. 
 Users can learn and practice with assorted search, shortest path  and minimum spanning tree algorithms.**
 
-<img src=https://img.shields.io/github/v/release/ryanalbertson/Algorithm_Visualizer>
-<img src=https://img.shields.io/github/downloads/ryanalbertson/Algorithm_Visualizer/total>
+<img src="https://img.shields.io/github/v/release/RyanAlbertson/Algorithm_Visualizer?color=limegreen&style=plastic">
+<img src="https://img.shields.io/github/release-date/RyanAlbertson/Algorithm_Visualizer?color=limegreen&style=plastic">
+<img src="https://img.shields.io/github/downloads/ryanalbertson/Algorithm_Visualizer/total?color=limegreen&style=plastic">
+<img src="https://img.shields.io/github/languages/top/RyanAlbertson/Algorithm_Visualizer?color=limegreen&style=plastic">
 
 
 ## Table of contents
