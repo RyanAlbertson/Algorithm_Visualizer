@@ -108,8 +108,8 @@ public class GUI extends JFrame {
         menu.add(stopButton);
 
         chooseSpeed = new JComboBox<>();
-        Defs.speedST.keySet().forEach(chooseSpeed::addItem);
-        // Default. See GraphPanel constuctor
+        Defs.speeds.forEach(chooseSpeed::addItem);
+        // Default. See GraphPanel constructor
         chooseSpeed.setSelectedItem("Fast");
         chooseSpeed.setFont(new Font("Ariel", Font.PLAIN, 18));
         chooseSpeed.addActionListener(event ->
@@ -119,7 +119,7 @@ public class GUI extends JFrame {
 
         chooseAlgName = new JComboBox<>();
         Defs.algNames.forEach(chooseAlgName::addItem);
-        // Default. See GraphPanel constuctor
+        // Default. See GraphPanel constructor
         chooseAlgName.setSelectedItem("A*");
         chooseAlgName.setFont(new Font("Ariel", Font.PLAIN, 18));
         chooseAlgName.addActionListener(event -> chooseAlgNameActions());

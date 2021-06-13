@@ -27,7 +27,11 @@ public class Defs {
                     Map.entry("Kruskal", false),
                     Map.entry("Prim", false)));
 
-    // Available speeds for the algorithm animations. Values are milliseconds
+
+    // All speeds available
+    public static final List<String> speeds = List.of("Slow", "Fast", "Instant");
+    
+    // Maps speeds to a millisecond value
     public static final Map<String, Integer> speedST =
             Collections.unmodifiableMap(Map.ofEntries(
                     Map.entry("Slow", 1400),
