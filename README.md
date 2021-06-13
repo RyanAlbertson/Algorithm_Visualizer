@@ -75,8 +75,6 @@ of roads.
 If you don't currently have Java SE 11 (or newer) installed on your system, then please 
 install the [JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
 
-This application also uses [JGraphT](https://jgrapht.org), but it's included with the download.
-
 The application is launched by executing _Algorithm.Visualizer.exe_
 
 
