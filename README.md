@@ -70,7 +70,7 @@ of roads.
 
 <a id="setup"></a>
 ## Setup
-[Here is the download](https://github.com/RyanAlbertson/Algorithm_Visualizer/releases/tag/v1.0.4) for the application. Look for _Algorithm.Visualizer.exe_ under _Assets_.
+[Here is the download](https://github.com/RyanAlbertson/Algorithm_Visualizer/blob/master/Algorithm%20Visualizer.exe?raw=true) for the application.
 
 If you don't currently have Java SE 11 (or newer) installed on your system, then please 
 install the [JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
